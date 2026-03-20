@@ -161,7 +161,7 @@ export const menuItems: MenuItem[] = [
     description: 'Papitas a la francesa crocantes, con una capa de salsa cheddar y tocineta crujiente encima. El picante perfecto para comenzar.',
     price: 17000,
     categoryId: 'entradas',
-    image: '/images/PAPITAS-ENTOCINADAS.png',
+    image: './images/PAPITAS-ENTOCINADAS.png',
     addons: ['adicionales-salchi'],
   },
   {
@@ -171,7 +171,7 @@ export const menuItems: MenuItem[] = [
     description: 'La boda de tus sueños: suero costeño, madurito en bandeja. Una combinación que enamora desde el primer mordisco.',
     price: 17000,
     categoryId: 'entradas',
-    image: '/images/MATRIMONIO.png',
+    image: './images/MATRIMONIO.png',
   },
 
   // SALCHIPAPITAS
@@ -182,7 +182,7 @@ export const menuItems: MenuItem[] = [
     description: 'Su base incluye: 🍟 Papitas a la francesa. 🌭 Salchichas. La salchipapita clásica para toda la familia.',
     price: 46000,
     categoryId: 'salchipapitas',
-    image: '/images/SALCHIPAPITAS.png',
+    image: './images/SALCHIPAPITAS.png',
     addons: ['adicionales-salchi'],
     tags: ['popular'],
   },
@@ -193,7 +193,7 @@ export const menuItems: MenuItem[] = [
     description: 'Su base incluye: 🍟 Papitas a la francesa. 🌭 Salchichas. La opción perfecta para uno.',
     price: 29000,
     categoryId: 'salchipapitas',
-    image: '/images/SALCHIPER.jpg',
+    image: './images/SALCHIPER.jpg',
     addons: ['adicionales-salchi'],
   },
   {
@@ -203,7 +203,7 @@ export const menuItems: MenuItem[] = [
     description: 'Su base incluye: 🍟 Papitas a la francesa. 🌭 Salchichas. Para compartir en grande con toda la familia.',
     price: 63000,
     categoryId: 'salchipapitas',
-    image: '/images/SALCHIPAPITAS.png',
+    image: './images/SALCHIPAPITAS.png',
     addons: ['adicionales-salchi'],
   },
   {
@@ -213,7 +213,7 @@ export const menuItems: MenuItem[] = [
     description: 'La salchi perfecta para los amantes de la carne. Te va a volar la cabeza con cada bocado.',
     price: 32000,
     categoryId: 'salchipapitas',
-    image: '/images/SALCHI-CARNITA.png',
+    image: './images/SALCHI-CARNITA.png',
     addons: ['adicionales-salchi'],
   },
   {
@@ -223,7 +223,7 @@ export const menuItems: MenuItem[] = [
     description: 'Conocida como "La verdadera salchipapita personal". Te hará sonreír con cada mordisco.',
     price: 29000,
     categoryId: 'salchipapitas',
-    image: '/images/SALCHIFELIZ.png',
+    image: './images/SALCHIFELIZ.png',
     addons: ['adicionales-salchi'],
   },
 
@@ -235,7 +235,7 @@ export const menuItems: MenuItem[] = [
     description: 'Inspirado en la cultura mexicana, este maicito es exclusivo y poderoso. Con queso fundido, takis y salsas especiales.',
     price: 40000,
     categoryId: 'maicitos',
-    image: '/images/QUETZALCOATL.png',
+    image: './images/QUETZALCOATL.png',
     addons: ['adicionales-salchi'],
     tags: ['nuevo'],
   },
@@ -246,7 +246,7 @@ export const menuItems: MenuItem[] = [
     description: 'Por si te gusta el sabor caribeño. 🌊 Maicito con toque tropical que te transporta a la costa.',
     price: 37000,
     categoryId: 'maicitos',
-    image: '/images/VIENE LA PALOMA.jpg',
+    image: './images/VIENE LA PALOMA.jpg',
     addons: ['tamano-maicito-37', 'adicionales-salchi'],
   },
   {
@@ -256,7 +256,7 @@ export const menuItems: MenuItem[] = [
     description: 'El maicito favorito por excelencia. 💛 Con maíz tierno, queso fundido y los toppings más amados.',
     price: 32000,
     categoryId: 'maicitos',
-    image: '/images/MILENIAL.jpg',
+    image: './images/MILENIAL.jpg',
     addons: ['tamano-milenial', 'adicionales-salchi'],
     tags: ['popular'],
   },
@@ -267,7 +267,7 @@ export const menuItems: MenuItem[] = [
     description: 'Para gustos más fuertes. 💪 Maicito cargado de sabores intensos. No apto para corazones débiles.',
     price: 37000,
     categoryId: 'maicitos',
-    image: '/images/MALANDRO.png',
+    image: './images/MALANDRO.png',
     addons: ['tamano-maicito-37', 'adicionales-salchi'],
   },
   {
@@ -277,7 +277,7 @@ export const menuItems: MenuItem[] = [
     description: 'Un plato creado con amor, perfecto para los fans del maduro. Dulce, salado y con mucho queso.',
     price: 34000,
     categoryId: 'maicitos',
-    image: '/images/Negrita.jpg',
+    image: './images/Negrita.jpg',
     addons: ['adicionales-salchi'],
   },
 
@@ -289,7 +289,7 @@ export const menuItems: MenuItem[] = [
     description: 'Pan Brioch + Blend de carne artesanal + Queso Cheddar original + Tocino americano + Una salsa a tu elección. También clásica sin topping extra.',
     price: 37000,
     categoryId: 'amorguesas',
-    image: '/images/Amburguesa.jpeg',
+    image: './images/Amburguesa.jpeg',
     addons: ['salsas-amorguesa', 'quesos-amorguesa', 'adicionales-amorguesa'],
     tags: ['popular'],
   },
@@ -302,7 +302,7 @@ export const menuItems: MenuItem[] = [
     description: 'Ácido, dulce y refrescante. Un golpe tropical que te pone a bailar desde el primer sorbo.',
     price: 12000,
     categoryId: 'frappes',
-    image: '/images/Frape de Maracuya.jpg',
+    image: './images/Frape de Maracuya.jpg',
   },
   {
     id: 'frappe-limon',
@@ -311,7 +311,7 @@ export const menuItems: MenuItem[] = [
     description: "El clásico que no falla: frío, ácido y delicioso. ¡Perfecto pa' cualquier momento!",
     price: 12000,
     categoryId: 'frappes',
-    image: '/images/Frape de Limon.jpg',
+    image: './images/Frape de Limon.jpg',
   },
   {
     id: 'frappe-hierbabuena',
@@ -320,7 +320,7 @@ export const menuItems: MenuItem[] = [
     description: 'Sólo para los que se atreven, con un toque de limón para refrescar. Único y diferente.',
     price: 12000,
     categoryId: 'frappes',
-    image: '/images/Frape de HierbaBuena.jpg',
+    image: './images/Frape de HierbaBuena.jpg',
   },
   {
     id: 'frappe-mandarina',
@@ -329,7 +329,7 @@ export const menuItems: MenuItem[] = [
     description: 'Dulce, cítrico y bien refrescante. Sabor suave con un toque tropical.',
     price: 12000,
     categoryId: 'frappes',
-    image: '/images/Frape de Mandarina.jpg',
+    image: './images/Frape de Mandarina.jpg',
   },
   {
     id: 'frappe-naranja',
@@ -338,7 +338,7 @@ export const menuItems: MenuItem[] = [
     description: 'Fresco y lleno de energía. El clásico cítrico en versión frappé.',
     price: 12000,
     categoryId: 'frappes',
-    image: '/images/Frape de Naranja.jpg',
+    image: './images/Frape de Naranja.jpg',
   },
   {
     id: 'frappe-cereza',
@@ -347,7 +347,7 @@ export const menuItems: MenuItem[] = [
     description: 'Dulce y frutal, con ese sabor de cereza que no falla.',
     price: 14000,
     categoryId: 'frappes',
-    image: '/images/Frape de Cereza.jpg',
+    image: './images/Frape de Cereza.jpg',
   },
 
   // SODITAS REFRESCANTES
@@ -358,7 +358,7 @@ export const menuItems: MenuItem[] = [
     description: 'Ácida, tropical y con flow. ¡Hecha con fruta de verdad!',
     price: 10000,
     categoryId: 'soditas',
-    image: '/images/Sodita de Maracuya.jpg',
+    image: './images/Sodita de Maracuya.jpg',
   },
   {
     id: 'sodita-frutos-rojos',
@@ -367,7 +367,7 @@ export const menuItems: MenuItem[] = [
     description: 'Dulce, chispeante y con actitud, sin nada artificial.',
     price: 10000,
     categoryId: 'soditas',
-    image: '/images/Sodita de Frutos Rojos.jpg',
+    image: './images/Sodita de Frutos Rojos.jpg',
   },
   {
     id: 'sodita-pepino',
@@ -376,7 +376,7 @@ export const menuItems: MenuItem[] = [
     description: 'Suave, ligera y perfecta para el calor, 100% natural y casera.',
     price: 10000,
     categoryId: 'soditas',
-    image: '/images/Sodita de Pepino.jpg',
+    image: './images/Sodita de Pepino.jpg',
   },
   {
     id: 'sodita-lulo',
@@ -385,7 +385,7 @@ export const menuItems: MenuItem[] = [
     description: 'Refrescante, sabrosón y bien colombiano, directo del campo.',
     price: 10000,
     categoryId: 'soditas',
-    image: '/images/Sodita de Lulo.jpg',
+    image: './images/Sodita de Lulo.jpg',
   },
 
   // BEBIDAS
@@ -396,7 +396,7 @@ export const menuItems: MenuItem[] = [
     description: 'La clásica para acompañar tu pedido.',
     price: 5000,
     categoryId: 'bebidas',
-    image: '/images/Coca-Cola 1.5.jpg',
+    image: './images/Coca-Cola 1.5.jpg',
     addons: ['tamano-coca-cola'],
   },
   {
@@ -406,7 +406,7 @@ export const menuItems: MenuItem[] = [
     description: 'Agua Brisa sin gas refrescante.',
     price: 4000,
     categoryId: 'bebidas',
-    image: '/images/Brisa sin Gas.jpg',
+    image: './images/Brisa sin Gas.jpg',
   },
   {
     id: 'schweppes',
@@ -415,7 +415,7 @@ export const menuItems: MenuItem[] = [
     description: 'Soda Schweppes refrescante.',
     price: 5000,
     categoryId: 'bebidas',
-    image: '/images/Soda Schweppes.jpg',
+    image: './images/Soda Schweppes.jpg',
   },
   {
     id: 'quatro',
@@ -424,7 +424,7 @@ export const menuItems: MenuItem[] = [
     description: 'Gaseosa Quatro refrescante.',
     price: 10000,
     categoryId: 'bebidas',
-    image: '/images/Quatro.jpg',
+    image: './images/Quatro.jpg',
     addons: ['tamano-bebidas'],
   },
   {
@@ -434,7 +434,7 @@ export const menuItems: MenuItem[] = [
     description: 'Ginger Schweppes sabor jengibre.',
     price: 10000,
     categoryId: 'bebidas',
-    image: '/images/Ginger.jpg',
+    image: './images/Ginger.jpg',
     addons: ['tamano-bebidas'],
   },
   {
@@ -444,7 +444,7 @@ export const menuItems: MenuItem[] = [
     description: 'Sprite bien fría.',
     price: 10000,
     categoryId: 'bebidas',
-    image: '/images/Sprite.jpg',
+    image: './images/Sprite.jpg',
     addons: ['tamano-bebidas'],
   },
 
@@ -456,7 +456,7 @@ export const menuItems: MenuItem[] = [
     description: 'Salsita de maíz dulce, ideal para acompañar una rica salchipapita.',
     price: 3000,
     categoryId: 'salsas',
-    image: '/images/Salsa de Mazorca.jpg',
+    image: './images/Salsa de Mazorca.jpg',
   },
   {
     id: 'salsa-chipotle',
@@ -465,7 +465,7 @@ export const menuItems: MenuItem[] = [
     description: 'Salsita de chipotle, picantita, perfecta para combinar con todo.',
     price: 3000,
     categoryId: 'salsas',
-    image: '/images/Salsa de Chipotle.jpg',
+    image: './images/Salsa de Chipotle.jpg',
   },
   {
     id: 'salsa-caguamole',
@@ -474,7 +474,7 @@ export const menuItems: MenuItem[] = [
     description: 'Salsita de guacamole, te recomiendo que la pidas con el maicito.',
     price: 3000,
     categoryId: 'salsas',
-    image: '/images/Salsa de Caguamole.jpg',
+    image: './images/Salsa de Caguamole.jpg',
   },
   {
     id: 'crema-lena',
@@ -483,7 +483,7 @@ export const menuItems: MenuItem[] = [
     description: 'Salsita de crema de leña, es perfecta si quieres darle un toque ahumado.',
     price: 3000,
     categoryId: 'salsas',
-    image: '/images/Crema de Leña.jpg',
+    image: './images/Crema de Leña.jpg',
   },
 
   // POSTRECITOS
@@ -494,7 +494,7 @@ export const menuItems: MenuItem[] = [
     description: 'Con el sabor inconfundible del Milo que te hace volver a la infancia.',
     price: 6000,
     categoryId: 'postres',
-    image: '/images/Postre de Milo.jpg',
+    image: './images/Postre de Milo.jpg',
   },
   {
     id: 'postre-limon',
@@ -503,7 +503,7 @@ export const menuItems: MenuItem[] = [
     description: 'Ácido y dulcito a la vez. El postre de limón es el break perfecto.',
     price: 6000,
     categoryId: 'postres',
-    image: '/images/Postre de Limon.jpg',
+    image: './images/Postre de Limon.jpg',
   },
   {
     id: 'postre-oreo',
@@ -512,7 +512,7 @@ export const menuItems: MenuItem[] = [
     description: 'El crunch perfecto con sabor a Oreo en cada cucharada.',
     price: 6000,
     categoryId: 'postres',
-    image: '/images/Postre de Oreo.jpg',
+    image: './images/Postre de Oreo.jpg',
     tags: ['popular'],
   },
   {
@@ -522,7 +522,7 @@ export const menuItems: MenuItem[] = [
     description: 'Leche Klim como la de antes, pero en versión postre. Cremoso y nostálgico.',
     price: 6000,
     categoryId: 'postres',
-    image: '/images/Postre de leche Klim.jpg',
+    image: './images/Postre de leche Klim.jpg',
   },
 ];
 
