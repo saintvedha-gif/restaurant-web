@@ -18,8 +18,7 @@ export default function CartDrawer() {
 
   function buildWhatsAppMessage(): string {
     if (state.items.length === 0) return '';
-    let msg = '🌽 *Pedido MUCHA MAZORCA*\n';
-    msg += '━━━━━━━━━━━━━━\n\n';
+    let msg = '*Pedido MUCHA MAZORCA*\n\n';
 
     state.items.forEach((item, index) => {
       msg += `*${index + 1}) ${item.menuItem.name}* x${item.quantity}\n`;
@@ -29,12 +28,12 @@ export default function CartDrawer() {
 
         item.selectedAddons.forEach(entry => {
           if (entry.addon.pricingMode === 'final') {
-            msg += `• Tamaño: ${entry.addon.name} (${formatPrice(entry.addon.price)})\n`;
+            msg += `* Tamaño: ${entry.addon.name} (${formatPrice(entry.addon.price)})\n`;
             return;
           }
 
           const qtyLabel = entry.quantity > 1 ? ` x${entry.quantity}` : '';
-          msg += `• ${entry.addon.name}${qtyLabel} (+${formatPrice(entry.addon.price * entry.quantity)})\n`;
+          msg += `* ${entry.addon.name}${qtyLabel} (+${formatPrice(entry.addon.price * entry.quantity)})\n`;
         });
       }
 
@@ -42,7 +41,6 @@ export default function CartDrawer() {
       msg += '\n';
     });
 
-    msg += '━━━━━━━━━━━━━━\n';
     msg += `*TOTAL PEDIDO: ${formatPrice(state.total)}*\n\n`;
     msg += '¿Me confirman tiempo estimado, por favor?';
     return encodeURIComponent(msg);
