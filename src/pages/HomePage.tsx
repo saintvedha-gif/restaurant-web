@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { formatPrice, menuItems } from '../data/menuData';
+import { formatPrice, getImageUrl, menuItems } from '../data/menuData';
 
 const topItems = menuItems.filter(item => item.tags?.includes('popular')).slice(0, 2);
 
@@ -38,7 +38,7 @@ export default function HomePage() {
             <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-[24px] border-2 border-yellow-400/70" />
             <div className="h-full w-full overflow-hidden rounded-[24px] border border-[#d1b07a] bg-[#8a673d]">
               <img
-                src="/images/QUETZALCOATL.png"
+                src={getImageUrl('QUETZALCOATL.png')}
                 alt="Mucha Mazorca especial"
                 className="h-full w-full object-cover"
                 loading="eager"

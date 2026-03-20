@@ -135,7 +135,7 @@ export default function SiteLayout() {
               </svg>
             </SocialIcon>
           </div>
-          <div className="hidden items-center gap-2 sm:flex">
+          <div className="flex items-center gap-2">
             <span className={`h-2.5 w-2.5 rounded-full ${openNow ? 'bg-emerald-600' : 'bg-rose-600'}`} />
             <p className="font-black uppercase tracking-[0.08em]">{openNow ? 'Abierto ahora' : 'Cerrado ahora'}</p>
           </div>
