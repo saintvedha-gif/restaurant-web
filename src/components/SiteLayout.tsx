@@ -115,31 +115,45 @@ export default function SiteLayout() {
     <div className="min-h-screen bg-[linear-gradient(180deg,#6e532e_0%,#8a6637_55%,#a0743d_100%)] text-zinc-100">
       <div className="corn-bg pointer-events-none fixed inset-0 z-50 select-none" aria-hidden="true" />
       <div className="border-b border-[#7c2d12]/40 bg-[linear-gradient(90deg,#ff8a00_0%,#ffb703_55%,#ffd166_100%)]">
-        <div className="section-shell flex items-center justify-between py-2.5 text-xs text-[#3f2200]">
-          <div className="flex items-center gap-3">
-            <SocialIcon href="https://www.facebook.com" label="Facebook">
-              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
-                <path d="M13.5 9H16V6h-2.5C10.9 6 9 7.9 9 10.5V13H7v3h2v6h3v-6h3l.5-3H12v-2.5c0-.8.7-1.5 1.5-1.5z" />
-              </svg>
-            </SocialIcon>
-            <SocialIcon href="https://www.instagram.com" label="Instagram">
-              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-[1.8]">
-                <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
-                <circle cx="12" cy="12" r="4" />
-                <circle cx="17.2" cy="6.8" r="1" className="fill-current stroke-none" />
-              </svg>
-            </SocialIcon>
-            <SocialIcon href="https://www.tiktok.com" label="TikTok">
-              <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
-                <path d="M14.8 3h2.2c.2 1.9 1.5 3.6 3.4 4.2v2.3a7.2 7.2 0 0 1-3.4-1.1v6.4a5.1 5.1 0 1 1-5.1-5.1c.3 0 .7 0 1 .1v2.3a2.8 2.8 0 1 0 1.9 2.7V3z" />
-              </svg>
-            </SocialIcon>
+        <div className="section-shell py-2 text-xs text-[#3f2200]">
+          {/* Fila 1: redes + estado */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <SocialIcon href="https://www.facebook.com" label="Facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                  <path d="M13.5 9H16V6h-2.5C10.9 6 9 7.9 9 10.5V13H7v3h2v6h3v-6h3l.5-3H12v-2.5c0-.8.7-1.5 1.5-1.5z" />
+                </svg>
+              </SocialIcon>
+              <SocialIcon href="https://www.instagram.com" label="Instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-[1.8]">
+                  <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.2" cy="6.8" r="1" className="fill-current stroke-none" />
+                </svg>
+              </SocialIcon>
+              <SocialIcon href="https://www.tiktok.com" label="TikTok">
+                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+                  <path d="M14.8 3h2.2c.2 1.9 1.5 3.6 3.4 4.2v2.3a7.2 7.2 0 0 1-3.4-1.1v6.4a5.1 5.1 0 1 1-5.1-5.1c.3 0 .7 0 1 .1v2.3a2.8 2.8 0 1 0 1.9 2.7V3z" />
+                </svg>
+              </SocialIcon>
+            </div>
+
+            {/* Badge estado: pill con color de fondo */}
+            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-black uppercase tracking-[0.08em] ${
+              openNow
+                ? 'bg-emerald-700/20 text-emerald-900'
+                : 'bg-[#7c2d12]/20 text-[#7c2d12]'
+            }`}>
+              <span className={`h-2 w-2 rounded-full ${openNow ? 'bg-emerald-700' : 'bg-rose-700'}`} />
+              {openNow ? 'Abierto ahora' : 'Cerrado ahora'}
+            </span>
+
+            {/* Ubicación — solo en desktop */}
+            <p className="hidden font-semibold sm:block">📍 Cúcuta, Norte de Santander</p>
           </div>
-          <div className="flex items-center gap-2">
-            <span className={`h-2.5 w-2.5 rounded-full ${openNow ? 'bg-emerald-600' : 'bg-rose-600'}`} />
-            <p className="font-black uppercase tracking-[0.08em]">{openNow ? 'Abierto ahora' : 'Cerrado ahora'}</p>
-          </div>
-          <p className="font-semibold">📍 Cúcuta, Norte de Santander</p>
+
+          {/* Fila 2: ubicación en móvil */}
+          <p className="mt-1 text-center font-semibold sm:hidden">📍 Cúcuta, Norte de Santander</p>
         </div>
       </div>
 
