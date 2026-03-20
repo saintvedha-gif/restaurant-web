@@ -123,7 +123,7 @@ export default function ContactPage() {
               <h2 className="text-2xl text-zinc-100"><span className="font-display">Instagram</span></h2>
               <p className="mt-2 text-zinc-300">{INSTAGRAM_HANDLE}</p>
               <a
-                href="https://www.instagram.com"
+                href="https://www.instagram.com/muchamazork?igsh=am82a3lsM2ExZ2lm"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 inline-flex rounded-full bg-[linear-gradient(90deg,#7c3aed_0%,#ec4899_100%)] px-5 py-2.5 text-sm font-bold text-white"

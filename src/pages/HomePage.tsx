@@ -8,14 +8,13 @@ export default function HomePage() {
     <div>
       <section className="section-shell grid min-h-[75vh] items-center gap-10 py-12 lg:grid-cols-[1.15fr_0.85fr] lg:py-16">
         <div className="anim-fade-right">
-          <span className="text-xs font-bold uppercase tracking-[0.28em] text-[#f0d27d]">El sabor urbano definitivo</span>
-          <h1 className="mt-4 text-5xl leading-[0.95] text-white sm:text-6xl lg:text-7xl">
-            <span className="font-display">SABOREA LA</span>
-            <br />
-            <span className="font-display text-[#f2c94c]">PERFECCIÓN</span>
+          <span className="inline-flex rounded-full border border-[#fffefb] bg-[#f0c648]/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.28em] text-[#f0d27d]">🔥 Sabor que antoja</span>
+          <h1 className="mt-4 leading-[0.92]">
+            <span className="block font-display text-6xl text-[#ffffff] sm:text-7xl lg:text-8xl">SOMOS</span>
+            <span className="mt-1 block font-display text-4xl text-[#f2c94c] sm:text-5xl lg:text-6xl">MUCHA MAZORCA</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-8 text-zinc-300 sm:text-lg">
-            Mazorcadas y salchipapas creadas con ingredientes premium para paladares que buscan lo mejor de Cúcuta.
+            Somos Mucha Mazorca, el restaurante que te permite armar tus salchipapas a tu gusto con los mejores ingredientes de la ciudad. ¡Pide hoy y date ese gustico bien cargado! 🌽🔥
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link

@@ -252,7 +252,7 @@ export const menuItems: MenuItem[] = [
     description: 'Por si te gusta el sabor caribeño. Trae maicito, carne desmechada, mucho maduro, extra-queso mozzarella gratinado, suero costeño y papita de perro. Mi favorito a gusto personal.',
     price: 37000,
     categoryId: 'maicitos',
-    image: getImageUrl('VIENE LA PALOMA.jpg'),
+    image: getImageUrl('Viene la paloma.jpeg'),
     addons: ['tamano-maicito-37', 'adicionales-salchi'],
   },
   {

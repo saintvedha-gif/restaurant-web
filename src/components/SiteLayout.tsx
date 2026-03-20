@@ -218,7 +218,7 @@ export default function SiteLayout() {
               <span className="font-display text-yellow-400">MAZORCA</span>
             </p>
             <p className="mt-4 text-sm leading-7 text-zinc-300">
-              Redefiniendo el sabor de la calle con calidad premium y actitud urbana.
+              ¡Tu antojo, tu combinacion, tu Mucha Mazorca!💛🌽
             </p>
           </div>
 
