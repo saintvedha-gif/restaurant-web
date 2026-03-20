@@ -18,22 +18,33 @@ export default function CartDrawer() {
 
   function buildWhatsAppMessage(): string {
     if (state.items.length === 0) return '';
-    let msg = '🌽 *Pedido MUCHA MAZORCA*\n\n';
-    state.items.forEach(item => {
-      msg += `• *${item.menuItem.name}* x${item.quantity}\n`;
+    let msg = '🌽 *Pedido MUCHA MAZORCA*\n';
+    msg += '━━━━━━━━━━━━━━\n\n';
+
+    state.items.forEach((item, index) => {
+      msg += `*${index + 1}) ${item.menuItem.name}* x${item.quantity}\n`;
+
       if (item.selectedAddons.length > 0) {
+        msg += 'Adicionales:\n';
+
         item.selectedAddons.forEach(entry => {
           if (entry.addon.pricingMode === 'final') {
-            msg += `   ↳ Tamaño: ${entry.addon.name} ${formatPrice(entry.addon.price)}\n`;
+            msg += `• Tamaño: ${entry.addon.name} (${formatPrice(entry.addon.price)})\n`;
             return;
           }
 
-          msg += `   ↳ ${entry.addon.name} x${entry.quantity} +${formatPrice(entry.addon.price * entry.quantity)}\n`;
+          const qtyLabel = entry.quantity > 1 ? ` x${entry.quantity}` : '';
+          msg += `• ${entry.addon.name}${qtyLabel} (+${formatPrice(entry.addon.price * entry.quantity)})\n`;
         });
       }
-      msg += `   Subtotal: ${formatPrice(item.totalPrice)}\n`;
+
+      msg += `Subtotal producto: *${formatPrice(item.totalPrice)}*\n`;
+      msg += '\n';
     });
-    msg += `\n*Total: ${formatPrice(state.total)}*`;
+
+    msg += '━━━━━━━━━━━━━━\n';
+    msg += `*TOTAL PEDIDO: ${formatPrice(state.total)}*\n\n`;
+    msg += '¿Me confirman tiempo estimado, por favor?';
     return encodeURIComponent(msg);
   }
 
