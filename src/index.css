@@ -6,7 +6,7 @@
 
 :root {
   color: #f8f8f8;
-  background-color: #6e532e;
+  background-color: #655031;
 }
 
 @layer base {
@@ -21,12 +21,12 @@
   body {
     @apply font-sans text-zinc-100;
     -webkit-font-smoothing: antialiased;
-    background-color: #6e532e;
+    background-color: #655031;
     background-image:
-      radial-gradient(circle at 10% -10%, rgba(255, 199, 44, 0.36), transparent 33%),
-      radial-gradient(circle at 95% -5%, rgba(255, 129, 40, 0.28), transparent 32%),
-      radial-gradient(circle at 50% 120%, rgba(251, 191, 36, 0.14), transparent 40%),
-      linear-gradient(180deg, #6e532e 0%, #8a6637 52%, #a0743d 100%);
+      radial-gradient(circle at 10% -10%, rgba(229, 181, 66, 0.22), transparent 33%),
+      radial-gradient(circle at 95% -5%, rgba(186, 117, 52, 0.18), transparent 32%),
+      radial-gradient(circle at 50% 120%, rgba(214, 170, 77, 0.1), transparent 40%),
+      linear-gradient(180deg, #655031 0%, #7a5d37 52%, #906c3f 100%);
     overflow-x: hidden;
     position: relative;
   }
@@ -93,7 +93,7 @@
   .paper-panel {
     @apply rounded-[28px] border;
     border-color: #d1b07a;
-    background-color: rgba(123, 90, 52, 0.9);
+    background-color: rgba(116, 86, 52, 0.9);
     box-shadow: 0 20px 38px rgba(8, 20, 44, 0.3);
   }
 
@@ -104,7 +104,7 @@
   .olive-card {
     @apply rounded-[24px] border;
     border-color: #d1b07a;
-    background-color: rgba(138, 103, 61, 0.9);
+    background-color: rgba(129, 98, 59, 0.9);
     box-shadow: 0 14px 40px rgba(8, 20, 44, 0.34);
   }
 

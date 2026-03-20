@@ -154,7 +154,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, { items: [], total: 0 });
 
   const addItem = (menuItem: MenuItem, selectedAddons: Addon[]) =>
-    dispatch({ type: 'ADD_ITEM', payload: { menuItem, selectedAddons } });
+    dispatch({ type: 'ADD_ITEM', payload: { menuItem, selectedAddons: [...selectedAddons] } });
   const removeItem = (cartItemId: string) =>
     dispatch({ type: 'REMOVE_ITEM', payload: { cartItemId } });
   const increment = (cartItemId: string) =>

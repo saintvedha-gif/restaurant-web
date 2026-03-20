@@ -33,8 +33,8 @@ function getEffectiveGroupLimits(itemId: string, group: AddonGroup, selectedAddo
   }
 
   if (itemId === 'salchipapota' && group.id === 'adicionales-salchi') {
-    minSelections = 4;
-    excludedFromCount = EXCLUDED_SALCHI_COUNT_IDS;
+    minSelections = 0;
+    excludedFromCount = new Set<string>();
   }
 
   return { minSelections, maxSelections, excludedFromCount };
@@ -139,9 +139,15 @@ export default function ProductDetailPage({ item, onBack }: Props) {
   function handleAdd() {
     const missingGroup = relevantGroups.find(group => {
       const { minSelections, excludedFromCount } = getEffectiveGroupLimits(item.id, group, selectedAddons);
-      if (minSelections === 0) return false;
       const groupIds = group.addons.map(a => a.id);
       const selectedCount = countSelectedInGroup(selectedAddons, groupIds, excludedFromCount);
+
+      if (item.id === 'salchipapota' && group.id === 'adicionales-salchi') {
+        const hasAnyAddonSelected = selectedAddons.some(addon => groupIds.includes(addon.id));
+        return hasAnyAddonSelected && selectedCount < 4;
+      }
+
+      if (minSelections === 0) return false;
       return selectedCount < minSelections;
     });
 
@@ -163,7 +169,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
       return;
     }
 
-    addItem(item, selectedAddons);
+    addItem(item, [...selectedAddons]);
     setSelectedAddons(defaultSelections);
     setValidationError('');
     setAdded(true);
@@ -227,7 +233,9 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-100">{group.name}</h3>
                     <span className="text-xs text-zinc-400">
-                      {minSelections > 0
+                      {item.id === 'salchipapota' && group.id === 'adicionales-salchi'
+                        ? `0 o mínimo 4 opción(es) · Máximo ${maxSelections}`
+                        : minSelections > 0
                         ? `Mínimo ${minSelections} opción(es) · Máximo ${maxSelections}`
                         : `Máximo ${maxSelections}`}
                     </span>
@@ -237,7 +245,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
                   {item.id === 'salchipapota' && group.id === 'adicionales-salchi' && (
                     <p className="mt-2 text-[11px] text-zinc-400">
-                      Para el mínimo de 4 no cuentan: Takis, Extra-salsas ni Base de papita casco.
+                      Puedes pedirla sin adicionales. Si decides personalizarla, debes elegir mínimo 4 adicionales.
                     </p>
                   )}
 

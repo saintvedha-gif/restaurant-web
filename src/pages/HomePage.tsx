@@ -8,11 +8,11 @@ export default function HomePage() {
     <div>
       <section className="section-shell grid min-h-[75vh] items-center gap-10 py-12 lg:grid-cols-[1.15fr_0.85fr] lg:py-16">
         <div className="anim-fade-right">
-          <span className="text-xs font-bold uppercase tracking-[0.28em] text-yellow-300">El sabor urbano definitivo</span>
+          <span className="text-xs font-bold uppercase tracking-[0.28em] text-[#f0d27d]">El sabor urbano definitivo</span>
           <h1 className="mt-4 text-5xl leading-[0.95] text-white sm:text-6xl lg:text-7xl">
             <span className="font-display">SABOREA LA</span>
             <br />
-            <span className="font-display text-yellow-400">PERFECCIÓN</span>
+            <span className="font-display text-[#f2c94c]">PERFECCIÓN</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-8 text-zinc-300 sm:text-lg">
             Mazorcadas y salchipapas creadas con ingredientes premium para paladares que buscan lo mejor de Cúcuta.
@@ -20,13 +20,13 @@ export default function HomePage() {
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
               to="/menu"
-              className="rounded-lg bg-yellow-400 px-7 py-4 text-sm font-extrabold uppercase tracking-[0.15em] text-black transition-all hover:-translate-y-0.5 hover:bg-white"
+              className="rounded-lg bg-[#f0c648] px-7 py-4 text-sm font-extrabold uppercase tracking-[0.15em] text-black transition-all hover:-translate-y-0.5 hover:bg-[#f7e2a4]"
             >
               Explorar menú
             </Link>
             <Link
               to="/contacto"
-              className="rounded-lg border border-zinc-700 px-7 py-4 text-sm font-extrabold uppercase tracking-[0.15em] text-white transition-colors hover:border-yellow-400 hover:text-yellow-300"
+              className="rounded-lg border border-[#c7aa75] px-7 py-4 text-sm font-extrabold uppercase tracking-[0.15em] text-white transition-colors hover:border-[#f0c648] hover:text-[#f0d27d]"
             >
               Contacto
             </Link>
@@ -35,8 +35,8 @@ export default function HomePage() {
 
         <div className="anim-fade-left mx-auto w-full max-w-[430px]">
           <div className="relative aspect-square">
-            <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-[24px] border-2 border-yellow-400/70" />
-            <div className="h-full w-full overflow-hidden rounded-[24px] border border-[#d1b07a] bg-[#8a673d]">
+            <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-[24px] border-2 border-[#e5bc52]/65" />
+            <div className="h-full w-full overflow-hidden rounded-[24px] border border-[#d1b07a] bg-[#84633a]">
               <img
                 src={getImageUrl('FONDO3.jpeg')}
                 alt="Mucha Mazorca especial"
@@ -50,12 +50,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-[linear-gradient(180deg,#7b5a34_0%,#a0743d_100%)] py-20">
+      <section className="bg-[linear-gradient(180deg,#765733_0%,#906c3f_100%)] py-20">
         <div className="section-shell">
           <div className="anim-fade-up text-center">
             <h2 className="text-4xl text-white sm:text-5xl">
               <span className="font-display">NUESTROS</span>{' '}
-              <span className="font-display text-yellow-400">TOP 🔥</span>
+              <span className="font-display text-[#f2c94c]">TOP 🔥</span>
             </h2>
           </div>
 

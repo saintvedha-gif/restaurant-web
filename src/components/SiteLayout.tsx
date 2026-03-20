@@ -112,9 +112,9 @@ export default function SiteLayout() {
   }, [clockTick]);
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#6e532e_0%,#8a6637_55%,#a0743d_100%)] text-zinc-100">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#655031_0%,#7a5d37_55%,#906c3f_100%)] text-zinc-100">
       <div className="corn-bg pointer-events-none fixed inset-0 z-50 select-none" aria-hidden="true" />
-      <div className="border-b border-[#7c2d12]/40 bg-[linear-gradient(90deg,#ff8a00_0%,#ffb703_55%,#ffd166_100%)]">
+      <div className="border-b border-[#7c2d12]/30 bg-[linear-gradient(90deg,#d79036_0%,#e1b24f_55%,#edd08b_100%)]">
         <div className="section-shell py-2 text-xs text-[#3f2200]">
           {/* Fila 1: redes + estado */}
           <div className="flex items-center justify-between">
@@ -157,7 +157,7 @@ export default function SiteLayout() {
         </div>
       </div>
 
-      <header className="anim-fade-down sticky top-0 z-40 border-b border-[#d1b07a] bg-[#7b5a34] shadow-[0_10px_24px_rgba(48,30,12,0.28)]">
+      <header className="anim-fade-down sticky top-0 z-40 border-b border-[#d1b07a] bg-[#765733] shadow-[0_10px_24px_rgba(48,30,12,0.24)]">
         <div className="section-shell flex items-center justify-between gap-4 py-4">
           <NavLink to="/" className="text-2xl leading-none tracking-tight text-white sm:text-3xl">
             <span className="font-display"><span className="logo-corn">🌽</span> MUCHA</span>
@@ -185,7 +185,7 @@ export default function SiteLayout() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="border-t border-[#d1b07a] bg-[#7b5a34] md:hidden">
+          <div className="border-t border-[#d1b07a] bg-[#765733] md:hidden">
             <div className="section-shell grid gap-3 py-4">
               <MobileNavItem to="/">Inicio</MobileNavItem>
               <MobileNavItem to="/menu">Menú</MobileNavItem>
@@ -210,7 +210,7 @@ export default function SiteLayout() {
         <span className="hidden sm:inline">¡Pide ya!</span>
       </a>
 
-      <footer className="mt-16 border-t border-[#d1b07a] bg-[linear-gradient(180deg,#7b5a34_0%,#6e532e_100%)] pb-8 pt-14">
+      <footer className="mt-16 border-t border-[#d1b07a] bg-[linear-gradient(180deg,#765733_0%,#655031_100%)] pb-8 pt-14">
         <div className="section-shell grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div>
             <p className="text-2xl leading-none tracking-tight text-white">
