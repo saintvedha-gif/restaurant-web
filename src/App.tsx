@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { lazy, Suspense } from 'react';
 import { CartProvider } from './context/CartContext';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
@@ -9,9 +10,10 @@ const ContactPage = lazy(() => import('./pages/ContactPage'));
 const GalleryPage = lazy(() => import('./pages/GalleryPage'));
 
 export default function App() {
+  const basename = import.meta.env.MODE === 'production' ? '/restaurant-web' : '/';
   return (
     <CartProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Suspense fallback={<div className="section-shell py-16 text-center text-stone-700">Cargando...</div>}>
           <Routes>
             <Route element={<SiteLayout />}>
