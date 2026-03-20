@@ -1,12 +1,14 @@
+import { getImageUrl } from '../data/menuData';
+
 const galleryPhotos = [
-  '/images/SALCHIPAPITAS.png',
-  '/images/SALCHIPER.jpg',
-  '/images/QUETZALCOATL.png',
-  '/images/MILENIAL.jpg',
-  '/images/MALANDRO.png',
-  '/images/Amorguesa.jpg',
-  '/images/Negrita.jpg',
-  '/images/PAPITAS-ENTOCINADAS.png',
+  { src: getImageUrl('SALCHIPAPITAS.png'), alt: 'Salchipapita clásica' },
+  { src: getImageUrl('SALCHIPER.jpg'), alt: 'Salchiper personal' },
+  { src: getImageUrl('QUETZALCOATL.png'), alt: 'Quetzalcóatl' },
+  { src: getImageUrl('MILENIAL.jpg'), alt: 'Maicito Milenial' },
+  { src: getImageUrl('MALANDRO.png'), alt: 'Malandro' },
+  { src: getImageUrl('Amorguesa.jpg'), alt: 'Amorguesa' },
+  { src: getImageUrl('Negrita.jpg'), alt: 'Negrita' },
+  { src: getImageUrl('PAPITAS-ENTOCINADAS.png'), alt: 'Papitas entocinadas' },
 ];
 
 export default function GalleryPage() {
@@ -23,18 +25,20 @@ export default function GalleryPage() {
       <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {galleryPhotos.map((photo, idx) => (
           <article
-            key={photo}
-            className={`overflow-hidden rounded-[24px] border border-zinc-800 bg-zinc-900 shadow-[0_15px_30px_rgba(0,0,0,0.28)] ${
+            key={photo.src}
+            className={`overflow-hidden rounded-[24px] border border-[#d1b07a] bg-[#7b5a34] shadow-[0_15px_30px_rgba(48,30,12,0.28)] ${
               idx % 4 === 0 ? 'sm:col-span-2 lg:col-span-2' : ''
             }`}
           >
-            <img
-              src={photo}
-              alt={`Foto de plato ${idx + 1}`}
-              className="h-64 w-full object-cover transition-transform duration-500 hover:scale-105"
-              loading="lazy"
-              decoding="async"
-            />
+            <div className="relative bg-[#6e532e]">
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                className="h-64 w-full object-cover transition-transform duration-500 hover:scale-105"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </article>
         ))}
       </section>

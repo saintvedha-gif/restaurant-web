@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { categories, menuItems } from '../data/menuData';
 import type { MenuItem } from '../types/menu';
@@ -22,6 +22,19 @@ export default function MenuPage() {
     }, {}),
     []
   );
+
+  const [showCopied, setShowCopied] = useState(false);
+
+  const shareMenu = useCallback(async () => {
+    const url = 'https://saintvedha-gif.github.io/restaurant-web/menu';
+    if (navigator.share) {
+      await navigator.share({ title: 'Menú Mucha Mazorca 🌽', url });
+    } else {
+      await navigator.clipboard.writeText(url);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2500);
+    }
+  }, []);
 
   const currentCategory = categories.find(cat => cat.id === activeCategory) ?? categories[0];
   const currentItems = itemsByCategory[currentCategory.id] ?? [];
@@ -71,7 +84,26 @@ export default function MenuPage() {
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#8a6637_0%,#a0743d_100%)] pb-32 text-zinc-100">
-      <main className="section-shell py-10 lg:py-14">
+      <main className="section-shell py-6 lg:py-10">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-black leading-tight tracking-tight text-zinc-100 sm:text-3xl">Nuestro menú</h1>
+            <p className="mt-0.5 text-sm text-zinc-300">Escoge tu favorito y pídelo por WhatsApp</p>
+          </div>
+          <button
+            type="button"
+            onClick={shareMenu}
+            className="relative flex shrink-0 items-center gap-1.5 rounded-full border border-yellow-400/60 bg-yellow-400/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.15em] text-yellow-300 transition-all hover:bg-yellow-400/20"
+          >
+            <span>🔗</span>
+            <span>Compartir menú</span>
+            {showCopied && (
+              <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-zinc-900 px-2 py-1 text-[10px] font-semibold text-yellow-300 shadow-lg">
+                ¡Enlace copiado!
+              </span>
+            )}
+          </button>
+        </div>
         <section>
           <CategoryNav
             categories={categories}

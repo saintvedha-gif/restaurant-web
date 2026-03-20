@@ -1,6 +1,6 @@
 import type { Category, MenuItem, AddonGroup } from '../types/menu';
 
-const getImageUrl = (fileName: string): string => {
+export const getImageUrl = (fileName: string): string => {
   const isGithubPages = typeof window !== 'undefined' && window.location.pathname.startsWith('/restaurant-web');
   const basePath = isGithubPages ? '/restaurant-web' : '';
   return `${basePath}/images/${fileName}`;
