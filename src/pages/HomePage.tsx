@@ -38,7 +38,7 @@ export default function HomePage() {
             <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-[24px] border-2 border-yellow-400/70" />
             <div className="h-full w-full overflow-hidden rounded-[24px] border border-[#d1b07a] bg-[#8a673d]">
               <img
-                src={getImageUrl('QUETZALCOATL.png')}
+                src={getImageUrl('FONDO3.jpeg')}
                 alt="Mucha Mazorca especial"
                 className="h-full w-full object-cover"
                 loading="eager"
