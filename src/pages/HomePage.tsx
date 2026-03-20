@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { formatPrice, getImageUrl, menuItems } from '../data/menuData';
 
-const topItems = menuItems.filter(item => item.tags?.includes('popular')).slice(0, 2);
+const topItems = menuItems.filter(item => item.tags?.includes('popular')).slice(0, 4);
 
 export default function HomePage() {
   return (
@@ -68,9 +68,9 @@ export default function HomePage() {
                 }`}
               >
                 <div className="relative h-64 overflow-hidden">
-                  {item.image && (
+                  {(item.imageHero || item.image) && (
                     <img
-                      src={item.image}
+                      src={item.imageHero || item.image!}
                       alt={item.name}
                       className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                       loading="lazy"

@@ -13,6 +13,7 @@ export interface MenuItem {
   price: number;
   emoji: string;
   image?: string;
+  imageHero?: string;
   categoryId: string;
   addons?: string[]; // addon group ids
   tags?: string[];
