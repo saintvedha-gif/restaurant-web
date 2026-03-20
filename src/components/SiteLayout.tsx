@@ -3,9 +3,9 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { WHATSAPP_NUMBER } from '../data/menuData';
 
 const socialLinks = [
-  { name: 'Instagram', href: 'https://www.instagram.com', handle: '@muchamazorca' },
+  { name: 'Instagram', href: 'https://www.instagram.com/muchamazork', handle: '@muchamazork' },
   { name: 'Facebook', href: 'https://www.facebook.com', handle: 'Mucha Mazorca' },
-  { name: 'TikTok', href: 'https://www.tiktok.com', handle: '@muchamazorca' },
+  { name: 'TikTok', href: 'https://www.tiktok.com/@muchamazorca', handle: '@muchamazorca' },
 ];
 
 type DayKey = 'domingo' | 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes' | 'sabado';
@@ -124,14 +124,14 @@ export default function SiteLayout() {
                   <path d="M13.5 9H16V6h-2.5C10.9 6 9 7.9 9 10.5V13H7v3h2v6h3v-6h3l.5-3H12v-2.5c0-.8.7-1.5 1.5-1.5z" />
                 </svg>
               </SocialIcon>
-              <SocialIcon href="https://www.instagram.com" label="Instagram">
+              <SocialIcon href="https://www.instagram.com/muchamazork" label="Instagram">
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-[1.8]">
                   <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
                   <circle cx="12" cy="12" r="4" />
                   <circle cx="17.2" cy="6.8" r="1" className="fill-current stroke-none" />
                 </svg>
               </SocialIcon>
-              <SocialIcon href="https://www.tiktok.com" label="TikTok">
+              <SocialIcon href="https://www.tiktok.com/@muchamazorca" label="TikTok">
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
                   <path d="M14.8 3h2.2c.2 1.9 1.5 3.6 3.4 4.2v2.3a7.2 7.2 0 0 1-3.4-1.1v6.4a5.1 5.1 0 1 1-5.1-5.1c.3 0 .7 0 1 .1v2.3a2.8 2.8 0 1 0 1.9 2.7V3z" />
                 </svg>
@@ -224,8 +224,8 @@ export default function SiteLayout() {
 
           <div>
             <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-yellow-300">Horario</p>
-            <p className="mt-3 text-sm text-zinc-300">Dom - Jue: 5:00 PM - 11:00 PM</p>
-            <p className="mt-2 text-sm text-zinc-300">Vie - Sáb: 5:00 PM - 1:00 AM</p>
+            <p className="mt-3 text-sm text-zinc-300">Lun - Jue: 5:00 PM - 10:00 PM</p>
+            <p className="mt-2 text-sm text-zinc-300">Vie - Dom: 6:00 PM - 11:00 PM</p>
           </div>
 
           <div>
