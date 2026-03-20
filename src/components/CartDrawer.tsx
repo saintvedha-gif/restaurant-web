@@ -18,31 +18,39 @@ export default function CartDrawer() {
 
   function buildWhatsAppMessage(): string {
     if (state.items.length === 0) return '';
-    let msg = '*Pedido MUCHA MAZORCA*\n\n';
+    // Usamos códigos Unicode para no depender de la codificación del archivo
+    const emojiCorn = '\uD83C\uDF3D';
+    const emojiCheck = '\u2705';
+    const emojiMoney = '\uD83D\uDCB0';
+    const emojiFire = '\uD83D\uDD25';
+    const emojiClock = '\u23F0';
+    const emojiPlus = '\u2795';
+
+    let msg = `${emojiCorn} *PEDIDO MUCHA MAZORCA* ${emojiCorn}\n\n`;
 
     state.items.forEach((item, index) => {
-      msg += `*${index + 1}) ${item.menuItem.name}* x${item.quantity}\n`;
+      msg += `${emojiCheck} *${index + 1}) ${item.menuItem.name}* x${item.quantity}\n`;
 
       if (item.selectedAddons.length > 0) {
-        msg += 'Adicionales:\n';
+        msg += `  ${emojiPlus} _Adicionales:_\n`;
 
         item.selectedAddons.forEach(entry => {
           if (entry.addon.pricingMode === 'final') {
-            msg += `* Tamaño: ${entry.addon.name} (${formatPrice(entry.addon.price)})\n`;
+            msg += `     - Tamano: ${entry.addon.name} (${formatPrice(entry.addon.price)})\n`;
             return;
           }
 
           const qtyLabel = entry.quantity > 1 ? ` x${entry.quantity}` : '';
-          msg += `* ${entry.addon.name}${qtyLabel} (+${formatPrice(entry.addon.price * entry.quantity)})\n`;
+          msg += `     - ${entry.addon.name}${qtyLabel} (+${formatPrice(entry.addon.price * entry.quantity)})\n`;
         });
       }
 
-      msg += `Subtotal producto: *${formatPrice(item.totalPrice)}*\n`;
-      msg += '\n';
+      msg += `${emojiMoney} Subtotal: *${formatPrice(item.totalPrice)}*\n`;
+      msg += '--------------------------------\n';
     });
 
-    msg += `*TOTAL PEDIDO: ${formatPrice(state.total)}*\n\n`;
-    msg += '¿Me confirman tiempo estimado, por favor?';
+    msg += `\n${emojiFire} *TOTAL A PAGAR: ${formatPrice(state.total)}* ${emojiFire}\n\n`;
+    msg += `${emojiClock} Me confirman tiempo estimado, por favor?`;
     return encodeURIComponent(msg);
   }
 
