@@ -430,7 +430,6 @@ export const menuItems: MenuItem[] = [
     price: 4000,
     categoryId: 'bebidas',
     image: getImageUrl('Brisa sin Gas.jpg'),
-    addons: ['tamano-bebidas'],
   },
   {
     id: 'schweppes',
@@ -440,7 +439,6 @@ export const menuItems: MenuItem[] = [
     price: 5000,
     categoryId: 'bebidas',
     image: getImageUrl('Soda Schweppes.jpg'),
-    addons: ['tamano-bebidas'],
   },
   {
     id: 'quatro',
