@@ -261,7 +261,7 @@ export default function SiteLayout() {
         type="button"
         onClick={() => setThemeMode(current => (current === 'light' ? 'dark' : 'light'))}
         aria-label={themeMode === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
-        className="fixed bottom-24 right-4 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition-transform hover:scale-[1.06] sm:bottom-28 sm:right-5"
+        className="fixed right-4 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition-colors duration-200 [bottom:calc(env(safe-area-inset-bottom)+6.25rem)] sm:bottom-28 sm:right-5"
         style={{
           background: themeMode === 'light' ? '#1e1e22' : '#FFD60A',
           color: themeMode === 'light' ? '#FFD60A' : '#1e1e22',
@@ -274,7 +274,7 @@ export default function SiteLayout() {
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-5 right-4 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#00C853] text-white shadow-[0_12px_24px_rgba(0,200,83,0.35)] transition-transform hover:scale-[1.04] sm:bottom-6 sm:right-5 sm:h-auto sm:w-auto sm:gap-2 sm:px-5 sm:py-3 sm:text-sm sm:font-bold"
+        className="fixed right-4 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#00C853] text-white shadow-[0_12px_24px_rgba(0,200,83,0.35)] transition-colors duration-200 [bottom:calc(env(safe-area-inset-bottom)+1.25rem)] sm:bottom-6 sm:right-5 sm:h-auto sm:w-auto sm:gap-2 sm:px-5 sm:py-3 sm:text-sm sm:font-bold"
       >
         <span className="text-base">💬</span>
         <span className="hidden sm:inline">¡Pide ya!</span>
