@@ -169,7 +169,7 @@ export default function SiteLayout() {
 
   return (
     <div className="theme-page min-h-screen bg-[linear-gradient(180deg,#FFECD2_0%,#FFF3E0_55%,#FFE4C2_100%)] text-[#4A2800]">
-      <div className="corn-bg pointer-events-none fixed inset-0 z-50 select-none" aria-hidden="true" />
+      <div className="corn-bg pointer-events-none fixed inset-0 z-0 select-none" aria-hidden="true" />
       <div className="theme-topbar border-b border-[#CC5500]/40 bg-[linear-gradient(90deg,#FF6D00_0%,#FF8C00_50%,#FFD60A_100%)]">
         <div className="section-shell py-2 text-xs font-semibold">
           {/* Fila 1: redes + estado */}
@@ -237,15 +237,6 @@ export default function SiteLayout() {
             <NavItem to="/contacto" asCta>
               Pide ahora
             </NavItem>
-            <button
-              type="button"
-              onClick={() => setThemeMode(current => (current === 'light' ? 'dark' : 'light'))}
-              className="theme-toggle"
-              aria-label={themeMode === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
-              title={themeMode === 'light' ? 'Modo oscuro' : 'Modo claro'}
-            >
-              {themeMode === 'light' ? '🌙 Oscuro' : '☀️ Claro'}
-            </button>
           </nav>
         </div>
 
@@ -256,14 +247,6 @@ export default function SiteLayout() {
               <MobileNavItem to="/menu">Menú</MobileNavItem>
               <MobileNavItem to="/galeria">Galería</MobileNavItem>
               <MobileNavItem to="/contacto" asCta>Pide ahora</MobileNavItem>
-              <button
-                type="button"
-                onClick={() => setThemeMode(current => (current === 'light' ? 'dark' : 'light'))}
-                className="theme-toggle w-full"
-                aria-label={themeMode === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
-              >
-                {themeMode === 'light' ? '🌙 Activar modo oscuro' : '☀️ Activar modo claro'}
-              </button>
             </div>
           </div>
         )}
@@ -272,6 +255,20 @@ export default function SiteLayout() {
       <main>
         <Outlet />
       </main>
+
+      {/* Botón flotante modo oscuro — encima del de WhatsApp */}
+      <button
+        type="button"
+        onClick={() => setThemeMode(current => (current === 'light' ? 'dark' : 'light'))}
+        aria-label={themeMode === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
+        className="fixed bottom-24 right-4 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition-transform hover:scale-[1.06] sm:bottom-28 sm:right-5"
+        style={{
+          background: themeMode === 'light' ? '#1e1e22' : '#FFD60A',
+          color: themeMode === 'light' ? '#FFD60A' : '#1e1e22',
+        }}
+      >
+        <span className="text-xl leading-none">{themeMode === 'light' ? '🌙' : '☀️'}</span>
+      </button>
 
       <a
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
