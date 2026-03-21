@@ -420,6 +420,7 @@ export const menuItems: MenuItem[] = [
     price: 5000,
     categoryId: 'bebidas',
     image: getImageUrl('Coca-Cola 1.5.jpg'),
+    addons: ['tamano-coca-cola'],
   },
   {
     id: 'brisa',
@@ -429,6 +430,7 @@ export const menuItems: MenuItem[] = [
     price: 4000,
     categoryId: 'bebidas',
     image: getImageUrl('Brisa sin Gas.jpg'),
+    addons: ['tamano-bebidas'],
   },
   {
     id: 'schweppes',
@@ -438,6 +440,7 @@ export const menuItems: MenuItem[] = [
     price: 5000,
     categoryId: 'bebidas',
     image: getImageUrl('Soda Schweppes.jpg'),
+    addons: ['tamano-bebidas'],
   },
   {
     id: 'quatro',
@@ -447,6 +450,7 @@ export const menuItems: MenuItem[] = [
     price: 10000,
     categoryId: 'bebidas',
     image: getImageUrl('Quatro.jpg'),
+    addons: ['tamano-bebidas'],
   },
   {
     id: 'ginger',
@@ -456,6 +460,7 @@ export const menuItems: MenuItem[] = [
     price: 10000,
     categoryId: 'bebidas',
     image: getImageUrl('Ginger.jpg'),
+    addons: ['tamano-bebidas'],
   },
   {
     id: 'sprite',
@@ -465,6 +470,7 @@ export const menuItems: MenuItem[] = [
     price: 10000,
     categoryId: 'bebidas',
     image: getImageUrl('Sprite.jpg'),
+    addons: ['tamano-bebidas'],
   },
 
   // SALSITAS PODEROSAS

@@ -34,7 +34,7 @@ export default function MenuCard({ item, onSelect }: Props) {
           </div>
           <p className="mt-1.5 line-clamp-2 text-sm leading-5 text-[#6A3A00]">{item.description}</p>
           <div className="mt-3 flex items-center justify-between gap-2">
-            <span className="inline-flex items-center justify-center rounded-lg border-2 border-yellow-300 bg-yellow-300/10 px-2.5 py-1 text-base font-black text-yellow-300 sm:text-lg">
+            <span className="inline-flex items-center justify-center rounded-md border border-[#4A2800] px-2.5 py-1 text-base font-black text-yellow-300 sm:text-lg">
               {formatPrice(item.price)}
             </span>
             <span className="inline-flex items-center justify-center rounded-full border border-[#FF6D00]/40 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-[#6A3A00]">
