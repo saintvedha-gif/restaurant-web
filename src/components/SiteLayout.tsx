@@ -93,6 +93,7 @@ function isOpenNow(day: DayKey, minutesOfDay: number) {
 export default function SiteLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [clockTick, setClockTick] = useState(0);
+  const [showFloatingActions, setShowFloatingActions] = useState(false);
   const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
     const stored = window.localStorage.getItem('theme-mode');
     if (stored === 'light' || stored === 'dark') return stored;
@@ -159,6 +160,23 @@ export default function SiteLayout() {
     }, 60_000);
 
     return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const updateFloatingVisibility = () => {
+      // En mobile evitamos tapar los CTAs del hero al inicio.
+      const isDesktop = window.innerWidth >= 640;
+      setShowFloatingActions(isDesktop || window.scrollY > 220);
+    };
+
+    updateFloatingVisibility();
+    window.addEventListener('scroll', updateFloatingVisibility, { passive: true });
+    window.addEventListener('resize', updateFloatingVisibility);
+
+    return () => {
+      window.removeEventListener('scroll', updateFloatingVisibility);
+      window.removeEventListener('resize', updateFloatingVisibility);
+    };
   }, []);
 
   const openNow = useMemo(() => {
@@ -256,6 +274,7 @@ export default function SiteLayout() {
         <Outlet />
       </main>
 
+      {showFloatingActions && (
       <div className="fixed bottom-5 right-4 z-50 flex flex-col items-center gap-3 sm:bottom-6 sm:right-5">
         <button
           type="button"
@@ -280,6 +299,7 @@ export default function SiteLayout() {
           <span className="hidden sm:inline">¡Pide ya!</span>
         </a>
       </div>
+      )}
 
       <footer className="theme-footer mt-16 border-t border-[#FF6D00]/30 bg-[linear-gradient(180deg,#FFF3E0_0%,#FFE4C2_100%)] pb-8 pt-14">
         <div className="section-shell grid gap-10 md:grid-cols-2 lg:grid-cols-3">
