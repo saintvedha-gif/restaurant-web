@@ -164,9 +164,15 @@ export default function SiteLayout() {
 
   useEffect(() => {
     const updateFloatingVisibility = () => {
-      // En mobile evitamos tapar los CTAs del hero al inicio.
-      const isDesktop = window.innerWidth >= 640;
-      setShowFloatingActions(isDesktop || window.scrollY > 220);
+      // En mobile evitamos tapar los CTAs al inicio. Una vez aparecen, se quedan visibles.
+      if (window.innerWidth >= 640) {
+        setShowFloatingActions(true);
+        return;
+      }
+
+      if (window.scrollY > 220) {
+        setShowFloatingActions(true);
+      }
     };
 
     updateFloatingVisibility();
