@@ -168,7 +168,6 @@ export const menuItems: MenuItem[] = [
     price: 17000,
     categoryId: 'entradas',
     image: getImageUrl('PAPITAS-ENTOCINADAS.png'),
-    addons: ['adicionales-salchi'],
   },
   {
     id: 'el-matrimonio',
@@ -191,7 +190,6 @@ export const menuItems: MenuItem[] = [
     image: getImageUrl('SALCHIPAPITAS.png'),
     imageHero: getImageUrl('Salchipapita.jpeg'),
     addons: ['adicionales-salchi'],
-    tags: ['popular'],
   },
   {
     id: 'salchiper',
@@ -203,7 +201,6 @@ export const menuItems: MenuItem[] = [
     image: getImageUrl('SALCHIPER.jpg'),
     imageHero: getImageUrl('Salchiper.jpeg'),
     addons: ['adicionales-salchi'],
-    tags: ['popular'],
   },
   {
     id: 'salchipapota',
@@ -223,7 +220,6 @@ export const menuItems: MenuItem[] = [
     price: 32000,
     categoryId: 'salchipapitas',
     image: getImageUrl('SALCHI-CARNITA.png'),
-    addons: ['adicionales-salchi'],
   },
   {
     id: 'salchifeliz',
@@ -233,7 +229,28 @@ export const menuItems: MenuItem[] = [
     price: 29000,
     categoryId: 'salchipapitas',
     image: getImageUrl('SALCHIFELIZ.png'),
-    addons: ['adicionales-salchi'],
+  },
+  {
+    id: 'la-doble-m',
+    name: '¡La Doble M!',
+    emoji: '🍟💛',
+    description: 'Una salchipera armada para compartir entre 2 personas. Incluye base de papitas y salchichas, pollito mechado en salsa blanca de la casa, 10 huevitos de codorniz, choricitos y madurito tajado.',
+    price: 66000,
+    categoryId: 'salchipapitas',
+    image: getImageUrl('La Doble M.jpeg'),
+    imageHero: getImageUrl('La Doble M.jpeg'),
+    tags: ['popular'],
+  },
+  {
+    id: 'la-gloriosa-salchipapa',
+    name: '¡La Gloriosa Salchipapa!',
+    emoji: '♟️🇨🇴',
+    description: 'Una salchiper en versión gloriosa con base de papitas y salchicha. Incluye carnita, maicito (mezcla de pollo, tocineta y salchichas en salsa bechamel), huevitos y madurito. Perfecta para compartir.',
+    price: 74000,
+    categoryId: 'salchipapitas',
+    image: getImageUrl('La Gloriosa Salchipapa.jpeg'),
+    imageHero: getImageUrl('La Gloriosa Salchipapa.jpeg'),
+    tags: ['popular'],
   },
 
   // MAICITOS
@@ -246,7 +263,6 @@ export const menuItems: MenuItem[] = [
     categoryId: 'maicitos',
     image: getImageUrl('Quetzalcoat.jpeg'),
     imageHero: getImageUrl('QUETZALCOATL.png'),
-    addons: ['adicionales-salchi'],
     tags: ['nuevo', 'popular'],
   },
   {
@@ -257,7 +273,6 @@ export const menuItems: MenuItem[] = [
     price: 37000,
     categoryId: 'maicitos',
     image: getImageUrl('Viene la paloma.jpeg'),
-    addons: ['tamano-maicito-37', 'adicionales-salchi'],
   },
   {
     id: 'milenial',
@@ -268,7 +283,6 @@ export const menuItems: MenuItem[] = [
     categoryId: 'maicitos',
     image: getImageUrl('MILENIAL.jpg'),
     imageHero: getImageUrl('Milenial.jpeg'),
-    addons: ['tamano-milenial', 'adicionales-salchi'],
     tags: ['popular'],
   },
   {
@@ -279,7 +293,6 @@ export const menuItems: MenuItem[] = [
     price: 37000,
     categoryId: 'maicitos',
     image: getImageUrl('MALANDRO.png'),
-    addons: ['tamano-maicito-37', 'adicionales-salchi'],
   },
   {
     id: 'negrita',
@@ -289,7 +302,6 @@ export const menuItems: MenuItem[] = [
     price: 34000,
     categoryId: 'maicitos',
     image: getImageUrl('Negrita.jpg'),
-    addons: ['adicionales-salchi'],
   },
 
   // AMORGUESAS
@@ -408,7 +420,6 @@ export const menuItems: MenuItem[] = [
     price: 5000,
     categoryId: 'bebidas',
     image: getImageUrl('Coca-Cola 1.5.jpg'),
-    addons: ['tamano-coca-cola'],
   },
   {
     id: 'brisa',
@@ -436,7 +447,6 @@ export const menuItems: MenuItem[] = [
     price: 10000,
     categoryId: 'bebidas',
     image: getImageUrl('Quatro.jpg'),
-    addons: ['tamano-bebidas'],
   },
   {
     id: 'ginger',
@@ -446,7 +456,6 @@ export const menuItems: MenuItem[] = [
     price: 10000,
     categoryId: 'bebidas',
     image: getImageUrl('Ginger.jpg'),
-    addons: ['tamano-bebidas'],
   },
   {
     id: 'sprite',
@@ -456,7 +465,6 @@ export const menuItems: MenuItem[] = [
     price: 10000,
     categoryId: 'bebidas',
     image: getImageUrl('Sprite.jpg'),
-    addons: ['tamano-bebidas'],
   },
 
   // SALSITAS PODEROSAS

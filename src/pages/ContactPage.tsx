@@ -90,43 +90,43 @@ export default function ContactPage() {
 
   return (
     <div className="section-shell py-8 sm:py-12">
-      <section className="rounded-[28px] border border-[#d1b07a] bg-[#7b5a34] p-4 shadow-[0_16px_34px_rgba(48,30,12,0.28)] sm:p-6 lg:p-8">
+      <section className="rounded-[28px] border border-[#FF6D00]/35 bg-[#FFF3E0] p-4 shadow-[0_16px_34px_rgba(255,109,0,0.15)] sm:p-6 lg:p-8">
         <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="space-y-4">
-            <article className="rounded-[22px] border border-[#d1b07a] bg-[#8a673d] p-5">
-              <h2 className="text-2xl text-zinc-100"><span className="font-display">Ubicacion</span></h2>
-              <p className="mt-2 text-zinc-300">{LOCATION_LABEL}</p>
+            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
+              <h2 className="text-2xl text-[#4A2800]"><span className="font-display">Ubicacion</span></h2>
+              <p className="mt-2 text-[#6A3A00]">{LOCATION_LABEL}</p>
               <a
                 href={MAPS_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-flex rounded-full bg-[#3b82f6] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#2563eb]"
+                className="btn-secondary-sm mt-4"
               >
                 Como llegar
               </a>
             </article>
 
-            <article className="rounded-[22px] border border-[#d1b07a] bg-[#8a673d] p-5">
-              <h2 className="text-2xl text-zinc-100"><span className="font-display">WhatsApp</span></h2>
-              <p className="mt-2 text-zinc-300">+57 350 338 4530</p>
+            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
+              <h2 className="text-2xl text-[#4A2800]"><span className="font-display">WhatsApp</span></h2>
+              <p className="mt-2 text-[#6A3A00]">+57 350 338 4530</p>
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-flex rounded-full bg-[#10b981] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#059669]"
+                className="btn-secondary-sm mt-4"
               >
                 Enviar mensaje
               </a>
             </article>
 
-            <article className="rounded-[22px] border border-[#d1b07a] bg-[#8a673d] p-5">
-              <h2 className="text-2xl text-zinc-100"><span className="font-display">Instagram</span></h2>
-              <p className="mt-2 text-zinc-300">{INSTAGRAM_HANDLE}</p>
+            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
+              <h2 className="text-2xl text-[#4A2800]"><span className="font-display">Instagram</span></h2>
+              <p className="mt-2 text-[#6A3A00]">{INSTAGRAM_HANDLE}</p>
               <a
                 href="https://www.instagram.com/muchamazork?igsh=am82a3lsM2ExZ2lm"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-flex rounded-full bg-[linear-gradient(90deg,#7c3aed_0%,#ec4899_100%)] px-5 py-2.5 text-sm font-bold text-white"
+                className="btn-secondary-sm mt-4"
               >
                 Seguir
               </a>
@@ -134,24 +134,24 @@ export default function ContactPage() {
           </div>
 
           <div className="space-y-4">
-            <article className="rounded-[22px] border border-[#d1b07a] bg-[#8a673d] p-5">
-              <h2 className="text-2xl text-zinc-100"><span className="font-display">Tipos de servicio</span></h2>
+            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
+              <h2 className="text-2xl text-[#4A2800]"><span className="font-display">Tipos de servicio</span></h2>
               <div className="mt-4 space-y-3">
                 {SERVICE_TYPES.map(service => (
-                  <div key={service.id} className="rounded-xl border border-[#d1b07a] bg-[#7b5a34] p-3">
+                  <div key={service.id} className="rounded-xl border border-[#FF6D00]/20 bg-[#FFE4C2] p-3">
                     <div className="flex items-center justify-between">
-                      <p className="font-semibold text-zinc-100">{service.name}</p>
-                      <span className="text-emerald-300">✓</span>
+                      <p className="font-semibold text-[#4A2800]">{service.name}</p>
+                      <span className="text-[#00C853]">✓</span>
                     </div>
-                    {service.note && <p className="mt-1 text-sm text-zinc-300">{service.note}</p>}
+                    {service.note && <p className="mt-1 text-sm text-[#6A3A00]">{service.note}</p>}
                   </div>
                 ))}
               </div>
             </article>
 
-            <article className="rounded-[22px] border border-[#d1b07a] bg-[#8a673d] p-5">
+            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 className="text-2xl text-zinc-100"><span className="font-display">Horarios de atencion</span></h2>
+                <h2 className="text-2xl text-[#4A2800]"><span className="font-display">Horarios de atencion</span></h2>
                 <span
                   className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-extrabold uppercase tracking-[0.12em] ${
                     currentStatus.isOpen
@@ -162,7 +162,7 @@ export default function ContactPage() {
                   {currentStatus.statusLabel}
                 </span>
               </div>
-              <p className="mt-2 text-sm text-zinc-300">Hora actual Cúcuta: {currentStatus.timeLabel} · {currentStatus.helperLabel}</p>
+              <p className="mt-2 text-sm text-[#6A3A00]">Hora actual Cúcuta: {currentStatus.timeLabel} · {currentStatus.helperLabel}</p>
 
               <div className="mt-4 space-y-2">
                 {DAY_ORDER.map(day => {
@@ -173,7 +173,7 @@ export default function ContactPage() {
                     <div
                       key={day}
                       className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${
-                        isToday ? 'bg-yellow-400/15 text-yellow-200' : 'text-zinc-200'
+                        isToday ? 'bg-[#FFD60A]/20 text-[#FFD60A] font-bold' : 'text-[#6A3A00]'
                       }`}
                     >
                       <span className="capitalize">{day}</span>
@@ -184,9 +184,9 @@ export default function ContactPage() {
               </div>
             </article>
 
-            <article className="rounded-[22px] border border-[#d1b07a] bg-[#8a673d] p-5">
-            <h2 className="text-2xl text-zinc-100"><span className="font-display">Encuentra nuestra ubicacion</span></h2>
-            <div className="mt-4 overflow-hidden rounded-[18px] border border-[#d1b07a]">
+            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
+            <h2 className="text-2xl text-[#4A2800]"><span className="font-display">Encuentra nuestra ubicacion</span></h2>
+            <div className="mt-4 overflow-hidden rounded-[18px] border border-[#FF6D00]/30">
               <iframe
                 title="Mapa Mucha Mazorca"
                 src={MAPS_EMBED}
@@ -200,7 +200,7 @@ export default function ContactPage() {
               href={MAPS_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex rounded-full bg-[linear-gradient(90deg,#fb923c_0%,#f97316_100%)] px-5 py-2.5 text-sm font-bold text-white"
+              className="btn-secondary-sm mt-4"
             >
               Como llegar
             </a>

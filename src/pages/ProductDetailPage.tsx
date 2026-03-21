@@ -177,12 +177,12 @@ export default function ProductDetailPage({ item, onBack }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#8a6637_0%,#a0743d_100%)] pb-36 text-zinc-100">
-      <header className="sticky top-0 z-30 border-b border-[#d1b07a] bg-[#7b5a34] shadow-[0_10px_24px_rgba(48,30,12,0.28)]">
+    <div className="theme-page min-h-screen bg-[linear-gradient(180deg,#FFECD2_0%,#FFF3E0_100%)] pb-36 text-[#4A2800]">
+      <header className="sticky top-0 z-30 border-b border-[#FF6D00]/35 bg-[#FFF3E0] shadow-[0_8px_20px_rgba(255,109,0,0.18)]">
         <div className="section-shell flex items-center justify-between gap-4 py-4">
           <button
             onClick={onBack}
-            className="inline-flex items-center gap-2 rounded-full border border-[#dcb983] bg-[#8a673d] px-4 py-2 text-sm font-bold text-zinc-100 hover:border-yellow-400 hover:text-yellow-300"
+            className="btn-secondary-sm gap-2"
           >
             <span>←</span>
             <span>Volver al menu</span>
@@ -207,20 +207,20 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
           <section className="paper-panel flex min-h-[500px] flex-col">
             <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
-              <h1 className="font-display text-4xl leading-tight text-zinc-100 sm:text-5xl">
+              <h1 className="font-display text-4xl leading-tight text-[#4A2800] sm:text-5xl">
                 {item.name} {item.emoji}
               </h1>
-              <p className="mt-3 text-base leading-8 text-zinc-300">{item.description}</p>
+              <p className="mt-3 text-base leading-8 text-[#6A3A00]">{item.description}</p>
 
-              <div className="mt-5 rounded-2xl border border-[#d1b07a] bg-[#8a673d] px-5 py-4">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-yellow-300">Precio base</p>
-                <p className="mt-1 text-4xl font-black text-yellow-300">{formatPrice(item.price)}</p>
+              <div className="mt-5 rounded-2xl border border-[#FF6D00]/35 bg-[#FFE4C2] px-5 py-4">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#FF6D00]">Precio base</p>
+                <p className="mt-1 text-4xl font-black text-[#FFD60A]">{formatPrice(item.price)}</p>
               </div>
 
               {relevantGroups.length > 0 && (
                 <div className="mt-6">
-                  <h2 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-100">Adicionales</h2>
-                  <p className="mt-1 text-xs text-zinc-400">Selecciona los que quieras y revisa el precio de cada uno.</p>
+                  <h2 className="text-sm font-black uppercase tracking-[0.2em] text-[#4A2800]">Adicionales</h2>
+                  <p className="mt-1 text-xs text-[#8A5A2A]">Selecciona los que quieras y revisa el precio de cada uno.</p>
                 </div>
               )}
 
@@ -231,8 +231,8 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
                     return (
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-zinc-100">{group.name}</h3>
-                    <span className="text-xs text-zinc-400">
+                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#4A2800]">{group.name}</h3>
+                    <span className="text-xs text-[#8A5A2A]">
                       {item.id === 'salchipapota' && group.id === 'adicionales-salchi'
                         ? `0 o mínimo 4 opción(es) · Máximo ${maxSelections}`
                         : minSelections > 0
@@ -244,7 +244,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                   })()}
 
                   {item.id === 'salchipapota' && group.id === 'adicionales-salchi' && (
-                    <p className="mt-2 text-[11px] text-zinc-400">
+                    <p className="mt-2 text-[11px] text-[#8A5A2A]">
                       Puedes pedirla sin adicionales. Si decides personalizarla, debes elegir mínimo 4 adicionales.
                     </p>
                   )}
@@ -267,17 +267,17 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                           disabled={disabled}
                           className={`rounded-2xl border px-4 py-4 text-left transition-colors ${
                             isSelected
-                              ? 'border-yellow-400/70 bg-yellow-400/10'
+                              ? 'border-[#FFD60A]/60 bg-[#FFD60A]/10'
                               : disabled
-                                  ? 'cursor-not-allowed border-[#d1b07a] bg-[#8a673d] opacity-40'
-                                  : 'border-[#d1b07a] bg-[#7b5a34] hover:bg-[#8a673d]'
+                                  ? 'cursor-not-allowed border-[#FF6D00]/15 bg-[#FFE4C2] opacity-40'
+                                  : 'border-[#FF6D00]/25 bg-[#FFF3E0] hover:bg-[#FFE4C2]'
                           }`}
                         >
                           <div className="flex items-center justify-between gap-3">
                             <div className="min-w-0">
-                              <p className="text-sm font-semibold leading-snug text-zinc-200">{addon.emoji} {addon.name}</p>
+                              <p className="text-sm font-semibold leading-snug text-[#6A3A00]">{addon.emoji} {addon.name}</p>
                             </div>
-                            <span className="shrink-0 text-sm font-black text-yellow-300">{isFinalPriceOption ? formatPrice(addon.price) : `+ ${formatPrice(addon.price)}`}</span>
+                            <span className="shrink-0 text-sm font-black text-[#FF6D00]">{isFinalPriceOption ? formatPrice(addon.price) : `+ ${formatPrice(addon.price)}`}</span>
                           </div>
                         </button>
                       );
@@ -287,20 +287,20 @@ export default function ProductDetailPage({ item, onBack }: Props) {
               ))}
 
               {item.id === 'salchiper' && salchiperCountableAdds >= 6 && (
-                <div className="mt-5 rounded-2xl border border-emerald-400/40 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-200">
+                <div className="mt-5 rounded-2xl border border-[#00C853]/35 bg-[#00C853]/10 px-4 py-3 text-sm text-[#00C853]">
                   ✅ Desde 6 adicionales te lo enviamos en envase más grande.
                 </div>
               )}
             </div>
 
-            <div className="border-t border-[#d1b07a] bg-[#7b5a34] px-5 py-4 sm:px-7">
+            <div className="border-t border-[#FF6D00]/30 bg-[#FFF3E0] px-5 py-4 sm:px-7">
               {validationError && <p className="mb-2 text-center text-xs font-semibold text-red-600">{validationError}</p>}
               <button
                 onClick={handleAdd}
                 className={`w-full rounded-2xl py-4 text-lg font-black transition-all ${
                   added
-                    ? 'scale-95 bg-zinc-700 text-white'
-                    : 'bg-yellow-400 text-black hover:bg-yellow-300 active:scale-95'
+                    ? 'scale-95 bg-zinc-800 text-white'
+                    : 'bg-[#FFD60A] text-black hover:bg-[#FF6D00] hover:text-white active:scale-95'
                 }`}
               >
                 {added ? '✓ Agregado al pedido' : `Agregar al pedido · ${formatPrice(totalPrice)}`}

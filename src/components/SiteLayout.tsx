@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import twemoji from '@twemoji/api';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { WHATSAPP_NUMBER } from '../data/menuData';
 
@@ -9,6 +10,7 @@ const socialLinks = [
 ];
 
 type DayKey = 'domingo' | 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes' | 'sabado';
+type ThemeMode = 'light' | 'dark';
 
 const OPENING_HOURS: Record<DayKey, { open: number; close: number }> = {
   lunes: { open: 17 * 60, close: 22 * 60 },
@@ -91,11 +93,65 @@ function isOpenNow(day: DayKey, minutesOfDay: number) {
 export default function SiteLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [clockTick, setClockTick] = useState(0);
+  const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
+    const stored = window.localStorage.getItem('theme-mode');
+    if (stored === 'light' || stored === 'dark') return stored;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
   const location = useLocation();
+
+  const parseTwemoji = () => {
+    twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+  };
 
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    let frameId = 0;
+
+    const scheduleParse = () => {
+      if (frameId) return;
+      frameId = window.requestAnimationFrame(() => {
+        frameId = 0;
+        parseTwemoji();
+      });
+    };
+
+    scheduleParse();
+
+    const observer = new MutationObserver(mutations => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'characterData' || mutation.addedNodes.length > 0) {
+          scheduleParse();
+          break;
+        }
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
+    return () => {
+      observer.disconnect();
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    parseTwemoji();
+  }, [location.pathname]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', themeMode);
+    window.localStorage.setItem('theme-mode', themeMode);
+  }, [themeMode]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -112,10 +168,10 @@ export default function SiteLayout() {
   }, [clockTick]);
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#655031_0%,#7a5d37_55%,#906c3f_100%)] text-zinc-100">
+    <div className="theme-page min-h-screen bg-[linear-gradient(180deg,#FFECD2_0%,#FFF3E0_55%,#FFE4C2_100%)] text-[#4A2800]">
       <div className="corn-bg pointer-events-none fixed inset-0 z-50 select-none" aria-hidden="true" />
-      <div className="border-b border-[#7c2d12]/30 bg-[linear-gradient(90deg,#d79036_0%,#e1b24f_55%,#edd08b_100%)]">
-        <div className="section-shell py-2 text-xs text-[#3f2200]">
+      <div className="theme-topbar border-b border-[#CC5500]/40 bg-[linear-gradient(90deg,#FF6D00_0%,#FF8C00_50%,#FFD60A_100%)]">
+        <div className="section-shell py-2 text-xs font-semibold">
           {/* Fila 1: redes + estado */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -141,10 +197,10 @@ export default function SiteLayout() {
             {/* Badge estado: pill con color de fondo */}
             <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-black uppercase tracking-[0.08em] ${
               openNow
-                ? 'bg-emerald-700/20 text-emerald-900'
-                : 'bg-[#7c2d12]/20 text-[#7c2d12]'
+                ? 'bg-[#4A2800]/15 text-[#4A2800] border border-[#4A2800]/30'
+                : 'bg-[#FF3D00]/20 text-[#7A0000] border border-[#FF3D00]/40'
             }`}>
-              <span className={`h-2 w-2 rounded-full ${openNow ? 'bg-emerald-700' : 'bg-rose-700'}`} />
+              <span className={`h-2 w-2 rounded-full ${openNow ? 'bg-[#00A843]' : 'bg-[#FF3D00]'}`} />
               {openNow ? 'Abierto ahora' : 'Cerrado ahora'}
             </span>
 
@@ -157,17 +213,17 @@ export default function SiteLayout() {
         </div>
       </div>
 
-      <header className="anim-fade-down sticky top-0 z-40 border-b border-[#d1b07a] bg-[#765733] shadow-[0_10px_24px_rgba(48,30,12,0.24)]">
+      <header className="theme-header anim-fade-down sticky top-0 z-40 border-b border-[#FF6D00]/40 bg-[linear-gradient(90deg,#FF6D00_0%,#FF8C00_50%,#FFD60A_100%)] shadow-[0_8px_20px_rgba(255,109,0,0.4)]">
         <div className="section-shell flex items-center justify-between gap-4 py-4">
-          <NavLink to="/" className="text-2xl leading-none tracking-tight text-white sm:text-3xl">
+          <NavLink to="/" className="theme-logo text-2xl leading-none tracking-tight sm:text-3xl">
             <span className="font-display"><span className="logo-corn">🌽</span> MUCHA</span>
-            <span className="font-display text-yellow-400">MAZORCA</span>
+            <span className="theme-logo-accent font-display drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]">MAZORCA</span>
           </NavLink>
 
           <button
             type="button"
             onClick={() => setMobileMenuOpen(current => !current)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[#dcb983] bg-[#8a673d] text-zinc-100 transition-colors hover:border-yellow-400 hover:text-yellow-300 md:hidden"
+            className="theme-menu-button inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[#4A2800]/30 bg-[#4A2800]/15 text-[#4A2800] transition-colors hover:bg-[#4A2800]/25 md:hidden"
             aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={mobileMenuOpen}
           >
@@ -181,16 +237,33 @@ export default function SiteLayout() {
             <NavItem to="/contacto" asCta>
               Pide ahora
             </NavItem>
+            <button
+              type="button"
+              onClick={() => setThemeMode(current => (current === 'light' ? 'dark' : 'light'))}
+              className="theme-toggle"
+              aria-label={themeMode === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
+              title={themeMode === 'light' ? 'Modo oscuro' : 'Modo claro'}
+            >
+              {themeMode === 'light' ? '🌙 Oscuro' : '☀️ Claro'}
+            </button>
           </nav>
         </div>
 
         {mobileMenuOpen && (
-          <div className="border-t border-[#d1b07a] bg-[#765733] md:hidden">
+          <div className="theme-mobile-panel border-t border-[#4A2800]/20 bg-[linear-gradient(90deg,#FF6D00_0%,#FFD60A_100%)] md:hidden">
             <div className="section-shell grid gap-3 py-4">
               <MobileNavItem to="/">Inicio</MobileNavItem>
               <MobileNavItem to="/menu">Menú</MobileNavItem>
               <MobileNavItem to="/galeria">Galería</MobileNavItem>
               <MobileNavItem to="/contacto" asCta>Pide ahora</MobileNavItem>
+              <button
+                type="button"
+                onClick={() => setThemeMode(current => (current === 'light' ? 'dark' : 'light'))}
+                className="theme-toggle w-full"
+                aria-label={themeMode === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
+              >
+                {themeMode === 'light' ? '🌙 Activar modo oscuro' : '☀️ Activar modo claro'}
+              </button>
             </div>
           </div>
         )}
@@ -204,34 +277,34 @@ export default function SiteLayout() {
         href={`https://wa.me/${WHATSAPP_NUMBER}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-5 right-4 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#25d366] text-white shadow-[0_12px_24px_rgba(37,211,102,0.35)] transition-transform hover:scale-[1.04] sm:bottom-6 sm:right-5 sm:h-auto sm:w-auto sm:gap-2 sm:px-5 sm:py-3 sm:text-sm sm:font-bold"
+        className="fixed bottom-5 right-4 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#00C853] text-white shadow-[0_12px_24px_rgba(0,200,83,0.35)] transition-transform hover:scale-[1.04] sm:bottom-6 sm:right-5 sm:h-auto sm:w-auto sm:gap-2 sm:px-5 sm:py-3 sm:text-sm sm:font-bold"
       >
         <span className="text-base">💬</span>
         <span className="hidden sm:inline">¡Pide ya!</span>
       </a>
 
-      <footer className="mt-16 border-t border-[#d1b07a] bg-[linear-gradient(180deg,#765733_0%,#655031_100%)] pb-8 pt-14">
+      <footer className="theme-footer mt-16 border-t border-[#FF6D00]/30 bg-[linear-gradient(180deg,#FFF3E0_0%,#FFE4C2_100%)] pb-8 pt-14">
         <div className="section-shell grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div>
-            <p className="text-2xl leading-none tracking-tight text-white">
+            <p className="text-2xl leading-none tracking-tight text-[#4A2800]">
               <span className="font-display"><span className="logo-corn">🌽</span> MUCHA</span>
-              <span className="font-display text-yellow-400">MAZORCA</span>
+              <span className="font-display text-[#FF6D00]">MAZORCA</span>
             </p>
-            <p className="mt-4 text-sm leading-7 text-zinc-300">
+            <p className="mt-4 text-sm leading-7 text-[#6A3A00]">
               ¡Tu antojo, tu combinacion, tu Mucha Mazorca!💛🌽
             </p>
           </div>
 
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-yellow-300">Horario</p>
-            <p className="mt-3 text-sm text-zinc-300">Lun - Jue: 5:00 PM - 10:00 PM</p>
-            <p className="mt-2 text-sm text-zinc-300">Vie - Dom: 6:00 PM - 11:00 PM</p>
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#FF6D00]">Horario</p>
+            <p className="mt-3 text-sm text-[#6A3A00]">Lun - Jue: 5:00 PM - 10:00 PM</p>
+            <p className="mt-2 text-sm text-[#6A3A00]">Vie - Dom: 6:00 PM - 11:00 PM</p>
           </div>
 
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-yellow-300">Contacto</p>
-            <p className="mt-3 text-sm leading-7 text-zinc-300">Av. Principal #12-34</p>
-            <p className="text-sm text-zinc-300">Cúcuta, Colombia</p>
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#FF6D00]">Contacto</p>
+            <p className="mt-3 text-sm leading-7 text-[#6A3A00]">Cl. 41 #58, Barrio Bogota </p>
+            <p className="text-sm text-[#6A3A00]">Cúcuta, Norte de Santander</p>
             <div className="mt-3 space-y-2">
               {socialLinks.map(social => (
                 <a
@@ -239,7 +312,7 @@ export default function SiteLayout() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-sm font-semibold text-zinc-200 transition-colors hover:text-yellow-300"
+                  className="block text-sm font-semibold text-[#6A3A00] transition-colors hover:text-[#FFD60A]"
                 >
                   {social.name} · {social.handle}
                 </a>
@@ -247,7 +320,7 @@ export default function SiteLayout() {
             </div>
           </div>
         </div>
-        <p className="section-shell mt-12 border-t border-[#334155] pt-6 text-xs text-zinc-400">
+        <p className="section-shell mt-12 border-t border-[#FF6D00]/15 pt-6 text-xs text-[#8A5A2A]">
           © 2026 Mucha Mazorca - Diseño Profesional Full Stack
         </p>
       </footer>
@@ -262,7 +335,7 @@ function SocialIcon({ href, label, children }: { href: string; label: string; ch
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-[10px] border border-[#7c6f53]/55 bg-[#efe6ca]/50 text-[#5f5b47] transition-colors hover:border-[#3f2200] hover:text-[#3f2200]"
+      className="theme-social inline-flex h-9 w-9 items-center justify-center rounded-[10px] border border-[#4A2800]/25 bg-[#4A2800]/12 text-[#4A2800] transition-colors hover:bg-[#4A2800]/25 hover:border-[#4A2800]/50"
     >
       {children}
     </a>
@@ -275,8 +348,8 @@ function NavItem({ to, children, asCta = false }: { to: string; children: string
       to={to}
       className={({ isActive }) =>
         asCta
-          ? 'rounded-lg bg-yellow-400 px-4 py-2 text-sm font-extrabold uppercase tracking-[0.14em] text-black transition-colors hover:bg-yellow-300'
-          : `text-sm font-bold text-zinc-200 transition-colors hover:text-yellow-300 ${isActive ? 'text-yellow-300' : ''}`
+          ? 'theme-nav-cta rounded-lg px-4 py-2 text-sm font-extrabold uppercase tracking-[0.14em] transition-colors'
+          : `theme-nav-link text-sm font-bold transition-colors ${isActive ? 'theme-nav-link-active underline underline-offset-4 decoration-2' : ''}`
       }
     >
       {children}
@@ -290,8 +363,8 @@ function MobileNavItem({ to, children, asCta = false }: { to: string; children: 
       to={to}
       className={({ isActive }) =>
         asCta
-          ? 'rounded-2xl bg-yellow-400 px-4 py-4 text-center text-sm font-extrabold uppercase tracking-[0.14em] text-black transition-colors hover:bg-yellow-300'
-              : `rounded-2xl border px-4 py-4 text-center text-sm font-bold transition-colors ${isActive ? 'border-yellow-400/60 bg-yellow-400/10 text-yellow-300' : 'border-[#d1b07a] bg-[#8a673d] text-zinc-100 hover:border-yellow-400/50 hover:text-yellow-300'}`
+          ? 'theme-mobile-nav-cta rounded-2xl px-4 py-4 text-center text-sm font-extrabold uppercase tracking-[0.14em] transition-colors'
+              : `theme-mobile-nav-link rounded-2xl border px-4 py-4 text-center text-sm font-bold transition-colors ${isActive ? 'theme-mobile-nav-link-active' : ''}`
       }
     >
       {children}

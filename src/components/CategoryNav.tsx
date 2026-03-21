@@ -23,8 +23,8 @@ export default function CategoryNav({ categories, activeId, onSelect }: Props) {
   }
 
   return (
-    <nav className="sticky top-20 z-30 rounded-[24px] border border-[#d1b07a] bg-[#7b5a34] shadow-[0_16px_30px_rgba(48,30,12,0.28)]">
-      <div className="px-4 pt-3 text-[11px] font-bold uppercase tracking-[0.18em] text-zinc-400 sm:hidden">
+    <nav className="sticky top-20 z-30 rounded-[24px] border border-[#FF6D00]/40 bg-[#FFF3E0] shadow-[0_8px_20px_rgba(255,109,0,0.16)]">
+      <div className="px-4 pt-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[#8A5A2A] sm:hidden">
         Desliza las categorías
       </div>
       <div
@@ -39,8 +39,8 @@ export default function CategoryNav({ categories, activeId, onSelect }: Props) {
             onClick={() => handleClick(cat.id)}
             className={`flex shrink-0 snap-start items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2.5 text-xs font-bold transition-all sm:px-4 sm:text-sm ${
               activeId === cat.id
-                ? 'bg-yellow-400 text-black shadow-md shadow-yellow-700/25'
-                : 'bg-[#9a7546] text-zinc-100 hover:bg-[#ae8550] hover:text-yellow-300'
+                ? 'bg-[#FFD60A] text-black shadow-md shadow-[#FFD60A]/30 font-extrabold'
+                : 'bg-[#FFE4C2] text-[#6A3A00] hover:bg-[#FFD9AD] hover:text-[#FFD60A]'
             }`}
           >
             <span>{cat.emoji}</span>
