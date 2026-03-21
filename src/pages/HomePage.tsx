@@ -21,16 +21,16 @@ obras de sabor.
 Arma tus salchipapas y maicitos a tu antojo… ¡te
 esperamos!   🌽🔥
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
             <Link
               to="/menu"
-              className="rounded-full bg-[#FF6D00] px-7 py-4 text-sm font-extrabold uppercase tracking-[0.15em] text-white shadow-[0_6px_20px_rgba(255,109,0,0.4)] transition-all hover:-translate-y-0.5 hover:bg-[#FF3D00]"
+              className="w-full rounded-full bg-[#FF6D00] px-7 py-4 text-center text-sm font-extrabold uppercase tracking-[0.15em] text-white shadow-[0_6px_20px_rgba(255,109,0,0.4)] transition-all hover:-translate-y-0.5 hover:bg-[#FF3D00] sm:w-auto"
             >
               Explorar menú
             </Link>
             <Link
               to="/contacto"
-              className="btn-secondary"
+              className="btn-secondary w-full sm:w-auto"
             >
               Contactate con MM
             </Link>
