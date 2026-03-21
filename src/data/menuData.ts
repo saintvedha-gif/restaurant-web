@@ -288,7 +288,7 @@ export const menuItems: MenuItem[] = [
   {
     id: 'malandro',
     name: '¡Malandro!',
-    emoji: '🕺',
+    emoji: '🦝',
     description: 'Para gustos más fuertes. Trae maicito, carne desmechada, tocineta, chorizo, queso mozzarella gratinado y papita de perro.',
     price: 37000,
     categoryId: 'maicitos',
@@ -297,7 +297,7 @@ export const menuItems: MenuItem[] = [
   {
     id: 'negrita',
     name: '¡Negrita!',
-    emoji: '👩🏿',
+    emoji: '💝',
     description: 'Un plato creado con amor, perfecto para los fans del maduro. Trae una camita de maduro frito, pollo y tocineta en salsa blanca, salchichas y una cubierta de queso mozzarella con algunos granitos de maíz. Se recomienda solo para 1 persona.',
     price: 34000,
     categoryId: 'maicitos',
