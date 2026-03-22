@@ -1,5 +1,5 @@
 import type { Category, MenuItem, AddonGroup } from '../types/menu';
-import { CLOUDINARY_IMAGE_MAP } from './cloudinaryImages';
+import { CLOUDINARY_IMAGE_MAP } from './cloudinaryImages.ts';
 
 export const getImageUrl = (fileName: string): string => {
   const cloudinaryUrl = CLOUDINARY_IMAGE_MAP[fileName];
