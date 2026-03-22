@@ -22,12 +22,12 @@ export default function MenuCard({ item, onSelect }: Props) {
               {item.name}
             </h3>
             {item.tags?.includes('popular') && (
-              <span className="rounded-full bg-yellow-400/15 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.15em] text-yellow-300">
+              <span className="rounded-full border border-[#7A4A00] bg-[#FFD60A] px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#4A2800] shadow-[0_2px_8px_rgba(74,40,0,0.22)] sm:text-xs">
                 Popular
               </span>
             )}
             {item.tags?.includes('nuevo') && (
-              <span className="rounded-full bg-[#FF6D00]/20 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#FF6D00]">
+              <span className="rounded-full border border-[#7A1400] bg-[#FF3D00] px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#FFF4E3] shadow-[0_2px_8px_rgba(122,20,0,0.28)] sm:text-xs">
                 Nuevo
               </span>
             )}

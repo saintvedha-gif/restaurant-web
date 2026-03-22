@@ -1,6 +1,12 @@
 import type { Category, MenuItem, AddonGroup } from '../types/menu';
+import { CLOUDINARY_IMAGE_MAP } from './cloudinaryImages';
 
 export const getImageUrl = (fileName: string): string => {
+  const cloudinaryUrl = CLOUDINARY_IMAGE_MAP[fileName];
+  if (cloudinaryUrl) {
+    return cloudinaryUrl;
+  }
+
   const isGithubPages = typeof window !== 'undefined' && window.location.pathname.startsWith('/restaurant-web');
   const basePath = isGithubPages ? '/restaurant-web' : '';
   return `${basePath}/images/${fileName}`;
@@ -176,7 +182,7 @@ export const menuItems: MenuItem[] = [
     description: 'La boda de tus sueños: suero costeño, madurito en bandeja. Una combinación que enamora desde el primer mordisco.',
     price: 17000,
     categoryId: 'entradas',
-    image: getImageUrl('MATRIMONIO.png'),
+    image: getImageUrl('MATRIMONIO.jpg'),
   },
 
   // SALCHIPAPITAS
@@ -219,7 +225,7 @@ export const menuItems: MenuItem[] = [
     description: 'La salchi perfecta para los amantes de la carne. Incluye base de papitas, salchicha y salsa, carnita en salsa BBQ, tiritas de maduro perfectamente fritas y huevitos de codorniz. Tip: acompáñala con una salsita de leña para sacar todo su potencial.',
     price: 32000,
     categoryId: 'salchipapitas',
-    image: getImageUrl('SALCHI-CARNITA.png'),
+    image: getImageUrl('SALCHI-CARNITA.jpg'),
   },
   {
     id: 'salchifeliz',
@@ -228,7 +234,7 @@ export const menuItems: MenuItem[] = [
     description: 'Conocida como la verdadera salchipapita personal. Incluye papitas, salchicha, pollito mechado en salsa blanca, un baño de tocineta y dos huevitos de codorniz.',
     price: 29000,
     categoryId: 'salchipapitas',
-    image: getImageUrl('SALCHIFELIZ.png'),
+    image: getImageUrl('SALCHIFELIZ.jpg'),
   },
   {
     id: 'la-doble-m',
@@ -237,8 +243,8 @@ export const menuItems: MenuItem[] = [
     description: 'Una salchipera armada para compartir entre 2 personas. Incluye base de papitas y salchichas, pollito mechado en salsa blanca de la casa, 10 huevitos de codorniz, choricitos y madurito tajado.',
     price: 66000,
     categoryId: 'salchipapitas',
-    image: getImageUrl('La Doble M.jpeg'),
-    imageHero: getImageUrl('La Doble M.jpeg'),
+    image: getImageUrl('La Doble M.jpg'),
+    imageHero: getImageUrl('La Doble M.jpg'),
     tags: ['popular'],
   },
   {
@@ -248,8 +254,8 @@ export const menuItems: MenuItem[] = [
     description: 'Una salchiper en versión gloriosa con base de papitas y salchicha. Incluye carnita, maicito (mezcla de pollo, tocineta y salchichas en salsa bechamel), huevitos y madurito. Perfecta para compartir.',
     price: 74000,
     categoryId: 'salchipapitas',
-    image: getImageUrl('La Gloriosa Salchipapa.jpeg'),
-    imageHero: getImageUrl('La Gloriosa Salchipapa.jpeg'),
+    image: getImageUrl('La Gloriosa Salchipapa.jpg'),
+    imageHero: getImageUrl('La Gloriosa Salchipapa.jpg'),
     tags: ['popular'],
   },
 
@@ -510,6 +516,15 @@ export const menuItems: MenuItem[] = [
   },
 
   // POSTRECITOS
+  {
+    id: 'postre-maracuya',
+    name: '¡Postre de maracuyá!',
+    emoji: '💛',
+    description: 'Cremoso, ácido y dulcito. Un postre tropical que cierra cualquier comida con broche de oro.',
+    price: 6000,
+    categoryId: 'postres',
+    image: getImageUrl('Postre de Maracuya.jpg'),
+  },
   {
     id: 'postre-milo',
     name: '¡Postre de milo!',

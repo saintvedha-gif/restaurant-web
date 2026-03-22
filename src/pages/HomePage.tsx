@@ -42,7 +42,7 @@ esperamos!   🌽🔥
             <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-[32px] bg-[#FFD60A]" />
             <div className="relative h-full w-full overflow-hidden rounded-[32px] border-4 border-[#FFD60A] shadow-[0_20px_50px_rgba(255,109,0,0.25)]">
               <img
-                src={getImageUrl('FONDO3.jpeg')}
+                src={getImageUrl('Fondo 1.png')}
                 alt="Mucha Mazorca especial"
                 className="h-full w-full object-cover"
                 loading="eager"
