@@ -90,12 +90,12 @@ export default function ContactPage() {
 
   return (
     <div className="section-shell py-8 sm:py-12">
-      <section className="rounded-[28px] border border-[#FF6D00]/35 bg-[#FFF3E0] p-4 shadow-[0_16px_34px_rgba(255,109,0,0.15)] sm:p-6 lg:p-8">
+      <section className="rounded-[28px] border border-yellow-400/18 bg-[#101014] p-4 shadow-[0_16px_34px_rgba(0,0,0,0.3)] sm:p-6 lg:p-8">
         <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="space-y-4">
-            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
-              <h2 className="text-2xl text-[#4A2800]"><span className="font-display">Ubicacion</span></h2>
-              <p className="mt-2 text-[#6A3A00]">{LOCATION_LABEL}</p>
+            <article className="rounded-[22px] border border-yellow-400/15 bg-[#141419] p-5">
+              <h2 className="text-xl text-white"><span className="title-pixel">Ubicacion</span></h2>
+              <p className="mt-2 text-white/70">{LOCATION_LABEL}</p>
               <a
                 href={MAPS_LINK}
                 target="_blank"
@@ -106,9 +106,9 @@ export default function ContactPage() {
               </a>
             </article>
 
-            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
-              <h2 className="text-2xl text-[#4A2800]"><span className="font-display">WhatsApp</span></h2>
-              <p className="mt-2 text-[#6A3A00]">+57 350 338 4530</p>
+            <article className="rounded-[22px] border border-yellow-400/15 bg-[#141419] p-5">
+              <h2 className="text-xl text-white"><span className="title-pixel">WhatsApp</span></h2>
+              <p className="mt-2 text-white/70">+57 350 338 4530</p>
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}`}
                 target="_blank"
@@ -119,9 +119,9 @@ export default function ContactPage() {
               </a>
             </article>
 
-            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
-              <h2 className="text-2xl text-[#4A2800]"><span className="font-display">Instagram</span></h2>
-              <p className="mt-2 text-[#6A3A00]">{INSTAGRAM_HANDLE}</p>
+            <article className="rounded-[22px] border border-yellow-400/15 bg-[#141419] p-5">
+              <h2 className="text-xl text-white"><span className="title-pixel">Instagram</span></h2>
+              <p className="mt-2 text-white/70">{INSTAGRAM_HANDLE}</p>
               <a
                 href="https://www.instagram.com/muchamazork?igsh=am82a3lsM2ExZ2lm"
                 target="_blank"
@@ -134,35 +134,35 @@ export default function ContactPage() {
           </div>
 
           <div className="space-y-4">
-            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
-              <h2 className="text-2xl text-[#4A2800]"><span className="font-display">Tipos de servicio</span></h2>
+            <article className="rounded-[22px] border border-yellow-400/15 bg-[#141419] p-5">
+              <h2 className="text-xl text-white"><span className="title-pixel">Tipos de servicio</span></h2>
               <div className="mt-4 space-y-3">
                 {SERVICE_TYPES.map(service => (
-                  <div key={service.id} className="rounded-xl border border-[#FF6D00]/20 bg-[#FFE4C2] p-3">
+                  <div key={service.id} className="rounded-xl border border-yellow-400/10 bg-[#101014] p-3">
                     <div className="flex items-center justify-between">
-                      <p className="font-semibold text-[#4A2800]">{service.name}</p>
-                      <span className="text-[#00C853]">✓</span>
+                      <p className="font-semibold text-white">{service.name}</p>
+                      <span className="text-yellow-300">✓</span>
                     </div>
-                    {service.note && <p className="mt-1 text-sm text-[#6A3A00]">{service.note}</p>}
+                    {service.note && <p className="mt-1 text-sm text-white/65">{service.note}</p>}
                   </div>
                 ))}
               </div>
             </article>
 
-            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
+            <article className="rounded-[22px] border border-yellow-400/15 bg-[#141419] p-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 className="text-2xl text-[#4A2800]"><span className="font-display">Horarios de atencion</span></h2>
+                <h2 className="text-xl text-white"><span className="title-pixel">Horarios de atencion</span></h2>
                 <span
                   className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-extrabold uppercase tracking-[0.12em] ${
                     currentStatus.isOpen
-                      ? 'bg-emerald-500/20 text-emerald-200'
-                      : 'bg-rose-500/20 text-rose-200'
+                      ? 'bg-yellow-400/15 text-yellow-300'
+                      : 'bg-white/10 text-white/70'
                   }`}
                 >
                   {currentStatus.statusLabel}
                 </span>
               </div>
-              <p className="mt-2 text-sm text-[#6A3A00]">Hora actual Cúcuta: {currentStatus.timeLabel} · {currentStatus.helperLabel}</p>
+              <p className="mt-2 text-sm text-white/65">Hora actual Cúcuta: {currentStatus.timeLabel} · {currentStatus.helperLabel}</p>
 
               <div className="mt-4 space-y-2">
                 {DAY_ORDER.map(day => {
@@ -173,7 +173,7 @@ export default function ContactPage() {
                     <div
                       key={day}
                       className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${
-                        isToday ? 'bg-[#FFD60A]/20 text-[#FFD60A] font-bold' : 'text-[#6A3A00]'
+                        isToday ? 'bg-[#FFD60A]/12 text-[#FFD60A] font-bold' : 'text-white/65'
                       }`}
                     >
                       <span className="capitalize">{day}</span>
@@ -184,9 +184,9 @@ export default function ContactPage() {
               </div>
             </article>
 
-            <article className="rounded-[22px] border border-[#FF6D00]/30 bg-[#FFF3E0] p-5">
-            <h2 className="text-2xl text-[#4A2800]"><span className="font-display">Encuentra nuestra ubicacion</span></h2>
-            <div className="mt-4 overflow-hidden rounded-[18px] border border-[#FF6D00]/30">
+            <article className="rounded-[22px] border border-yellow-400/15 bg-[#141419] p-5">
+            <h2 className="text-xl text-white"><span className="title-pixel">Encuentra nuestra ubicacion</span></h2>
+            <div className="mt-4 overflow-hidden rounded-[18px] border border-yellow-400/15">
               <iframe
                 title="Mapa Mucha Mazorca"
                 src={MAPS_EMBED}

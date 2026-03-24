@@ -17,9 +17,9 @@ export default {
         // Paleta de marca nueva
         brand: {
           yellow: '#FFD60A',
-          orange: '#FF6D00',
+          orange: '#FFD60A',
           green: '#00C853',
-          red: '#FF3D00',
+          red: '#FFD60A',
           dark: '#2A1E12',
           surface: '#342518',
           panel: '#3E2D1C',

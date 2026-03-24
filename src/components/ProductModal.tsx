@@ -95,21 +95,21 @@ export default function ProductModal({ item, onClose }: Props) {
             )}
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#FFF3E0]/95 text-xl text-[#FF6D00] backdrop-blur transition-colors hover:bg-[#FFE4C2]"
+              className="absolute right-4 top-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#FFF3E0]/95 text-xl text-[#FFD60A] backdrop-blur transition-colors hover:bg-[#FFE4C2]"
               aria-label="Cerrar"
             >
               ✕
             </button>
           </div>
 
-            <div className="flex min-h-0 flex-col border-t border-[#FF6D00]/25 lg:border-l lg:border-t-0">
+            <div className="flex min-h-0 flex-col border-t border-[#FFD60A]/25 lg:border-l lg:border-t-0">
             <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-7">
               <h2 className="font-display text-4xl leading-tight text-[#4A2800] sm:text-5xl">
                 {item.name} {item.emoji}
               </h2>
               <p className="mt-3 text-base leading-8 text-[#6A3A00]">{item.description}</p>
-              <div className="mt-5 rounded-2xl border border-[#FF6D00]/35 bg-[#FFE4C2] px-5 py-4">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#FF6D00]">Precio base</p>
+              <div className="mt-5 rounded-2xl border border-[#FFD60A]/35 bg-[#FFE4C2] px-5 py-4">
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#FFD60A]">Precio base</p>
                 <p className="mt-1 text-4xl font-black text-[#FFD60A]">{formatPrice(item.price)}</p>
               </div>
 
@@ -139,8 +139,8 @@ export default function ProductModal({ item, onClose }: Props) {
                             isSelected
                               ? 'border-[#FFD60A]/60 bg-[#FFD60A]/10'
                               : disabled
-                                ? 'cursor-not-allowed border-[#FF6D00]/15 bg-[#FFE4C2] opacity-40'
-                                : 'border-[#FF6D00]/25 bg-[#FFF3E0] hover:bg-[#FFE4C2]'
+                                ? 'cursor-not-allowed border-[#FFD60A]/15 bg-[#FFE4C2] opacity-40'
+                                : 'border-[#FFD60A]/25 bg-[#FFF3E0] hover:bg-[#FFE4C2]'
                           }`}
                         >
                           <div className="flex items-center justify-between gap-3">
@@ -154,7 +154,7 @@ export default function ProductModal({ item, onClose }: Props) {
                                 {addon.emoji} {addon.name}
                               </span>
                             </div>
-                            <span className="shrink-0 text-sm font-black text-[#FF6D00]">
+                            <span className="shrink-0 text-sm font-black text-[#FFD60A]">
                               + {formatPrice(addon.price)}
                             </span>
                           </div>
@@ -167,7 +167,7 @@ export default function ProductModal({ item, onClose }: Props) {
 
             </div>
 
-            <div className="shrink-0 border-t border-[#FF6D00]/25 bg-[#FFF3E0] px-6 py-4 sm:px-8">
+            <div className="shrink-0 border-t border-[#FFD60A]/25 bg-[#FFF3E0] px-6 py-4 sm:px-8">
               {validationError && (
                 <p className="mb-2 text-center text-xs font-semibold text-red-600">{validationError}</p>
               )}
@@ -182,7 +182,7 @@ export default function ProductModal({ item, onClose }: Props) {
                 className={`w-full py-4 rounded-2xl font-black text-lg transition-all ${
                   added
                     ? 'scale-95 bg-[#00C853] text-white'
-                    : 'bg-[#FFD60A] text-black hover:bg-[#FF6D00] hover:text-white active:scale-95'
+                    : 'bg-[#FFD60A] text-black hover:bg-[#FFE45C] hover:text-black active:scale-95'
                 }`}
               >
                 {added ? '✓ ¡Agregado!' : `Agregar · ${formatPrice(totalPrice)}`}

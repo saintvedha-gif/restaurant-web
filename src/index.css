@@ -16,8 +16,8 @@ img.emoji {
 }
 
 :root {
-  color: #4A2800;
-  background-color: #FFECD2;
+  color: #F5F5F5;
+  background-color: #050505;
 }
 
 @layer base {
@@ -30,14 +30,14 @@ img.emoji {
   }
 
   body {
-    @apply font-sans text-[#4A2800];
+    @apply font-sans text-[#F5F5F5];
     -webkit-font-smoothing: antialiased;
-  background-color: #FFECD2;
-  background-image:
-      radial-gradient(circle at 10% -10%, rgba(255, 109, 0, 0.12), transparent 33%),
-      radial-gradient(circle at 95% -5%, rgba(255, 214, 10, 0.08), transparent 32%),
-      radial-gradient(circle at 50% 120%, rgba(255, 61, 0, 0.07), transparent 40%),
-      linear-gradient(180deg, #FFECD2 0%, #FFF3E0 52%, #FFE4C2 100%);
+    background-color: #050505;
+    background-image:
+      radial-gradient(circle at 10% -10%, rgba(255, 214, 10, 0.18), transparent 30%),
+      radial-gradient(circle at 95% -5%, rgba(255, 255, 255, 0.08), transparent 26%),
+      radial-gradient(circle at 50% 120%, rgba(255, 214, 10, 0.08), transparent 34%),
+      linear-gradient(180deg, #050505 0%, #09090b 55%, #111114 100%);
     overflow-x: hidden;
     position: relative;
   }
@@ -45,49 +45,6 @@ img.emoji {
   #root {
     position: relative;
     z-index: 1;
-  }
-
-  .corn-bg::before,
-  .corn-bg::after {
-    content: '✶';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    user-select: none;
-    line-height: 1;
-    opacity: 0.14;
-    color: #fff3c9;
-  }
-
-  .corn-bg::before {
-    font-size: 27px;
-    text-shadow:
-      8vw 10vh 0 rgba(255, 247, 221, 0.85),
-      24vw 22vh 0 rgba(255, 247, 221, 0.8),
-      40vw 14vh 0 rgba(255, 247, 221, 0.82),
-      58vw 26vh 0 rgba(255, 247, 221, 0.8),
-      76vw 16vh 0 rgba(255, 247, 221, 0.82),
-      14vw 46vh 0 rgba(255, 247, 221, 0.8),
-      34vw 58vh 0 rgba(255, 247, 221, 0.78),
-      54vw 50vh 0 rgba(255, 247, 221, 0.8),
-      74vw 62vh 0 rgba(255, 247, 221, 0.8),
-      20vw 82vh 0 rgba(255, 247, 221, 0.78),
-      46vw 86vh 0 rgba(255, 247, 221, 0.8),
-      72vw 88vh 0 rgba(255, 247, 221, 0.78);
-  }
-
-  .corn-bg::after {
-    font-size: 16px;
-    opacity: 0.08;
-    text-shadow:
-      18vw 12vh 0 rgba(255, 247, 221, 0.8),
-      50vw 18vh 0 rgba(255, 247, 221, 0.8),
-      82vw 24vh 0 rgba(255, 247, 221, 0.8),
-      28vw 44vh 0 rgba(255, 247, 221, 0.8),
-      62vw 52vh 0 rgba(255, 247, 221, 0.8),
-      12vw 72vh 0 rgba(255, 247, 221, 0.8),
-      44vw 78vh 0 rgba(255, 247, 221, 0.8),
-      78vw 86vh 0 rgba(255, 247, 221, 0.8);
   }
 
   ::selection {
@@ -103,45 +60,45 @@ img.emoji {
 
   .paper-panel {
     @apply rounded-[28px] border;
-    border-color: rgba(255, 109, 0, 0.30);
-    background-color: rgba(255, 243, 224, 0.95);
-    box-shadow: 0 20px 38px rgba(255, 109, 0, 0.15);
+    border-color: rgba(255, 214, 10, 0.18);
+    background-color: rgba(18, 18, 22, 0.94);
+    box-shadow: 0 20px 38px rgba(0, 0, 0, 0.34);
   }
 
   .section-kicker {
-    @apply inline-flex items-center gap-2 rounded-full border border-[#FF6D00]/60 bg-[#FF6D00]/15 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#FF6D00];
+    @apply inline-flex items-center gap-2 rounded-full border border-yellow-400/40 bg-yellow-400/10 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.22em] text-yellow-300;
   }
 
   .olive-card {
     @apply rounded-[24px] border;
-    border-color: rgba(255, 109, 0, 0.30);
-    background-color: rgba(255, 228, 194, 0.95);
-    box-shadow: 0 14px 40px rgba(255, 109, 0, 0.14);
+    border-color: rgba(255, 214, 10, 0.18);
+    background-color: rgba(21, 21, 26, 0.95);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center rounded-full border-2 border-[#FF6D00] px-7 py-4 text-sm font-extrabold uppercase tracking-[0.15em] text-[#FF6D00] transition-all;
+    @apply inline-flex items-center justify-center rounded-full border-2 border-yellow-400 px-7 py-4 text-sm font-extrabold uppercase tracking-[0.15em] text-yellow-300 transition-all;
   }
 
   .btn-secondary:hover {
-    @apply -translate-y-0.5 bg-[#FF6D00] text-white;
+    @apply -translate-y-0.5 bg-yellow-400 text-black;
   }
 
   .btn-secondary-sm {
-    @apply inline-flex items-center justify-center rounded-full border border-[#FF6D00]/60 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-[#FF6D00] transition-all;
-    background-color: rgba(255, 109, 0, 0.12);
+    @apply inline-flex items-center justify-center rounded-full border border-yellow-400/40 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-yellow-300 transition-all;
+    background-color: rgba(255, 214, 10, 0.08);
   }
 
   .btn-secondary-sm:hover {
-    background-color: rgba(255, 109, 0, 0.25);
+    background-color: rgba(255, 214, 10, 0.18);
   }
 
   .brand-pixel-card {
-    border: 2px solid rgba(255, 109, 0, 0.45);
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe4c2 58%, #ffd9ad 100%);
+    border: 2px solid rgba(255, 214, 10, 0.45);
+    background: linear-gradient(135deg, #0d0d10 0%, #15151a 58%, #1d1d24 100%);
     border-radius: 24px;
     padding: 22px 20px;
-    box-shadow: 0 14px 34px rgba(255, 109, 0, 0.2);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.34);
   }
 
   .brand-pixel-line {
@@ -150,24 +107,35 @@ img.emoji {
     letter-spacing: 0.06em;
     line-height: 1;
     display: block;
-    text-shadow: 2px 2px 0 rgba(255, 214, 10, 0.45);
+    text-shadow: 2px 2px 0 rgba(255, 214, 10, 0.28);
   }
 
   .brand-pixel-line--top {
-    color: #4A2800;
+    color: #F5F5F5;
   }
 
   .brand-pixel-line--bottom {
-    color: #FF6D00;
+    color: #FFD60A;
+  }
+
+  .title-pixel {
+    font-family: 'Press Start 2P', monospace;
+    letter-spacing: 0.04em;
+    line-height: 1.35;
+  }
+
+  .title-standard {
+    font-family: 'Sora', 'Segoe UI', system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
 
   .theme-toggle {
-    @apply inline-flex items-center justify-center rounded-full border border-[#4A2800]/35 px-3 py-2 text-xs font-extrabold uppercase tracking-[0.12em] text-[#4A2800] transition-colors;
-    background-color: rgba(74, 40, 0, 0.12);
+    @apply inline-flex items-center justify-center rounded-full border border-yellow-400/35 px-3 py-2 text-xs font-extrabold uppercase tracking-[0.12em] text-yellow-300 transition-colors;
+    background-color: rgba(255, 214, 10, 0.08);
   }
 
   .theme-toggle:hover {
-    @apply bg-[#4A2800]/20;
+    @apply bg-yellow-400/15;
   }
 
   .anim-fade-up {
@@ -226,6 +194,7 @@ img.emoji {
   }
   .line-clamp-2 {
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -240,9 +209,9 @@ html[data-theme='dark'] body {
   color: #f5f5f5;
   background-color: #0b0b0c;
   background-image:
-    radial-gradient(circle at 12% -12%, rgba(255, 109, 0, 0.16), transparent 35%),
+    radial-gradient(circle at 12% -12%, rgba(255, 214, 10, 0.18), transparent 35%),
     radial-gradient(circle at 92% -6%, rgba(255, 214, 10, 0.08), transparent 28%),
-    radial-gradient(circle at 52% 122%, rgba(255, 61, 0, 0.08), transparent 38%),
+    radial-gradient(circle at 52% 122%, rgba(255, 214, 10, 0.1), transparent 38%),
     linear-gradient(180deg, #0b0b0c 0%, #101012 58%, #161619 100%);
 }
 
@@ -254,13 +223,13 @@ html[data-theme='dark'] .theme-page {
 html[data-theme='dark'] .theme-topbar,
 html[data-theme='dark'] .theme-header,
 html[data-theme='dark'] .theme-mobile-panel {
-  background: linear-gradient(90deg, #111114 0%, #17171a 55%, #1e1e22 100%) !important;
-  border-color: rgba(255, 109, 0, 0.35) !important;
+  background: linear-gradient(90deg, #090909 0%, #101014 55%, #18181d 100%) !important;
+  border-color: rgba(255, 214, 10, 0.2) !important;
 }
 
 html[data-theme='dark'] .theme-footer {
-  background: linear-gradient(180deg, #111114 0%, #0b0b0c 100%) !important;
-  border-color: rgba(255, 109, 0, 0.35) !important;
+  background: linear-gradient(180deg, #101014 0%, #050505 100%) !important;
+  border-color: rgba(255, 214, 10, 0.2) !important;
 }
 
 html[data-theme='dark'] .theme-logo {
@@ -280,7 +249,7 @@ html[data-theme='dark'] .theme-social {
 
 html[data-theme='dark'] .theme-social:hover,
 html[data-theme='dark'] .theme-menu-button:hover {
-  background-color: rgba(255, 109, 0, 0.25) !important;
+  background-color: rgba(255, 214, 10, 0.16) !important;
 }
 
 html[data-theme='dark'] .theme-nav-link,
@@ -301,8 +270,8 @@ html[data-theme='dark'] .theme-mobile-nav-cta {
 
 html[data-theme='dark'] .theme-nav-cta:hover,
 html[data-theme='dark'] .theme-mobile-nav-cta:hover {
-  background-color: #ff6d00 !important;
-  color: #ffffff !important;
+  background-color: #ffe45c !important;
+  color: #101012 !important;
 }
 
 html[data-theme='dark'] .theme-mobile-nav-link {
@@ -313,7 +282,7 @@ html[data-theme='dark'] .theme-mobile-nav-link {
 
 html[data-theme='dark'] .theme-mobile-nav-link:hover,
 html[data-theme='dark'] .theme-mobile-nav-link-active {
-  background-color: rgba(255, 109, 0, 0.25) !important;
+  background-color: rgba(255, 214, 10, 0.16) !important;
 }
 
 html[data-theme='dark'] .paper-panel,
@@ -323,8 +292,8 @@ html[data-theme='dark'] .bg-\[\#FFE4C2\],
 html[data-theme='dark'] .bg-\[\#FFECD2\],
 html[data-theme='dark'] .bg-white {
   background-color: #17171b !important;
-  border-color: rgba(255, 109, 0, 0.35) !important;
-  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.36) !important;
+  border-color: rgba(255, 214, 10, 0.35) !important;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.36), 0 0 0 1px rgba(255, 214, 10, 0.08) !important;
 }
 
 html[data-theme='dark'] .text-\[\#4A2800\],
@@ -335,7 +304,7 @@ html[data-theme='dark'] .text-zinc-600 {
 }
 
 html[data-theme='dark'] .theme-home-top {
-  background: #101012 !important;
+  background: #0e0e12 !important;
 }
 
 html[data-theme='dark'] .theme-home-top h2,
@@ -354,13 +323,13 @@ html[data-theme='dark'] .btn-secondary-sm {
 html[data-theme='dark'] .btn-secondary:hover,
 html[data-theme='dark'] .btn-secondary-sm:hover,
 html[data-theme='dark'] .theme-toggle:hover {
-  background-color: rgba(255, 109, 0, 0.3) !important;
-  color: #fff8ef !important;
+  background-color: rgba(255, 214, 10, 0.22) !important;
+  color: #ffd60a !important;
 }
 
 html[data-theme='dark'] .brand-pixel-card {
-  border-color: rgba(255, 109, 0, 0.5);
-  background: linear-gradient(135deg, #2a1e12 0%, #38281a 62%, #47311d 100%);
+  border-color: rgba(255, 214, 10, 0.45);
+  background: linear-gradient(135deg, #0d0d10 0%, #15151a 62%, #1d1d24 100%);
 }
 
 html[data-theme='dark'] .brand-pixel-line--top {

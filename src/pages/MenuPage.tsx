@@ -4,7 +4,6 @@ import { categories, menuItems } from '../data/menuData';
 import type { MenuItem } from '../types/menu';
 import CategoryNav from '../components/CategoryNav';
 import MenuCard from '../components/MenuCard';
-import CartDrawer from '../components/CartDrawer';
 import ProductDetailPage from './ProductDetailPage';
 
 export default function MenuPage() {
@@ -74,21 +73,16 @@ export default function MenuPage() {
   }
 
   if (selectedItem) {
-    return (
-      <>
-        <ProductDetailPage item={selectedItem} onBack={closeProductDetail} />
-        <CartDrawer />
-      </>
-    );
+    return <ProductDetailPage item={selectedItem} onBack={closeProductDetail} />;
   }
 
   return (
-    <div className="theme-page min-h-screen bg-[linear-gradient(180deg,#FFECD2_0%,#FFF3E0_100%)] pb-32 text-[#4A2800]">
+    <div className="theme-page min-h-screen bg-[linear-gradient(180deg,#050505_0%,#0c0c0f_100%)] pb-32 text-white">
       <main className="section-shell py-6 lg:py-10">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-black leading-tight tracking-tight text-[#4A2800] sm:text-3xl">Nuestro menú</h1>
-            <p className="mt-0.5 text-sm text-[#6A3A00]">Escoge tu favorito y pídelo por WhatsApp</p>
+            <h1 className="title-pixel text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl">Nuestro menú</h1>
+            <p className="mt-0.5 text-sm text-white/65">Escoge tu favorito y pídelo por WhatsApp</p>
           </div>
           <button
             type="button"
@@ -114,14 +108,14 @@ export default function MenuPage() {
 
         <section className="mt-8">
           <section
-            className="rounded-[28px] border border-[#FF6D00]/35 bg-[#FFF3E0] p-5 shadow-[0_16px_34px_rgba(255,109,0,0.15)] sm:p-7"
+            className="rounded-[28px] border border-yellow-400/18 bg-[#101014] p-5 shadow-[0_16px_34px_rgba(0,0,0,0.28)] sm:p-7"
           >
-              <div className="flex flex-col gap-3 border-b border-[#FF6D00]/25 pb-5 sm:flex-row sm:items-end sm:justify-between">
-              <h2 className="flex items-center gap-3 text-3xl sm:text-4xl">
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#FF6D00]/15 text-xl">{currentCategory.emoji}</span>
+              <div className="flex flex-col gap-3 border-b border-yellow-400/12 pb-5 sm:flex-row sm:items-end sm:justify-between">
+              <h2 className="title-pixel flex items-center gap-3 text-3xl font-black text-white sm:text-4xl">
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-yellow-400/10 text-xl">{currentCategory.emoji}</span>
                 <span>{currentCategory.name}</span>
               </h2>
-              <span className="rounded-full bg-[#FF6D00]/15 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.2em] text-[#FF6D00]">
+              <span className="rounded-full bg-yellow-400/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.2em] text-yellow-300">
                 {currentItems.length} opciones
               </span>
             </div>
@@ -135,7 +129,6 @@ export default function MenuPage() {
         </section>
       </main>
 
-      <CartDrawer />
     </div>
   );
 }

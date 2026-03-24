@@ -23,8 +23,8 @@ export default function CategoryNav({ categories, activeId, onSelect }: Props) {
   }
 
   return (
-    <nav className="sticky top-20 z-30 rounded-[24px] border border-[#FF6D00]/40 bg-[#FFF3E0] shadow-[0_8px_20px_rgba(255,109,0,0.16)]">
-      <div className="px-4 pt-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[#8A5A2A] sm:hidden">
+    <nav className="sticky top-20 z-30 rounded-[24px] border border-yellow-400/18 bg-[#101014] shadow-[0_8px_20px_rgba(0,0,0,0.28)]">
+      <div className="px-4 pt-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/50 sm:hidden">
         Desliza las categorías
       </div>
       <div
@@ -40,11 +40,11 @@ export default function CategoryNav({ categories, activeId, onSelect }: Props) {
             className={`flex shrink-0 snap-start items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2.5 text-xs font-bold transition-all sm:px-4 sm:text-sm ${
               activeId === cat.id
                 ? 'bg-[#FFD60A] text-black shadow-md shadow-[#FFD60A]/30 font-extrabold'
-                : 'bg-[#FFE4C2] text-[#6A3A00] hover:bg-[#FFD9AD] hover:text-[#FFD60A]'
+                : 'bg-[#17171d] text-white/75 hover:bg-[#202028] hover:text-[#FFD60A]'
             }`}
           >
             <span>{cat.emoji}</span>
-            <span>{cat.name}</span>
+            <span className="title-pixel">{cat.name}</span>
           </button>
         ))}
       </div>

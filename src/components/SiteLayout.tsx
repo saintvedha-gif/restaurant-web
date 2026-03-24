@@ -10,7 +10,6 @@ const socialLinks = [
 ];
 
 type DayKey = 'domingo' | 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes' | 'sabado';
-type ThemeMode = 'light' | 'dark';
 
 const OPENING_HOURS: Record<DayKey, { open: number; close: number }> = {
   lunes: { open: 17 * 60, close: 22 * 60 },
@@ -94,11 +93,6 @@ export default function SiteLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [clockTick, setClockTick] = useState(0);
   const [showFloatingActions, setShowFloatingActions] = useState(false);
-  const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
-    const stored = window.localStorage.getItem('theme-mode');
-    if (stored === 'light' || stored === 'dark') return stored;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  });
   const location = useLocation();
 
   const parseTwemoji = () => {
@@ -150,9 +144,8 @@ export default function SiteLayout() {
   }, [location.pathname]);
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', themeMode);
-    window.localStorage.setItem('theme-mode', themeMode);
-  }, [themeMode]);
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }, []);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -164,6 +157,13 @@ export default function SiteLayout() {
 
   useEffect(() => {
     const updateFloatingVisibility = () => {
+      // Solo mostrar en la página de inicio
+      const isHomePage = location.pathname === '/' || location.pathname === '';
+      if (!isHomePage) {
+        setShowFloatingActions(false);
+        return;
+      }
+
       // En mobile evitamos tapar los CTAs al inicio. Una vez aparecen, se quedan visibles.
       if (window.innerWidth >= 640) {
         setShowFloatingActions(true);
@@ -183,7 +183,7 @@ export default function SiteLayout() {
       window.removeEventListener('scroll', updateFloatingVisibility);
       window.removeEventListener('resize', updateFloatingVisibility);
     };
-  }, []);
+  }, [location.pathname]);
 
   const openNow = useMemo(() => {
     const now = getCurrentColombiaTime();
@@ -192,9 +192,8 @@ export default function SiteLayout() {
   }, [clockTick]);
 
   return (
-    <div className="theme-page min-h-screen bg-[linear-gradient(180deg,#FFECD2_0%,#FFF3E0_55%,#FFE4C2_100%)] text-[#4A2800]">
-      <div className="corn-bg pointer-events-none fixed inset-0 z-0 select-none" aria-hidden="true" />
-      <div className="theme-topbar border-b border-[#CC5500]/40 bg-[linear-gradient(90deg,#FF6D00_0%,#FF8C00_50%,#FFD60A_100%)]">
+    <div className="theme-page relative min-h-screen bg-[linear-gradient(180deg,#050505_0%,#0a0a0d_55%,#111114_100%)] text-[#F5F5F5]">
+      <div className="theme-topbar relative z-0 border-b border-yellow-400/15 bg-[linear-gradient(90deg,#090909_0%,#111114_70%,#17171c_100%)]">
         <div className="section-shell py-2 text-xs font-semibold">
           {/* Fila 1: redes + estado */}
           <div className="flex items-center justify-between">
@@ -221,10 +220,10 @@ export default function SiteLayout() {
             {/* Badge estado: pill con color de fondo */}
             <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-black uppercase tracking-[0.08em] ${
               openNow
-                ? 'bg-[#4A2800]/15 text-[#4A2800] border border-[#4A2800]/30'
-                : 'bg-[#FF3D00]/20 text-[#7A0000] border border-[#FF3D00]/40'
+                ? 'border border-yellow-400/30 bg-yellow-400/10 text-yellow-300'
+                : 'border border-white/15 bg-white/10 text-white/70'
             }`}>
-              <span className={`h-2 w-2 rounded-full ${openNow ? 'bg-[#00A843]' : 'bg-[#FF3D00]'}`} />
+              <span className={`h-2 w-2 rounded-full ${openNow ? 'bg-[#FFD60A]' : 'bg-white/70'}`} />
               {openNow ? 'Abierto ahora' : 'Cerrado ahora'}
             </span>
 
@@ -237,17 +236,17 @@ export default function SiteLayout() {
         </div>
       </div>
 
-      <header className="theme-header anim-fade-down sticky top-0 z-40 border-b border-[#FF6D00]/40 bg-[linear-gradient(90deg,#FF6D00_0%,#FF8C00_50%,#FFD60A_100%)] shadow-[0_8px_20px_rgba(255,109,0,0.4)]">
+      <header className="theme-header anim-fade-down sticky top-0 z-40 border-b border-yellow-400/15 bg-[linear-gradient(90deg,#090909_0%,#101014_60%,#18181d_100%)] shadow-[0_8px_20px_rgba(0,0,0,0.45)]">
         <div className="section-shell flex items-center justify-between gap-4 py-4">
-          <NavLink to="/" className="theme-logo text-2xl leading-none tracking-tight sm:text-3xl">
-            <span className="font-display"><span className="logo-corn">🌽</span> MUCHA</span>
-            <span className="theme-logo-accent font-display drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]">MAZORCA</span>
+          <NavLink to="/" className="theme-logo flex items-center gap-2 leading-none">
+            <span className="title-pixel text-base text-white sm:text-lg">🌽 MUCHA</span>
+            <span className="title-pixel text-base text-yellow-400 sm:text-lg">MAZORCA</span>
           </NavLink>
 
           <button
             type="button"
             onClick={() => setMobileMenuOpen(current => !current)}
-            className="theme-menu-button inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[#4A2800]/30 bg-[#4A2800]/15 text-[#4A2800] transition-colors hover:bg-[#4A2800]/25 md:hidden"
+            className="theme-menu-button inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-yellow-400/25 bg-yellow-400/10 text-yellow-300 transition-colors hover:bg-yellow-400/15 md:hidden"
             aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={mobileMenuOpen}
           >
@@ -259,42 +258,29 @@ export default function SiteLayout() {
             <NavItem to="/menu">Menú</NavItem>
             <NavItem to="/galeria">Galería</NavItem>
             <NavItem to="/contacto" asCta>
-              Pide ahora
+              <span className="title-pixel">Pide ahora</span>
             </NavItem>
           </nav>
         </div>
 
         {mobileMenuOpen && (
-          <div className="theme-mobile-panel border-t border-[#4A2800]/20 bg-[linear-gradient(90deg,#FF6D00_0%,#FFD60A_100%)] md:hidden">
+          <div className="theme-mobile-panel border-t border-yellow-400/15 bg-[linear-gradient(90deg,#090909_0%,#15151a_100%)] md:hidden">
             <div className="section-shell grid gap-3 py-4">
               <MobileNavItem to="/">Inicio</MobileNavItem>
               <MobileNavItem to="/menu">Menú</MobileNavItem>
               <MobileNavItem to="/galeria">Galería</MobileNavItem>
-              <MobileNavItem to="/contacto" asCta>Pide ahora</MobileNavItem>
+              <MobileNavItem to="/contacto" asCta><span className="title-pixel">Pide ahora</span></MobileNavItem>
             </div>
           </div>
         )}
       </header>
 
-      <main>
+      <main className="relative z-0">
         <Outlet />
       </main>
 
       {showFloatingActions && (
       <div className="fixed bottom-5 right-4 z-50 flex flex-col items-center gap-3 sm:bottom-6 sm:right-5">
-        <button
-          type="button"
-          onClick={() => setThemeMode(current => (current === 'light' ? 'dark' : 'light'))}
-          aria-label={themeMode === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
-          className="inline-flex h-14 w-14 items-center justify-center rounded-full shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition-colors duration-200"
-          style={{
-            background: themeMode === 'light' ? '#1e1e22' : '#FFD60A',
-            color: themeMode === 'light' ? '#FFD60A' : '#1e1e22',
-          }}
-        >
-          <span className="text-xl leading-none">{themeMode === 'light' ? '🌙' : '☀️'}</span>
-        </button>
-
         <a
           href={`https://wa.me/${WHATSAPP_NUMBER}`}
           target="_blank"
@@ -307,28 +293,28 @@ export default function SiteLayout() {
       </div>
       )}
 
-      <footer className="theme-footer mt-16 border-t border-[#FF6D00]/30 bg-[linear-gradient(180deg,#FFF3E0_0%,#FFE4C2_100%)] pb-8 pt-14">
+      <footer className="theme-footer relative z-0 mt-16 border-t border-yellow-400/15 bg-[linear-gradient(180deg,#101014_0%,#050505_100%)] pb-8 pt-14">
         <div className="section-shell grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div>
-            <p className="text-2xl leading-none tracking-tight text-[#4A2800]">
-              <span className="font-display"><span className="logo-corn">🌽</span> MUCHA</span>
-              <span className="font-display text-[#FF6D00]">MAZORCA</span>
+            <p className="flex flex-col gap-0.5 leading-none">
+              <span className="title-pixel text-xs text-white sm:text-sm">🌽 MUCHA</span>
+              <span className="title-pixel text-xs text-yellow-400 sm:text-sm">MAZORCA</span>
             </p>
-            <p className="mt-4 text-sm leading-7 text-[#6A3A00]">
+            <p className="mt-4 text-sm leading-7 text-white/70">
               ¡Tu antojo, tu combinacion, tu Mucha Mazorca!💛🌽
             </p>
           </div>
 
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#FF6D00]">Horario</p>
-            <p className="mt-3 text-sm text-[#6A3A00]">Lun - Jue: 5:00 PM - 10:00 PM</p>
-            <p className="mt-2 text-sm text-[#6A3A00]">Vie - Dom: 6:00 PM - 11:00 PM</p>
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-yellow-300">Horario</p>
+            <p className="mt-3 text-sm text-white/70">Lun - Jue: 5:00 PM - 10:00 PM</p>
+            <p className="mt-2 text-sm text-white/70">Vie - Dom: 6:00 PM - 11:00 PM</p>
           </div>
 
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#FF6D00]">Contacto</p>
-            <p className="mt-3 text-sm leading-7 text-[#6A3A00]">Cl. 41 #58, Barrio Bogota </p>
-            <p className="text-sm text-[#6A3A00]">Cúcuta, Norte de Santander</p>
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-yellow-300">Contacto</p>
+            <p className="mt-3 text-sm leading-7 text-white/70">Cl. 41 #58, Barrio Bogota </p>
+            <p className="text-sm text-white/70">Cúcuta, Norte de Santander</p>
             <div className="mt-3 space-y-2">
               {socialLinks.map(social => (
                 <a
@@ -336,7 +322,7 @@ export default function SiteLayout() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-sm font-semibold text-[#6A3A00] transition-colors hover:text-[#FFD60A]"
+                  className="block text-sm font-semibold text-white/70 transition-colors hover:text-[#FFD60A]"
                 >
                   {social.name} · {social.handle}
                 </a>
@@ -344,7 +330,7 @@ export default function SiteLayout() {
             </div>
           </div>
         </div>
-        <p className="section-shell mt-12 border-t border-[#FF6D00]/15 pt-6 text-xs text-[#8A5A2A]">
+        <p className="section-shell mt-12 border-t border-yellow-400/10 pt-6 text-xs text-white/45">
           © 2026 Mucha Mazorca - Diseño Profesional Full Stack
         </p>
       </footer>
@@ -359,14 +345,14 @@ function SocialIcon({ href, label, children }: { href: string; label: string; ch
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="theme-social inline-flex h-9 w-9 items-center justify-center rounded-[10px] border border-[#4A2800]/25 bg-[#4A2800]/12 text-[#4A2800] transition-colors hover:bg-[#4A2800]/25 hover:border-[#4A2800]/50"
+      className="theme-social inline-flex h-9 w-9 items-center justify-center rounded-[10px] border border-yellow-400/25 bg-yellow-400/10 text-yellow-300 transition-colors hover:bg-yellow-400/15 hover:border-yellow-400/40"
     >
       {children}
     </a>
   );
 }
 
-function NavItem({ to, children, asCta = false }: { to: string; children: string; asCta?: boolean }) {
+function NavItem({ to, children, asCta = false }: { to: string; children: ReactNode; asCta?: boolean }) {
   return (
     <NavLink
       to={to}
@@ -381,7 +367,7 @@ function NavItem({ to, children, asCta = false }: { to: string; children: string
   );
 }
 
-function MobileNavItem({ to, children, asCta = false }: { to: string; children: string; asCta?: boolean }) {
+function MobileNavItem({ to, children, asCta = false }: { to: string; children: ReactNode; asCta?: boolean }) {
   return (
     <NavLink
       to={to}

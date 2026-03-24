@@ -105,7 +105,8 @@ export const addonGroups: AddonGroup[] = [
   {
     id: 'adicionales-amorguesa',
     name: 'ADICIONALES',
-    subtitle: 'Personaliza tu amorguesa (máx. 5)',
+    subtitle: 'Min. 1 · Máx. 5 | 3 carne · 3 pepinillos · 3 tocino · 2 cebolla',
+    minSelections: 1,
     maxSelections: 5,
     addons: [
       { id: 'amor-tocino', name: 'Tocino Americano', emoji: '🥓', price: 4000 },
@@ -118,8 +119,8 @@ export const addonGroups: AddonGroup[] = [
   {
     id: 'quesos-amorguesa',
     name: 'QUESOS',
-    subtitle: 'Elige tu queso (máx. 1)',
-    maxSelections: 1,
+    subtitle: 'Elige tus quesos (máx. 2 de cada)',
+    maxSelections: 8,
     addons: [
       { id: 'amor-queso-cheddar', name: 'Queso Cheddar', emoji: '🧀', price: 3000 },
       { id: 'amor-colbyjack', name: 'ColbyJack', emoji: '🧀', price: 4000 },
@@ -130,8 +131,7 @@ export const addonGroups: AddonGroup[] = [
   {
     id: 'salsas-amorguesa',
     name: 'SALSAS',
-    subtitle: 'Elige tu salsa (incluida)',
-    minSelections: 1,
+    subtitle: 'Elige 1 salsa',
     maxSelections: 1,
     addons: [
       { id: 'amor-salsa-yurbo', name: 'Yurbo', emoji: '🍯', price: 0 },
@@ -235,6 +235,7 @@ export const menuItems: MenuItem[] = [
     price: 29000,
     categoryId: 'salchipapitas',
     image: getImageUrl('SALCHIFELIZ.jpg'),
+    addons: ['adicionales-salchi'],
   },
   {
     id: 'la-doble-m',
@@ -269,6 +270,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'maicitos',
     image: getImageUrl('Quetzalcoat.jpeg'),
     imageHero: getImageUrl('QUETZALCOATL.png'),
+    addons: ['adicionales-salchi'],
     tags: ['nuevo', 'popular'],
   },
   {
@@ -279,6 +281,7 @@ export const menuItems: MenuItem[] = [
     price: 37000,
     categoryId: 'maicitos',
     image: getImageUrl('Viene la paloma.jpeg'),
+    addons: ['tamano-maicito-37', 'adicionales-salchi'],
   },
   {
     id: 'milenial',
@@ -289,6 +292,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'maicitos',
     image: getImageUrl('MILENIAL.jpg'),
     imageHero: getImageUrl('Milenial.jpeg'),
+    addons: ['tamano-milenial', 'adicionales-salchi'],
     tags: ['popular'],
   },
   {
@@ -299,6 +303,7 @@ export const menuItems: MenuItem[] = [
     price: 37000,
     categoryId: 'maicitos',
     image: getImageUrl('MALANDRO.png'),
+    addons: ['tamano-maicito-37', 'adicionales-salchi'],
   },
   {
     id: 'negrita',
@@ -308,19 +313,30 @@ export const menuItems: MenuItem[] = [
     price: 34000,
     categoryId: 'maicitos',
     image: getImageUrl('Negrita.jpg'),
+    addons: ['adicionales-salchi'],
   },
 
   // AMORGUESAS
   {
-    id: 'menu-amorguesas',
-    name: 'Menú de amorguesas',
-    emoji: '❤️',
-    description: 'Pan Brioch + Blend de carne artesanal + Queso Cheddar original + Tocino americano + Una salsa a tu elección. También clásica sin topping extra.',
-    price: 37000,
+    id: 'amorguesa-clasica',
+    name: 'Amorguesa Clásica',
+    emoji: '🍔',
+    description: 'Pan Brioch, blend de carne artesanal, queso cheddar original, tocino americano y salsa de pepinillos (Yurbo).',
+    price: 17000,
+    categoryId: 'amorguesas',
+    image: getImageUrl('Amburguesa.jpeg'),
+    tags: ['popular'],
+    addons: ['salsas-amorguesa'],
+  },
+  {
+    id: 'amorguesa-armable',
+    name: 'Amorguesa Armable',
+    emoji: '🍔✨',
+    description: 'Base de pan Brioch, blend de carne artesanal y tocino americano. Personalízala con adicionales, quesos y salsa a tu elección.',
+    price: 14000,
     categoryId: 'amorguesas',
     image: getImageUrl('Amburguesa.jpeg'),
     addons: ['salsas-amorguesa', 'quesos-amorguesa', 'adicionales-amorguesa'],
-    tags: ['popular'],
   },
 
   // FRAPPÉS

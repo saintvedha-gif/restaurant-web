@@ -16,8 +16,8 @@ export default function GalleryPage() {
     <div className="section-shell py-10 sm:py-14">
       <section>
         <span className="section-kicker">Galeria</span>
-        <h1 className="mt-5 text-5xl leading-tight text-[#4A2800] sm:text-6xl"><span className="font-display">Un vistazo a nuestros platos favoritos.</span></h1>
-        <p className="mt-5 max-w-3xl text-base leading-8 text-[#6A3A00]">
+        <h1 className="title-pixel mt-5 text-5xl font-black leading-tight text-white sm:text-6xl">Un vistazo a nuestros platos favoritos.</h1>
+        <p className="mt-5 max-w-3xl text-base leading-8 text-white/65">
           Esta galeria muestra la energia visual de Mucha Mazorca: platos cargados, coloridos y listos para compartir.
         </p>
       </section>
@@ -26,11 +26,11 @@ export default function GalleryPage() {
         {galleryPhotos.map((photo, idx) => (
           <article
             key={photo.src}
-            className={`self-start overflow-hidden rounded-[24px] border border-[#FF6D00]/35 bg-[#FFF3E0] shadow-[0_15px_30px_rgba(255,109,0,0.15)] ${
+            className={`self-start overflow-hidden rounded-[24px] border border-yellow-400/18 bg-[#101014] shadow-[0_15px_30px_rgba(0,0,0,0.3)] ${
               idx !== 0 && idx % 4 === 0 ? 'sm:col-span-2 lg:col-span-2' : ''
             }`}
           >
-              <div className="relative bg-[#FFE4C2]">
+              <div className="relative bg-[#121217]">
               <img
                 src={photo.src}
                 alt={photo.alt}
