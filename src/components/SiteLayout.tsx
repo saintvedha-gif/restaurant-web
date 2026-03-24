@@ -238,9 +238,14 @@ export default function SiteLayout() {
 
       <header className="theme-header anim-fade-down sticky top-0 z-40 border-b border-yellow-400/15 bg-[linear-gradient(90deg,#090909_0%,#101014_60%,#18181d_100%)] shadow-[0_8px_20px_rgba(0,0,0,0.45)]">
         <div className="section-shell flex items-center justify-between gap-4 py-4">
-          <NavLink to="/" className="theme-logo flex items-center gap-2 leading-none">
-            <span className="title-pixel text-base text-white sm:text-lg">🌽 MUCHA</span>
-            <span className="title-pixel text-base text-yellow-400 sm:text-lg">MAZORCA</span>
+          <NavLink to="/" className="theme-logo flex items-center gap-2.5 leading-none">
+            <span className="logo-corn text-[1.8rem] drop-shadow-[0_6px_12px_rgba(255,214,10,0.15)] sm:text-[2.1rem]">🌽</span>
+            <span className="title-standard text-[1.55rem] font-black tracking-[-0.07em] text-white sm:text-[2rem]">
+              MUCHA
+            </span>
+            <span className="theme-logo-accent title-standard text-[1.55rem] font-black tracking-[-0.07em] sm:text-[2rem]">
+              MAZORCA
+            </span>
           </NavLink>
 
           <button

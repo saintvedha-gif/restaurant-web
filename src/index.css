@@ -170,6 +170,18 @@ img.emoji {
     display: inline-block;
     transform-origin: 50% 70%;
     animation: cornWiggle 2.4s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .logo-corn .emoji,
+  .logo-corn img.emoji {
+    display: block;
+    height: 1em;
+    width: 1em;
+    margin: 0;
+    animation: cornWiggle 2.4s ease-in-out infinite;
+    transform-origin: 50% 70%;
+    will-change: transform;
   }
 
   .theme-logo {
