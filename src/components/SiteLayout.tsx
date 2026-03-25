@@ -104,44 +104,12 @@ export default function SiteLayout() {
   }, [location.pathname]);
 
   useEffect(() => {
-    let frameId = 0;
+    const parseTimer = window.setTimeout(() => {
+      parseTwemoji();
+    }, 0);
 
-    const scheduleParse = () => {
-      if (frameId) return;
-      frameId = window.requestAnimationFrame(() => {
-        frameId = 0;
-        parseTwemoji();
-      });
-    };
-
-    scheduleParse();
-
-    const observer = new MutationObserver(mutations => {
-      for (const mutation of mutations) {
-        if (mutation.type === 'characterData' || mutation.addedNodes.length > 0) {
-          scheduleParse();
-          break;
-        }
-      }
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-    });
-
-    return () => {
-      observer.disconnect();
-      if (frameId) {
-        window.cancelAnimationFrame(frameId);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    parseTwemoji();
-  }, [location.pathname]);
+    return () => window.clearTimeout(parseTimer);
+  }, [location.pathname, mobileMenuOpen]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', 'dark');

@@ -12,6 +12,21 @@ export const getImageUrl = (fileName: string): string => {
   return `${basePath}/images/${fileName}`;
 };
 
+export const getSizedImageUrl = (url: string, width: number, quality = 'auto:good'): string => {
+  if (!url.includes('res.cloudinary.com') || width <= 0) {
+    return url;
+  }
+
+  if (url.includes('/image/upload/f_auto,q_auto/')) {
+    return url.replace(
+      '/image/upload/f_auto,q_auto/',
+      `/image/upload/f_auto,q_auto,${quality},c_limit,w_${Math.round(width)}/`
+    );
+  }
+
+  return url.replace('/image/upload/', `/image/upload/f_auto,q_auto,${quality},c_limit,w_${Math.round(width)}/`);
+};
+
 export const categories: Category[] = [
   { id: 'entradas', name: 'ENTRADAS', emoji: '🔥', slug: 'entradas' },
   { id: 'salchipapitas', name: 'SALCHIPAPITAS', emoji: '🍟', slug: 'salchipapitas' },
@@ -193,8 +208,8 @@ export const menuItems: MenuItem[] = [
     description: 'Su base incluye papitas a la francesa, salchichas, salsita tártara de la casa y queso mozzarella gratinado. Esta salchi está pensada para más de 2 personas.',
     price: 46000,
     categoryId: 'salchipapitas',
-    image: getImageUrl('SALCHIPAPITAS.png'),
-    imageHero: getImageUrl('Salchipapita.jpeg'),
+    image: getImageUrl('Salchipapita.png'),
+    imageHero: getImageUrl('Salchipapita.png'),
     addons: ['adicionales-salchi'],
   },
   {
@@ -204,8 +219,8 @@ export const menuItems: MenuItem[] = [
     description: 'Su base incluye papitas a la francesa, salchichas y salsita tártara de la casa. Esta salchi está pensada para 1 persona que coma muuuuucho, pero la verdad es que te alcanza pa\' 2.',
     price: 29000,
     categoryId: 'salchipapitas',
-    image: getImageUrl('SALCHIPER.jpg'),
-    imageHero: getImageUrl('Salchiper.jpeg'),
+    image: getImageUrl('Salchiper.png'),
+    imageHero: getImageUrl('Salchiper.png'),
     addons: ['adicionales-salchi'],
   },
   {
@@ -268,8 +283,8 @@ export const menuItems: MenuItem[] = [
     description: 'Inspirado en la cultura mexicana, este maicito es exclusivamente pa\' 2 personas. Trae carne mechada en guiso, base de maicito, extra-queso mozzarella gratinado, 3 tortillas, pico de gallo, salsa cheddar, piña y tártara.',
     price: 40000,
     categoryId: 'maicitos',
-    image: getImageUrl('Quetzalcoat.jpeg'),
-    imageHero: getImageUrl('QUETZALCOATL.png'),
+    image: getImageUrl('Quetzalcoat.png'),
+    imageHero: getImageUrl('Quetzalcoat.png'),
     addons: ['adicionales-salchi'],
     tags: ['nuevo', 'popular'],
   },
@@ -280,7 +295,7 @@ export const menuItems: MenuItem[] = [
     description: 'Por si te gusta el sabor caribeño. Trae maicito, carne desmechada, mucho maduro, extra-queso mozzarella gratinado, suero costeño y papita de perro. Mi favorito a gusto personal.',
     price: 37000,
     categoryId: 'maicitos',
-    image: getImageUrl('Viene la paloma.jpeg'),
+    image: getImageUrl('Viene la Paloma.png'),
     addons: ['tamano-maicito-37', 'adicionales-salchi'],
   },
   {
@@ -290,8 +305,8 @@ export const menuItems: MenuItem[] = [
     description: 'El maicito favorito por excelencia. Trae maicito, pollito desmechado, tocineta, salchicha, queso mozzarella gratinado y papita de perro.',
     price: 32000,
     categoryId: 'maicitos',
-    image: getImageUrl('MILENIAL.jpg'),
-    imageHero: getImageUrl('Milenial.jpeg'),
+    image: getImageUrl('Milenial.png'),
+    imageHero: getImageUrl('Milenial.png'),
     addons: ['tamano-milenial', 'adicionales-salchi'],
     tags: ['popular'],
   },
@@ -302,7 +317,7 @@ export const menuItems: MenuItem[] = [
     description: 'Para gustos más fuertes. Trae maicito, carne desmechada, tocineta, chorizo, queso mozzarella gratinado y papita de perro.',
     price: 37000,
     categoryId: 'maicitos',
-    image: getImageUrl('MALANDRO.png'),
+    image: getImageUrl('Malandro.png'),
     addons: ['tamano-maicito-37', 'adicionales-salchi'],
   },
   {
@@ -312,7 +327,7 @@ export const menuItems: MenuItem[] = [
     description: 'Un plato creado con amor, perfecto para los fans del maduro. Trae una camita de maduro frito, pollo y tocineta en salsa blanca, salchichas y una cubierta de queso mozzarella con algunos granitos de maíz. Se recomienda solo para 1 persona.',
     price: 34000,
     categoryId: 'maicitos',
-    image: getImageUrl('Negrita.jpg'),
+    image: getImageUrl('Negrita.png'),
     addons: ['adicionales-salchi'],
   },
 
@@ -324,7 +339,7 @@ export const menuItems: MenuItem[] = [
     description: 'Pan Brioch, blend de carne artesanal, queso cheddar original, tocino americano y salsa de pepinillos (Yurbo).',
     price: 17000,
     categoryId: 'amorguesas',
-    image: getImageUrl('Amburguesa.jpeg'),
+    image: getImageUrl('Amorguesa Clasica.jpeg'),
     tags: ['popular'],
     addons: ['salsas-amorguesa', 'quesos-amorguesa', 'adicionales-amorguesa'],
   },
@@ -335,7 +350,7 @@ export const menuItems: MenuItem[] = [
     description: 'Base de pan Brioch, blend de carne artesanal y tocino americano. Personalízala con adicionales, quesos y salsa a tu elección.',
     price: 14000,
     categoryId: 'amorguesas',
-    image: getImageUrl('Amburguesa.jpeg'),
+    image: getImageUrl('Amorguesa Armable.jpeg'),
     addons: ['salsas-amorguesa', 'quesos-amorguesa', 'adicionales-amorguesa'],
   },
 

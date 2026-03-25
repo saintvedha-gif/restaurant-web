@@ -1,5 +1,5 @@
 import type { MenuItem } from '../types/menu';
-import { formatPrice } from '../data/menuData';
+import { formatPrice, getSizedImageUrl } from '../data/menuData';
 
 interface Props {
   item: MenuItem;
@@ -41,11 +41,12 @@ export default function MenuCard({ item, onSelect }: Props) {
         {item.image && (
           <div className="shrink-0 overflow-hidden rounded-[12px] bg-[#101014] ring-1 ring-yellow-400/15" style={{width: '88px', height: '88px'}}>
             <img
-              src={item.image}
+              src={getSizedImageUrl(item.image, 220)}
               alt={item.name}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
               decoding="async"
+              sizes="88px"
               width={88}
               height={88}
             />

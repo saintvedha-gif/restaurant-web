@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { formatPrice, getImageUrl, menuItems } from '../data/menuData';
+import { formatPrice, getImageUrl, getSizedImageUrl, menuItems } from '../data/menuData';
 
 const topItems = menuItems.filter(item => item.tags?.includes('popular')).slice(0, 4);
 
@@ -42,12 +42,13 @@ esperamos!   🌽🔥
             <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-[32px] bg-[#FFD60A]" />
             <div className="relative h-full w-full overflow-hidden rounded-[32px] border-4 border-[#FFD60A] shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
               <img
-                src={getImageUrl('Fondo 1.png')}
+                src={getSizedImageUrl(getImageUrl('FONDO1.jpg'), 960)}
                 alt="Mucha Mazorca especial"
                 className="h-full w-full object-cover"
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"
+                sizes="(max-width: 1024px) 100vw, 430px"
               />
             </div>
           </div>
@@ -76,11 +77,12 @@ esperamos!   🌽🔥
                 <div className="relative h-64 overflow-hidden">
                   {(item.imageHero || item.image) && (
                     <img
-                      src={item.imageHero || item.image!}
+                      src={getSizedImageUrl(item.imageHero || item.image!, 720)}
                       alt={item.name}
                       className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                       loading="lazy"
                       decoding="async"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   )}
                   <span className="absolute bottom-4 right-4 rounded-full bg-[#FFD60A] px-4 py-1.5 text-sm font-black text-black shadow-lg">
