@@ -98,6 +98,12 @@ export default function MenuPage() {
             )}
           </button>
         </div>
+        {/* Refuerzo de overflow y ancho en el contenedor de tarjetas */}
+        <div className="w-full max-w-full min-w-0 overflow-x-clip">
+          {currentItems.map(item => (
+            <MenuCard key={item.id} item={item} onSelect={openProductDetail} />
+          ))}
+        </div>
         <section>
           <CategoryNav
             categories={categories}

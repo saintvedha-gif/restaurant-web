@@ -10,11 +10,11 @@ export default function MenuCard({ item, onSelect }: Props) {
   return (
     <button
       onClick={() => onSelect(item)}
-      className="group w-full rounded-[18px] border border-yellow-400/15 bg-[#16161b] p-3 text-left shadow-[0_8px_20px_rgba(0,0,0,0.24)] transition-all hover:-translate-y-0.5 hover:border-yellow-300/60 hover:shadow-[0_16px_34px_rgba(0,0,0,0.34)] sm:p-4"
+      className="group w-full min-w-0 max-w-full overflow-x-clip rounded-[18px] border border-yellow-400/15 bg-[#16161b] p-3 text-left shadow-[0_8px_20px_rgba(0,0,0,0.24)] transition-all hover:-translate-y-0.5 hover:border-yellow-300/60 hover:shadow-[0_16px_34px_rgba(0,0,0,0.34)] sm:p-4"
     >
-      <div className="flex min-w-0 flex-row items-center gap-3 sm:gap-4">
-        <div className="min-w-0 flex-1">
-          <div className="flex min-w-0 flex-wrap items-center gap-2">
+      <div className="flex min-w-0 max-w-full flex-row items-center gap-3 sm:gap-4 overflow-x-clip">
+        <div className="min-w-0 max-w-full flex-1 overflow-x-clip">
+          <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2 overflow-x-clip">
             <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-yellow-400/10 px-0.5 text-[11px] leading-none sm:h-9 sm:w-9 sm:px-0 sm:text-base">
               {item.emoji}
             </span>
