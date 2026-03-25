@@ -17,14 +17,14 @@ export const getSizedImageUrl = (url: string, width: number, quality = 'auto:goo
     return url;
   }
 
-  if (url.includes('/image/upload/f_auto,q_auto/')) {
-    return url.replace(
-      '/image/upload/f_auto,q_auto/',
-      `/image/upload/f_auto,q_auto,${quality},c_limit,w_${Math.round(width)}/`
-    );
-  }
+  const safeWidth = Math.max(1, Math.round(width));
+  const transformation = `f_auto,q_${quality},c_limit,w_${safeWidth}`;
 
-  return url.replace('/image/upload/', `/image/upload/f_auto,q_auto,${quality},c_limit,w_${Math.round(width)}/`);
+  // Replace existing transformation segment (e.g. f_auto,q_auto/) but keep version (v1/).
+  return url.replace(
+    /\/image\/upload\/(?:[^/]*,[^/]*\/)?/,
+    `/image/upload/${transformation}/`
+  );
 };
 
 export const categories: Category[] = [
