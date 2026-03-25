@@ -70,7 +70,7 @@ export default function CategoryNav({ categories, activeId, onSelect }: Props) {
         <div
           ref={scrollRef}
           onWheel={handleWheelScroll}
-          className="flex min-w-0 w-full flex-wrap gap-1 overflow-x-visible px-1.5 py-2 scrollbar-none sm:overflow-x-auto sm:px-3 md:px-8 lg:flex-nowrap lg:overflow-x-auto lg:px-12"
+          className="flex min-w-0 w-full flex-nowrap gap-1 overflow-x-auto px-1.5 py-2 scrollbar-none sm:px-3 md:px-8 lg:px-12"
           style={{ scrollbarWidth: 'none' }}
         >
           {categories.map(cat => (
