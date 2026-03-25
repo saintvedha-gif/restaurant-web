@@ -12,13 +12,13 @@ export default function MenuCard({ item, onSelect }: Props) {
       onClick={() => onSelect(item)}
       className="group w-full rounded-[18px] border border-yellow-400/15 bg-[#16161b] p-3 text-left shadow-[0_8px_20px_rgba(0,0,0,0.24)] transition-all hover:-translate-y-0.5 hover:border-yellow-300/60 hover:shadow-[0_16px_34px_rgba(0,0,0,0.34)] sm:p-4"
     >
-      <div className="flex flex-row items-center gap-3 sm:gap-4">
+      <div className="flex min-w-0 flex-row items-center gap-3 sm:gap-4">
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-400/10 text-base sm:h-9 sm:w-9 sm:text-lg">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden whitespace-nowrap rounded-full bg-yellow-400/10 px-0.5 text-[11px] leading-none sm:h-9 sm:w-9 sm:px-0 sm:text-base">
               {item.emoji}
             </span>
-            <h3 className="title-pixel text-sm leading-snug text-white transition-colors group-hover:text-yellow-300 sm:text-base">
+            <h3 className="title-pixel min-w-0 break-words text-sm leading-snug text-white transition-colors group-hover:text-yellow-300 sm:text-base">
               {item.name}
             </h3>
             {item.tags?.includes('popular') && (
