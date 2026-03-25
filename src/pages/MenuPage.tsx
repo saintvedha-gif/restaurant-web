@@ -79,15 +79,15 @@ export default function MenuPage() {
   return (
     <div className="theme-page min-h-screen bg-[linear-gradient(180deg,#050505_0%,#0c0c0f_100%)] pb-32 text-white">
       <main className="section-shell py-6 lg:py-10">
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <div>
-            <h1 className="title-pixel text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl">Nuestro menú</h1>
-            <p className="mt-0.5 text-sm text-white/65">Escoge tu favorito y pídelo por WhatsApp</p>
+        <div className="mb-5 flex flex-col gap-3 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <h1 className="title-pixel text-[1.65rem] font-black leading-[1.1] tracking-tight text-white sm:text-3xl">Nuestro menú</h1>
+            <p className="mt-1 max-w-[24rem] text-sm text-white/65">Escoge tu favorito y pídelo por WhatsApp</p>
           </div>
           <button
             type="button"
             onClick={shareMenu}
-            className="btn-secondary-sm relative flex shrink-0 items-center gap-1.5"
+            className="btn-secondary-sm relative inline-flex w-full items-center justify-center gap-1.5 sm:w-auto sm:shrink-0"
           >
             <span>🔗</span>
             <span>Compartir menú</span>
