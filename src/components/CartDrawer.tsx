@@ -6,6 +6,7 @@ const PRODUCT_ADDON_LIMITS: Record<string, Partial<Record<string, number>>> = {
   salchiper: { 'adicionales-salchi': 8 },
   salchipapita: { 'adicionales-salchi': 10 },
   salchipapota: { 'adicionales-salchi': 12 },
+  salchifeliz: { 'adicionales-salchi': 3 },
 };
 
 const MAICITO_SIZE_LIMITS: Record<string, number> = {
@@ -117,9 +118,7 @@ export default function CartDrawer() {
       'Bebida',
       drinkBlock,
       '',
-      'Necesito _ tenedores.',
-      '',
-      '“(Espacio para alguna especificación del pedido)”',
+      `💰 Total: ${formatPrice(state.total)}`,
     ].join('\n');
 
     return encodeURIComponent(msg);

@@ -55,7 +55,7 @@ export const addonGroups: AddonGroup[] = [
   {
     id: 'adicionales-salchi',
     name: 'ADICIONALES SALCHIPAPITAS',
-    subtitle: 'Seleccione hasta 16 opciones',
+    subtitle: '',
     maxSelections: 16,
     addons: [
       { id: 'papita-casco', name: 'Base de papita casco', emoji: '🥔', price: 4000 },

@@ -12,6 +12,7 @@ const PRODUCT_ADDON_LIMITS: Record<string, Partial<Record<string, number>>> = {
   salchiper: { 'adicionales-salchi': 8 },
   salchipapita: { 'adicionales-salchi': 10 },
   salchipapota: { 'adicionales-salchi': 12 },
+  salchifeliz: { 'adicionales-salchi': 3 },
 };
 
 const MAICITO_SIZE_LIMITS: Record<string, number> = {
@@ -116,11 +117,26 @@ function getPerAddonLimit(itemId: string, groupId: string, addonId: string) {
 }
 
 function shouldHideGroupMeta(itemId: string, groupId: string) {
-  return isAmorguesaWithLimits(itemId) && [
+  if (isAmorguesaWithLimits(itemId) && [
     'salsas-amorguesa',
     'quesos-amorguesa',
     'adicionales-amorguesa',
-  ].includes(groupId);
+  ].includes(groupId)) {
+    return true;
+  }
+
+  return (
+    (itemId === 'milenial' && groupId === 'tamano-milenial') ||
+    (itemId === 'malandro' && groupId === 'tamano-maicito-37')
+  );
+}
+
+function shouldHideGroupSubtitle(itemId: string, groupId: string) {
+  if (shouldHideGroupMeta(itemId, groupId)) {
+    return true;
+  }
+
+  return groupId === 'adicionales-salchi' && ['quetzalcoatl', 'milenial', 'malandro'].includes(itemId);
 }
 
 export default function ProductDetailPage({ item, onBack }: Props) {
@@ -392,7 +408,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                     );
                   })()}
 
-                  {!shouldHideGroupMeta(item.id, group.id) && (
+                  {!shouldHideGroupSubtitle(item.id, group.id) && group.subtitle.trim().length > 0 && (
                     <p className="mt-1 text-xs text-white/55">
                       {group.id.startsWith('tamano')
                         ? group.subtitle
