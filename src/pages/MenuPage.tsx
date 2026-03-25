@@ -77,12 +77,12 @@ export default function MenuPage() {
   }
 
   return (
-    <div className="theme-page min-h-screen overflow-x-clip bg-[linear-gradient(180deg,#050505_0%,#0c0c0f_100%)] pb-32 text-white">
-      <main className="section-shell min-w-0 py-6 lg:py-10">
-        <div className="mb-5 flex flex-col gap-3 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="min-w-0">
-            <h1 className="title-pixel text-[1.65rem] font-black leading-[1.1] tracking-tight text-white sm:text-3xl">Nuestro menú</h1>
-            <p className="mt-1 max-w-[24rem] text-sm text-white/65">Escoge tu favorito y pídelo por WhatsApp</p>
+    <div className="theme-page min-h-screen w-full max-w-full overflow-x-clip bg-[linear-gradient(180deg,#050505_0%,#0c0c0f_100%)] pb-32 text-white">
+      <main className="section-shell min-w-0 w-full max-w-full overflow-x-clip py-6 lg:py-10">
+        <div className="mb-5 flex flex-col gap-3 sm:mb-4 sm:flex-row sm:items-center sm:justify-between w-full max-w-full overflow-x-clip">
+          <div className="min-w-0 w-full max-w-full">
+            <h1 className="title-pixel text-[1.65rem] font-black leading-[1.1] tracking-tight text-white sm:text-3xl break-words truncate">Nuestro menú</h1>
+            <p className="mt-1 max-w-[24rem] text-sm text-white/65 break-words truncate">Escoge tu favorito y pídelo por WhatsApp</p>
           </div>
           <button
             type="button"
