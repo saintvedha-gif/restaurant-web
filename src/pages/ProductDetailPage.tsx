@@ -346,7 +346,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
   }
 
   return (
-    <div className="theme-page min-h-screen bg-[linear-gradient(180deg,#050505_0%,#0c0c0f_100%)] pb-36 text-[#F5F5F5]">
+    <div className="theme-page min-h-screen overflow-x-clip bg-[linear-gradient(180deg,#050505_0%,#0c0c0f_100%)] pb-36 text-[#F5F5F5]">
       <header className="sticky top-0 z-30 border-b border-yellow-400/20 bg-[#101014] shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
         <div className="section-shell flex items-center justify-between gap-4 py-4">
           <button
@@ -376,7 +376,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
           <section className="paper-panel flex min-h-[500px] flex-col">
             <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
-              <h1 className="title-pixel text-3xl leading-tight text-white sm:text-4xl">
+              <h1 className="title-pixel break-words text-2xl leading-tight text-white sm:text-4xl">
                 {item.name} {item.emoji}
               </h1>
               <p className="mt-3 text-base leading-8 text-white/75">{item.description}</p>
@@ -394,7 +394,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
                     return (
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="title-pixel text-sm uppercase text-white">{group.name}</h3>
+                    <h3 className="title-pixel break-words text-sm uppercase text-white">{group.name}</h3>
                     {!hideGroupMeta && (
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-white/55">
@@ -416,7 +416,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                     </p>
                   )}
 
-                  <div className={`mt-3 grid gap-3 ${group.id === 'salsas-amorguesa' || isMaicitoSizeGroup(group.id) ? 'grid-cols-3 gap-2' : 'sm:grid-cols-2'}`}>
+                  <div className={`mt-3 grid gap-3 ${group.id === 'salsas-amorguesa' || isMaicitoSizeGroup(group.id) ? 'grid-cols-2 gap-2 min-[420px]:grid-cols-3' : 'sm:grid-cols-2'}`}>
                     {group.addons.map(addon => {
                       const quantity = getAddonQuantity(selectedAddons, addon.id);
                       const groupAddons = group.addons.map(a => a.id);
