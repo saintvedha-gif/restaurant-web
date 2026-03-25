@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, type WheelEvent } from 'react';
 import type { Category } from '../types/menu';
 
 interface Props {
@@ -9,6 +9,26 @@ interface Props {
 
 export default function CategoryNav({ categories, activeId, onSelect }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  function nudgeScroll(direction: 'left' | 'right') {
+    const container = scrollRef.current;
+    if (!container) return;
+    const amount = direction === 'left' ? -260 : 260;
+    container.scrollBy({ left: amount, behavior: 'smooth' });
+  }
+
+  function handleWheelScroll(event: WheelEvent<HTMLDivElement>) {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const hasOverflow = container.scrollWidth > container.clientWidth;
+    if (!hasOverflow) return;
+
+    if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+      event.preventDefault();
+      container.scrollBy({ left: event.deltaY, behavior: 'auto' });
+    }
+  }
 
   function handleClick(id: string) {
     onSelect(id);
@@ -27,26 +47,47 @@ export default function CategoryNav({ categories, activeId, onSelect }: Props) {
       <div className="px-4 pt-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/50 sm:hidden">
         Desliza las categorías
       </div>
-      <div
-        ref={scrollRef}
-        className="flex snap-x snap-mandatory overflow-x-auto gap-2 px-3 py-3 scrollbar-none"
-        style={{ scrollbarWidth: 'none' }}
-      >
-        {categories.map(cat => (
-          <button
-            key={cat.id}
-            data-cat={cat.id}
-            onClick={() => handleClick(cat.id)}
-            className={`flex shrink-0 snap-start items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2.5 text-xs font-bold transition-all sm:px-4 sm:text-sm ${
-              activeId === cat.id
-                ? 'bg-[#FFD60A] text-black shadow-md shadow-[#FFD60A]/30 font-extrabold'
-                : 'bg-[#17171d] text-white/75 hover:bg-[#202028] hover:text-[#FFD60A]'
-            }`}
-          >
-            <span>{cat.emoji}</span>
-            <span className="title-pixel">{cat.name}</span>
-          </button>
-        ))}
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => nudgeScroll('left')}
+          className="absolute left-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-yellow-400/25 bg-[#0d0d12]/90 text-yellow-300 transition-colors hover:bg-[#18181d] md:inline-flex"
+          aria-label="Desplazar categorías a la izquierda"
+        >
+          ‹
+        </button>
+
+        <button
+          type="button"
+          onClick={() => nudgeScroll('right')}
+          className="absolute right-1 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-yellow-400/25 bg-[#0d0d12]/90 text-yellow-300 transition-colors hover:bg-[#18181d] md:inline-flex"
+          aria-label="Desplazar categorías a la derecha"
+        >
+          ›
+        </button>
+
+        <div
+          ref={scrollRef}
+          onWheel={handleWheelScroll}
+          className="flex snap-x snap-mandatory overflow-x-auto gap-2 px-3 py-3 scrollbar-none md:px-12"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              data-cat={cat.id}
+              onClick={() => handleClick(cat.id)}
+              className={`flex shrink-0 snap-start items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2.5 text-xs font-bold transition-all sm:px-4 sm:text-sm ${
+                activeId === cat.id
+                  ? 'bg-[#FFD60A] text-black shadow-md shadow-[#FFD60A]/30 font-extrabold'
+                  : 'bg-[#17171d] text-white/75 hover:bg-[#202028] hover:text-[#FFD60A]'
+              }`}
+            >
+              <span>{cat.emoji}</span>
+              <span className="title-pixel">{cat.name}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </nav>
   );

@@ -22,13 +22,8 @@ export default function MenuCard({ item, onSelect }: Props) {
               {item.name}
             </h3>
             {item.tags?.includes('popular') && (
-              <span className="rounded-full border border-yellow-400/30 bg-[#FFD60A] px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-black shadow-[0_2px_8px_rgba(0,0,0,0.3)] sm:text-xs">
+              <span className="rounded-full border border-yellow-400/30 bg-[#FFD60A] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em] text-black shadow-[0_2px_8px_rgba(0,0,0,0.3)] sm:text-xs sm:tracking-[0.12em]">
                 Popular
-              </span>
-            )}
-            {item.tags?.includes('nuevo') && (
-              <span className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_2px_8px_rgba(0,0,0,0.28)] sm:text-xs">
-                Nuevo
               </span>
             )}
           </div>
@@ -37,7 +32,7 @@ export default function MenuCard({ item, onSelect }: Props) {
             <span className="text-base font-black text-yellow-300 sm:text-lg" style={{ textShadow: '0 0 8px rgba(255,214,10,0.22)' }}>
               {formatPrice(item.price)}
             </span>
-            <span className="inline-flex items-center justify-center rounded-full border border-yellow-400/20 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-white/70">
+            <span className="inline-flex items-center justify-center rounded-full border border-yellow-400/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-white/70 sm:px-3 sm:text-xs sm:tracking-[0.2em]">
               Ver detalle
             </span>
           </div>

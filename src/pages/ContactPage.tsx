@@ -155,8 +155,8 @@ export default function ContactPage() {
                 <span
                   className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-extrabold uppercase tracking-[0.12em] ${
                     currentStatus.isOpen
-                      ? 'bg-yellow-400/15 text-yellow-300'
-                      : 'bg-white/10 text-white/70'
+                      ? 'border border-[#8ED3A5] bg-[#CFF5D6] text-[#2D7A3E]'
+                      : 'border border-[#8A2A43] bg-[#5B1022] text-[#F6CDD7]'
                   }`}
                 >
                   {currentStatus.statusLabel}

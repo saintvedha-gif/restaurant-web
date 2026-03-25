@@ -119,8 +119,8 @@ export const addonGroups: AddonGroup[] = [
   {
     id: 'quesos-amorguesa',
     name: 'QUESOS',
-    subtitle: 'Elige tus quesos (máx. 2 de cada)',
-    maxSelections: 8,
+    subtitle: 'Elige tus quesos (máx. 2 en total)',
+    maxSelections: 2,
     addons: [
       { id: 'amor-queso-cheddar', name: 'Queso Cheddar', emoji: '🧀', price: 3000 },
       { id: 'amor-colbyjack', name: 'ColbyJack', emoji: '🧀', price: 4000 },
@@ -134,9 +134,9 @@ export const addonGroups: AddonGroup[] = [
     subtitle: 'Elige 1 salsa',
     maxSelections: 1,
     addons: [
-      { id: 'amor-salsa-yurbo', name: 'Yurbo', emoji: '🍯', price: 0 },
+      { id: 'amor-salsa-yurbo', name: 'Yurbo', emoji: '🥒', price: 0 },
       { id: 'amor-salsa-pimienta', name: 'Pimentón Romántico', emoji: '🌶️', price: 0 },
-      { id: 'amor-salsa-tartara', name: 'Tártara', emoji: '🍋', price: 0 },
+      { id: 'amor-salsa-tartara', name: 'Tártara', emoji: '🧅', price: 0 },
     ],
   },
   {
@@ -326,7 +326,7 @@ export const menuItems: MenuItem[] = [
     categoryId: 'amorguesas',
     image: getImageUrl('Amburguesa.jpeg'),
     tags: ['popular'],
-    addons: ['salsas-amorguesa'],
+    addons: ['salsas-amorguesa', 'quesos-amorguesa', 'adicionales-amorguesa'],
   },
   {
     id: 'amorguesa-armable',

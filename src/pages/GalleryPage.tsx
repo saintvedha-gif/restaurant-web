@@ -16,7 +16,7 @@ export default function GalleryPage() {
     <div className="section-shell py-10 sm:py-14">
       <section>
         <span className="section-kicker">Galeria</span>
-        <h1 className="title-pixel mt-5 text-5xl font-black leading-tight text-white sm:text-6xl">Un vistazo a nuestros platos favoritos.</h1>
+        <h1 className="title-pixel mt-5 text-3xl font-black leading-tight text-white sm:text-4xl lg:text-5xl">Un vistazo a nuestros platos favoritos.</h1>
         <p className="mt-5 max-w-3xl text-base leading-8 text-white/65">
           Esta galeria muestra la energia visual de Mucha Mazorca: platos cargados, coloridos y listos para compartir.
         </p>

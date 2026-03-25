@@ -220,10 +220,10 @@ export default function SiteLayout() {
             {/* Badge estado: pill con color de fondo */}
             <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-black uppercase tracking-[0.08em] ${
               openNow
-                ? 'border border-yellow-400/30 bg-yellow-400/10 text-yellow-300'
-                : 'border border-white/15 bg-white/10 text-white/70'
+                ? 'border border-[#8ED3A5] bg-[#CFF5D6] text-[#2D7A3E]'
+                : 'border border-[#8A2A43] bg-[#5B1022] text-[#F6CDD7]'
             }`}>
-              <span className={`h-2 w-2 rounded-full ${openNow ? 'bg-[#FFD60A]' : 'bg-white/70'}`} />
+              <span className={`h-2 w-2 rounded-full ${openNow ? 'bg-[#5FBF7A]' : 'bg-[#C05A78]'}`} />
               {openNow ? 'Abierto ahora' : 'Cerrado ahora'}
             </span>
 
@@ -238,12 +238,12 @@ export default function SiteLayout() {
 
       <header className="theme-header anim-fade-down sticky top-0 z-40 border-b border-yellow-400/15 bg-[linear-gradient(90deg,#090909_0%,#101014_60%,#18181d_100%)] shadow-[0_8px_20px_rgba(0,0,0,0.45)]">
         <div className="section-shell flex items-center justify-between gap-4 py-4">
-          <NavLink to="/" className="theme-logo flex items-center gap-2.5 leading-none">
-            <span className="logo-corn text-[1.8rem] drop-shadow-[0_6px_12px_rgba(255,214,10,0.15)] sm:text-[2.1rem]">🌽</span>
-            <span className="title-standard text-[1.55rem] font-black tracking-[-0.07em] text-white sm:text-[2rem]">
+          <NavLink to="/" className="theme-logo flex items-center gap-2 leading-none">
+            <span className="logo-corn text-[1.45rem] drop-shadow-[0_6px_12px_rgba(255,214,10,0.15)] sm:text-[1.8rem] md:text-[2rem]">🌽</span>
+            <span className="title-pixel text-[0.82rem] font-black leading-none text-white sm:text-[1rem] md:text-[1.2rem]">
               MUCHA
             </span>
-            <span className="theme-logo-accent title-standard text-[1.55rem] font-black tracking-[-0.07em] sm:text-[2rem]">
+            <span className="theme-logo-accent title-pixel text-[0.82rem] font-black leading-none sm:text-[1rem] md:text-[1.2rem]">
               MAZORCA
             </span>
           </NavLink>
@@ -301,9 +301,10 @@ export default function SiteLayout() {
       <footer className="theme-footer relative z-0 mt-16 border-t border-yellow-400/15 bg-[linear-gradient(180deg,#101014_0%,#050505_100%)] pb-8 pt-14">
         <div className="section-shell grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div>
-            <p className="flex flex-col gap-0.5 leading-none">
-              <span className="title-pixel text-xs text-white sm:text-sm">🌽 MUCHA</span>
-              <span className="title-pixel text-xs text-yellow-400 sm:text-sm">MAZORCA</span>
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 leading-none">
+              <span className="logo-corn text-[1.5rem] drop-shadow-[0_6px_12px_rgba(255,214,10,0.15)]">🌽</span>
+              <span className="title-pixel text-[0.82rem] font-black text-white sm:text-[1rem]">MUCHA</span>
+              <span className="title-pixel text-[0.82rem] font-black text-yellow-400 sm:text-[1rem]">MAZORCA</span>
             </p>
             <p className="mt-4 text-sm leading-7 text-white/70">
               ¡Tu antojo, tu combinacion, tu Mucha Mazorca!💛🌽
@@ -363,7 +364,7 @@ function NavItem({ to, children, asCta = false }: { to: string; children: ReactN
       to={to}
       className={({ isActive }) =>
         asCta
-          ? 'theme-nav-cta rounded-lg px-4 py-2 text-sm font-extrabold uppercase tracking-[0.14em] transition-colors'
+          ? 'theme-nav-cta inline-flex items-center justify-center rounded-lg px-4 py-2 text-center text-sm font-extrabold uppercase tracking-[0.14em] transition-colors'
           : `theme-nav-link text-sm font-bold transition-colors ${isActive ? 'theme-nav-link-active underline underline-offset-4 decoration-2' : ''}`
       }
     >

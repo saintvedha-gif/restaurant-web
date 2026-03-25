@@ -58,7 +58,7 @@ esperamos!   🌽🔥
       <section className="theme-home-top bg-[#0e0e12] py-20">
         <div className="section-shell">
           <div className="anim-fade-up text-center">
-            <h2 className="title-pixel text-4xl font-black text-white sm:text-5xl">
+            <h2 className="title-pixel text-3xl font-black text-white sm:text-4xl lg:text-5xl">
               <span>NUESTROS</span>{' '}
               <span className="text-yellow-300">TOP 🔥</span>
             </h2>

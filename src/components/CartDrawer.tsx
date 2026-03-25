@@ -1,6 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
-import { formatPrice, WHATSAPP_NUMBER } from '../data/menuData';
+import { addonGroups, formatPrice, WHATSAPP_NUMBER } from '../data/menuData';
+
+const PRODUCT_ADDON_LIMITS: Record<string, Partial<Record<string, number>>> = {
+  salchiper: { 'adicionales-salchi': 8 },
+  salchipapita: { 'adicionales-salchi': 10 },
+  salchipapota: { 'adicionales-salchi': 12 },
+};
+
+const MAICITO_SIZE_LIMITS: Record<string, number> = {
+  'milenial-pequeno': 2,
+  'maicito37-pequeno': 2,
+  'milenial-mediano': 3,
+  'maicito37-mediano': 3,
+  'milenial-grande': 3,
+  'maicito37-grande': 3,
+};
 
 // Límites específicos por addon individual para amorguesa-armable
 const AMORGUESA_ARMABLE_ADDON_LIMITS: Record<string, number> = {
@@ -17,6 +32,28 @@ const AMORGUESA_ARMABLE_QUESO_LIMITS: Record<string, number> = {
   'amor-mozzarella': 2,
   'amor-mix-quesos': 2,
 };
+
+const AMORGUESA_TOTAL_QUESO_LIMIT = 2;
+
+const AMORGUESA_WITH_LIMITS_IDS = ['amorguesa-armable', 'amorguesa-clasica'] as const;
+
+function isAmorguesaWithLimits(itemId: string) {
+  return AMORGUESA_WITH_LIMITS_IDS.includes(itemId as typeof AMORGUESA_WITH_LIMITS_IDS[number]);
+}
+
+function getEffectiveGroupLimit(itemId: string, groupId: string, defaultMax: number, selectedSizeId?: string) {
+  if (groupId === 'adicionales-salchi') {
+    if (itemId === 'negrita') return 2;
+    if (itemId === 'quetzalcoatl') return 3;
+
+    if (itemId === 'viene-la-paloma' || itemId === 'milenial' || itemId === 'malandro') {
+      const sizeLimit = selectedSizeId ? MAICITO_SIZE_LIMITS[selectedSizeId] : undefined;
+      if (sizeLimit) return sizeLimit;
+    }
+  }
+
+  return PRODUCT_ADDON_LIMITS[itemId]?.[groupId] ?? defaultMax;
+}
 
 export default function CartDrawer() {
   const {
@@ -149,13 +186,18 @@ export default function CartDrawer() {
               )}
               {state.items.map(cartItem => (
                 <div key={cartItem.id} className="rounded-[24px] border border-yellow-400/20 bg-[#16161b] p-4 shadow-[0_10px_26px_rgba(0,0,0,0.28)]">
+                  {(() => {
+                    const selectedSize = cartItem.selectedAddons.find(entry => entry.addon.pricingMode === 'final');
+                    const baseDisplayPrice = selectedSize ? selectedSize.addon.price : cartItem.menuItem.price;
+
+                    return (
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold leading-tight text-white">
                         {cartItem.menuItem.emoji} {cartItem.menuItem.name}
                       </p>
                       <p className="mt-1 text-xs text-white/55">Base x{cartItem.quantity}</p>
-                      <p className="mt-2 font-black text-yellow-300">{formatPrice(cartItem.totalPrice)}</p>
+                      <p className="mt-2 font-black text-yellow-300">{formatPrice(baseDisplayPrice)}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
                       <button
@@ -173,6 +215,8 @@ export default function CartDrawer() {
                       </button>
                     </div>
                   </div>
+                    );
+                  })()}
                   <button
                     onClick={() => removeItem(cartItem.id)}
                     className="mt-3 text-xs font-semibold text-red-400 hover:text-red-600"
@@ -185,17 +229,43 @@ export default function CartDrawer() {
                       <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-yellow-300">Adicionales</p>
                       {cartItem.selectedAddons.map(entry => {
                         const isFinalPriceOption = entry.addon.pricingMode === 'final';
-                        const isAmorguesa = cartItem.menuItem.id === 'amorguesa-armable';
+                        const isAmorguesaSauce = entry.addon.id.startsWith('amor-salsa');
+                        const isAmorguesa = isAmorguesaWithLimits(cartItem.menuItem.id);
+                        const selectedSizeId = cartItem.selectedAddons.find(addonEntry => addonEntry.addon.pricingMode === 'final')?.addon.id;
+                        const allowedGroups = (cartItem.menuItem.addons ?? [])
+                          .map(groupId => addonGroups.find(group => group.id === groupId))
+                          .filter(Boolean);
+                        const currentGroup = allowedGroups.find(group =>
+                          group?.addons.some(addon => addon.id === entry.addon.id)
+                        );
+                        const groupAddonIds = currentGroup ? currentGroup.addons.map(addon => addon.id) : [];
+                        const currentGroupCount = groupAddonIds.length > 0
+                          ? cartItem.selectedAddons
+                            .filter(addonEntry => groupAddonIds.includes(addonEntry.addon.id))
+                            .reduce((sum, addonEntry) => sum + addonEntry.quantity, 0)
+                          : 0;
+                        const effectiveGroupMax = currentGroup
+                          ? getEffectiveGroupLimit(
+                            cartItem.menuItem.id,
+                            currentGroup.id,
+                            currentGroup.maxSelections,
+                            selectedSizeId
+                          )
+                          : 999;
+                        const totalQuesos = cartItem.selectedAddons
+                          .filter(addonEntry => addonEntry.addon.id in AMORGUESA_ARMABLE_QUESO_LIMITS)
+                          .reduce((sum, addonEntry) => sum + addonEntry.quantity, 0);
 
-                        // Aplicar límites específicos para amorguesa-armable
-                        let canIncrement = true;
+                        let canIncrement = isFinalPriceOption ? false : currentGroupCount < effectiveGroupMax;
+
+                        // Aplicar límites específicos por addon para amorguesa
                         if (isAmorguesa && !isFinalPriceOption) {
                           if (entry.addon.id in AMORGUESA_ARMABLE_ADDON_LIMITS) {
                             const limit = AMORGUESA_ARMABLE_ADDON_LIMITS[entry.addon.id];
-                            canIncrement = entry.quantity < limit;
+                            canIncrement = canIncrement && entry.quantity < limit;
                           } else if (entry.addon.id in AMORGUESA_ARMABLE_QUESO_LIMITS) {
                             const limit = AMORGUESA_ARMABLE_QUESO_LIMITS[entry.addon.id];
-                            canIncrement = entry.quantity < limit;
+                            canIncrement = canIncrement && entry.quantity < limit && totalQuesos < AMORGUESA_TOTAL_QUESO_LIMIT;
                           }
                         }
 
@@ -208,7 +278,9 @@ export default function CartDrawer() {
                             <p className="text-[11px] text-white/55">
                               {isFinalPriceOption
                                 ? `Tamano seleccionado · ${formatPrice(entry.addon.price)}`
-                                : `${entry.quantity} x ${formatPrice(entry.addon.price)} · ${formatPrice(entry.addon.price * entry.quantity)}`}
+                                : isAmorguesaSauce
+                                  ? 'Salsa seleccionada'
+                                  : `${entry.quantity} x ${formatPrice(entry.addon.price)}`}
                             </p>
                           </div>
 
@@ -216,6 +288,11 @@ export default function CartDrawer() {
                             <span className="rounded-full border border-yellow-400/40 bg-yellow-400/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-yellow-300">
                               Tamaño
                             </span>
+                          ) : isAmorguesaSauce ? (
+                            <button
+                              onClick={() => removeAddon(cartItem.id, entry.addon.id)}
+                              className="ml-1 text-[10px] font-semibold text-red-400 hover:text-red-300"
+                            >✕</button>
                           ) : (
                             <div className="flex items-center gap-1 shrink-0">
                               <button

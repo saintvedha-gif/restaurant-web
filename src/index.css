@@ -264,6 +264,28 @@ html[data-theme='dark'] .theme-menu-button:hover {
   background-color: rgba(255, 214, 10, 0.16) !important;
 }
 
+@media (max-width: 640px) {
+  .title-pixel {
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+  }
+
+  .section-kicker {
+    letter-spacing: 0.14em;
+  }
+
+  .btn-secondary,
+  .btn-secondary-sm {
+    letter-spacing: 0.1em;
+  }
+
+  .theme-header .section-shell,
+  .theme-footer .section-shell {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+}
+
 html[data-theme='dark'] .theme-nav-link,
 html[data-theme='dark'] .theme-nav-link-active {
   color: #f5f5f5 !important;

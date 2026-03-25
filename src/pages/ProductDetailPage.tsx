@@ -39,6 +39,17 @@ const AMORGUESA_ARMABLE_QUESO_LIMITS: Record<string, number> = {
   'amor-mix-quesos': 2,
 };
 
+const AMORGUESA_WITH_LIMITS_IDS = ['amorguesa-armable', 'amorguesa-clasica'] as const;
+const MAICITO_SIZE_GROUP_IDS = ['tamano-milenial', 'tamano-maicito-37'] as const;
+
+function isAmorguesaWithLimits(itemId: string) {
+  return AMORGUESA_WITH_LIMITS_IDS.includes(itemId as typeof AMORGUESA_WITH_LIMITS_IDS[number]);
+}
+
+function isMaicitoSizeGroup(groupId: string) {
+  return MAICITO_SIZE_GROUP_IDS.includes(groupId as typeof MAICITO_SIZE_GROUP_IDS[number]);
+}
+
 function getEffectiveGroupLimits(itemId: string, group: AddonGroup, selectedAddons: Addon[]) {
   if (group.id === 'adicionales-salchi') {
     if (itemId === 'negrita') {
@@ -69,7 +80,7 @@ function getEffectiveGroupLimits(itemId: string, group: AddonGroup, selectedAddo
   }
 
   // Para amorguesa-armable, el máximo total de adicionales es 5 y mínimo 0 (validación en handleAdd)
-  if (itemId === 'amorguesa-armable' && group.id === 'adicionales-amorguesa') {
+  if (isAmorguesaWithLimits(itemId) && group.id === 'adicionales-amorguesa') {
     return {
       minSelections: 0,
       maxSelections: 5,
@@ -91,7 +102,7 @@ function getAddonQuantity(selectedAddons: Addon[], addonId: string) {
 }
 
 function getPerAddonLimit(itemId: string, groupId: string, addonId: string) {
-  if (itemId === 'amorguesa-armable') {
+  if (isAmorguesaWithLimits(itemId)) {
     if (groupId === 'adicionales-amorguesa') {
       return AMORGUESA_ARMABLE_ADDON_LIMITS[addonId];
     }
@@ -105,7 +116,7 @@ function getPerAddonLimit(itemId: string, groupId: string, addonId: string) {
 }
 
 function shouldHideGroupMeta(itemId: string, groupId: string) {
-  return itemId === 'amorguesa-armable' && [
+  return isAmorguesaWithLimits(itemId) && [
     'salsas-amorguesa',
     'quesos-amorguesa',
     'adicionales-amorguesa',
@@ -179,6 +190,15 @@ export default function ProductDetailPage({ item, onBack }: Props) {
     ]);
   }
 
+  function selectSingleAddon(addon: Addon, group: AddonGroup) {
+    setValidationError('');
+    const groupAddonIds = group.addons.map(groupAddon => groupAddon.id);
+    setSelectedAddons(prev => [
+      ...prev.filter(selectedAddon => !groupAddonIds.includes(selectedAddon.id)),
+      addon,
+    ]);
+  }
+
   function changeAddonQuantity(addon: Addon, group: AddonGroup, delta: 1 | -1) {
     setValidationError('');
     const { minSelections, maxSelections } = getEffectiveGroupLimits(item.id, group, selectedAddons);
@@ -188,7 +208,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
     if (delta === 1) {
       // Validar límites específicos por addon para amorguesa-armable
-      if (item.id === 'amorguesa-armable' && group.id === 'adicionales-amorguesa') {
+      if (isAmorguesaWithLimits(item.id) && group.id === 'adicionales-amorguesa') {
         const addonLimit = AMORGUESA_ARMABLE_ADDON_LIMITS[addon.id];
         if (addonLimit && currentAddonQuantity >= addonLimit) {
           setValidationError(`Máximo ${addonLimit} de ${addon.name}.`);
@@ -197,7 +217,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
       }
 
       // Validar límites específicos por addon para quesos en amorguesa-armable
-      if (item.id === 'amorguesa-armable' && group.id === 'quesos-amorguesa') {
+      if (isAmorguesaWithLimits(item.id) && group.id === 'quesos-amorguesa') {
         const quesoLimit = AMORGUESA_ARMABLE_QUESO_LIMITS[addon.id];
         if (quesoLimit && currentAddonQuantity >= quesoLimit) {
           setValidationError(`Máximo ${quesoLimit} de ${addon.name}.`);
@@ -242,7 +262,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
     // Validar mínimo 1 adicional en amorguesa-armable (excluyendo salsas)
     let minAdicionalError = '';
-    if (item.id === 'amorguesa-armable') {
+    if (isAmorguesaWithLimits(item.id)) {
       const adicionalesGroup = relevantGroups.find(g => g.id === 'adicionales-amorguesa');
       if (adicionalesGroup) {
         const adicionalesIds = adicionalesGroup.addons.map(a => a.id);
@@ -255,7 +275,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
     // Validar límites específicos por addon para amorguesa-armable
     let addonsGroupError = '';
-    if (item.id === 'amorguesa-armable') {
+    if (isAmorguesaWithLimits(item.id)) {
       const adicionales = selectedAddons.filter(a => a.id.startsWith('amor-') && !a.id.startsWith('amor-queso') && !a.id.startsWith('amor-salsa'));
       const quesos = selectedAddons.filter(a => a.id.startsWith('amor-queso'));
 
@@ -354,9 +374,6 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                 <div key={group.id} className="mt-5">
                   {(() => {
                     const { minSelections, maxSelections } = getEffectiveGroupLimits(item.id, group, selectedAddons);
-                    const groupAddonIds = group.addons.map(addon => addon.id);
-                    const selectedCount = countSelectedInGroup(selectedAddons, groupAddonIds);
-                    const isComplete = minSelections === 0 ? selectedCount > 0 : selectedCount >= minSelections;
                     const hideGroupMeta = shouldHideGroupMeta(item.id, group.id);
 
                     return (
@@ -364,15 +381,6 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                     <h3 className="title-pixel text-sm uppercase text-white">{group.name}</h3>
                     {!hideGroupMeta && (
                     <div className="flex items-center gap-2">
-                      {minSelections > 0 && (
-                        <span className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] ${
-                          isComplete
-                            ? 'bg-[#22c55e]/20 text-[#4ade80]'
-                            : 'bg-yellow-400/12 text-yellow-300'
-                        }`}>
-                          {isComplete ? 'Completado' : 'Pendiente'}
-                        </span>
-                      )}
                       <span className="text-xs text-white/55">
                         {minSelections > 0
                           ? `Mínimo ${minSelections} opción(es) · Máximo ${maxSelections}`
@@ -392,18 +400,19 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                     </p>
                   )}
 
-                  <div className={`mt-3 grid gap-3 ${group.id === 'salsas-amorguesa' ? 'grid-cols-3 gap-3' : 'sm:grid-cols-2'}`}>
+                  <div className={`mt-3 grid gap-3 ${group.id === 'salsas-amorguesa' || isMaicitoSizeGroup(group.id) ? 'grid-cols-3 gap-2' : 'sm:grid-cols-2'}`}>
                     {group.addons.map(addon => {
                       const quantity = getAddonQuantity(selectedAddons, addon.id);
                       const groupAddons = group.addons.map(a => a.id);
                       const { minSelections, maxSelections } = getEffectiveGroupLimits(item.id, group, selectedAddons);
                       const currentGroupCount = countSelectedInGroup(selectedAddons, groupAddons);
                       const isFinalPriceOption = addon.pricingMode === 'final';
+                      const isSauceSingleSelect = group.id === 'salsas-amorguesa';
                       const perAddonLimit = getPerAddonLimit(item.id, group.id, addon.id);
                       
                       // Validar límites específicos por addon para amorguesa-armable
                       let canIncrement = isFinalPriceOption ? true : currentGroupCount < maxSelections;
-                      if (!isFinalPriceOption && item.id === 'amorguesa-armable') {
+                      if (!isFinalPriceOption && isAmorguesaWithLimits(item.id)) {
                         if (group.id === 'adicionales-amorguesa') {
                           const addonLimit = AMORGUESA_ARMABLE_ADDON_LIMITS[addon.id];
                           if (addonLimit && quantity >= addonLimit) {
@@ -420,20 +429,41 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                       const canDecrement = isFinalPriceOption ? quantity === 0 && minSelections === 0 : quantity > 0 && currentGroupCount > minSelections;
                       const isSelected = quantity > 0;
 
+                      if (isSauceSingleSelect) {
+                        return (
+                          <button
+                            key={addon.id}
+                            type="button"
+                            onClick={() => selectSingleAddon(addon, group)}
+                            className={`rounded-xl border px-2 py-2 text-center transition-colors ${
+                              isSelected
+                                ? 'border-yellow-300/70 bg-yellow-400/12'
+                                : 'border-white/10 bg-[#121217] hover:border-yellow-300/50 hover:bg-[#18181d]'
+                            }`}
+                          >
+                            <p className="text-[11px] font-semibold leading-tight text-white">{addon.emoji} {addon.name}</p>
+                          </button>
+                        );
+                      }
+
                       if (isFinalPriceOption) {
                         return (
                           <button
                             key={addon.id}
                             onClick={() => selectFinalAddon(addon, group)}
-                            className={`rounded-2xl border px-4 py-4 text-left transition-colors ${
+                            className={`border text-left transition-colors ${
+                              isMaicitoSizeGroup(group.id)
+                                ? 'rounded-xl px-2 py-2'
+                                : 'rounded-2xl px-4 py-4'
+                            } ${
                               isSelected
                                 ? 'border-yellow-300 bg-yellow-400/10'
                                 : 'border-white/10 bg-[#121217] hover:border-yellow-300/50 hover:bg-[#18181d]'
                             }`}
                           >
                             <div className="flex items-center justify-between gap-3">
-                              <p className="text-sm font-semibold leading-snug text-white">{addon.emoji} {addon.name}</p>
-                              <span className="shrink-0 text-sm font-black text-yellow-300">{formatPrice(addon.price)}</span>
+                              <p className={`${isMaicitoSizeGroup(group.id) ? 'text-[11px]' : 'text-sm'} font-semibold leading-snug text-white`}>{addon.emoji} {addon.name}</p>
+                              <span className={`${isMaicitoSizeGroup(group.id) ? 'text-[11px]' : 'text-sm'} shrink-0 font-black text-yellow-300`}>{formatPrice(addon.price)}</span>
                             </div>
                           </button>
                         );
@@ -448,30 +478,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                               : `px-4 py-4 ${isSelected ? 'border-yellow-300/70 bg-yellow-400/10' : 'border-white/10 bg-[#121217]'}`
                           }`}
                         >
-                          {group.id === 'salsas-amorguesa' ? (
-                            <div className="flex flex-col items-center gap-2">
-                              <p className="text-xs font-semibold text-white text-center">{addon.emoji} {addon.name}</p>
-                              <div className="flex items-center gap-1">
-                                <button
-                                  type="button"
-                                  onClick={() => changeAddonQuantity(addon, group, -1)}
-                                  disabled={!canDecrement}
-                                  className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-[#0b0b0e] text-sm font-black text-white transition-colors disabled:cursor-not-allowed disabled:opacity-35"
-                                >
-                                  −
-                                </button>
-                                <span className="w-5 text-center text-xs font-black text-yellow-300">{quantity}</span>
-                                <button
-                                  type="button"
-                                  onClick={() => changeAddonQuantity(addon, group, 1)}
-                                  disabled={!canIncrement}
-                                  className="flex h-7 w-7 items-center justify-center rounded-full bg-yellow-400 text-sm font-black text-black transition-colors hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-35"
-                                >
-                                  +
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
+                          {group.id !== 'salsas-amorguesa' && (
                             <>
                               <div className="flex items-start justify-between gap-3">
                                 <div className="min-w-0">
