@@ -286,7 +286,7 @@ export const menuItems: MenuItem[] = [
     image: getImageUrl('Quetzalcoat.png'),
     imageHero: getImageUrl('Quetzalcoat.png'),
     addons: ['adicionales-salchi'],
-    tags: ['nuevo', 'popular'],
+    tags: ['popular'],
   },
   {
     id: 'viene-la-paloma',

@@ -125,20 +125,6 @@ img.emoji {
     line-height: 1.35;
   }
 
-  .title-standard {
-    font-family: 'Sora', 'Segoe UI', system-ui, sans-serif;
-    letter-spacing: -0.02em;
-  }
-
-  .theme-toggle {
-    @apply inline-flex items-center justify-center rounded-full border border-yellow-400/35 px-3 py-2 text-xs font-extrabold uppercase tracking-[0.12em] text-yellow-300 transition-colors;
-    background-color: rgba(255, 214, 10, 0.08);
-  }
-
-  .theme-toggle:hover {
-    @apply bg-yellow-400/15;
-  }
-
   .anim-fade-up {
     animation: fadeUp 0.8s ease-out forwards;
     opacity: 0;
@@ -357,7 +343,6 @@ html[data-theme='dark'] .theme-home-top p {
   color: #f5f5f5 !important;
 }
 
-html[data-theme='dark'] .theme-toggle,
 html[data-theme='dark'] .btn-secondary,
 html[data-theme='dark'] .btn-secondary-sm {
   border-color: rgba(255, 214, 10, 0.45) !important;
@@ -366,8 +351,7 @@ html[data-theme='dark'] .btn-secondary-sm {
 }
 
 html[data-theme='dark'] .btn-secondary:hover,
-html[data-theme='dark'] .btn-secondary-sm:hover,
-html[data-theme='dark'] .theme-toggle:hover {
+html[data-theme='dark'] .btn-secondary-sm:hover {
   background-color: rgba(255, 214, 10, 0.22) !important;
   color: #ffd60a !important;
 }

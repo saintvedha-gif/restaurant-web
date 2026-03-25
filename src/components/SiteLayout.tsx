@@ -125,14 +125,12 @@ export default function SiteLayout() {
 
   useEffect(() => {
     const updateFloatingVisibility = () => {
-      // Solo mostrar en la página de inicio
       const isHomePage = location.pathname === '/' || location.pathname === '';
       if (!isHomePage) {
         setShowFloatingActions(false);
         return;
       }
 
-      // En mobile evitamos tapar los CTAs al inicio. Una vez aparecen, se quedan visibles.
       if (window.innerWidth >= 640) {
         setShowFloatingActions(true);
         return;
