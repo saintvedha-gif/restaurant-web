@@ -154,27 +154,28 @@ export default function CartDrawer() {
 
       {/* Drawer */}
       {open && (
-                {/* Modal de confirmación antes de WhatsApp */}
-                {showConfirm && (
-                  <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-sm">
-                    <div className="rounded-2xl bg-white p-6 max-w-xs w-full text-center shadow-2xl">
-                      <p className="text-base text-[#4A2800] font-semibold mb-4">
-                        Si llegas a tener algún problema con tu pedido, recuerda comunicarte con MM🌽, para poderte solucionar y que no te lleves una mala experiencia 🫶🏻
-                      </p>
-                      <button
-                        onClick={confirmAndSendOrder}
-                        className="mt-2 w-full rounded-xl bg-yellow-400 py-3 text-lg font-black text-black shadow transition-all hover:bg-yellow-300 active:scale-95"
-                      >
-                        Okay 🫶🏻
-                      </button>
-                    </div>
-                  </div>
-                )}
-        <div
-          className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm overscroll-none touch-none"
-          style={{ overscrollBehavior: 'none', touchAction: 'none' }}
-          onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
-        >
+        <>
+          {/* Modal de confirmación antes de WhatsApp */}
+          {showConfirm && (
+            <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+              <div className="rounded-2xl bg-white p-6 max-w-xs w-full text-center shadow-2xl">
+                <p className="text-base text-[#4A2800] font-semibold mb-4">
+                  Si llegas a tener algún problema con tu pedido, recuerda comunicarte con MM🌽, para poderte solucionar y que no te lleves una mala experiencia 🫶🏻
+                </p>
+                <button
+                  onClick={confirmAndSendOrder}
+                  className="mt-2 w-full rounded-xl bg-yellow-400 py-3 text-lg font-black text-black shadow transition-all hover:bg-yellow-300 active:scale-95"
+                >
+                  Okay 🫶🏻
+                </button>
+              </div>
+            </div>
+          )}
+          <div
+            className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm overscroll-none touch-none"
+            style={{ overscrollBehavior: 'none', touchAction: 'none' }}
+            onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
+          >
           <div className="flex max-h-[85vh] w-full max-w-lg flex-col rounded-t-[32px] border border-yellow-400/20 bg-[#101014] shadow-2xl overscroll-contain" style={{ overscrollBehavior: 'contain' }}>
             {/* Header */}
             <div className="flex items-center justify-between border-b border-yellow-400/20 px-5 pb-3 pt-5 shrink-0">
