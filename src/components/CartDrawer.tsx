@@ -265,14 +265,9 @@ export default function CartDrawer() {
 
                         let canIncrement = isFinalPriceOption ? false : currentGroupCount < effectiveGroupMax;
                         if (isAmorguesa && !isFinalPriceOption) {
-                          // Límite combinado de 5 entre adicionales y quesos
+                          // Límite combinado de 5 entre adicionales y quesos: si ya hay 5, ningún botón + debe estar habilitado
                           if (totalAdicionalesQuesos >= 5) {
-                            // Solo permitir incrementar si es el propio adicional/queso y aún no ha llegado a su límite individual
-                            if (entry.quantity < (AMORGUESA_ARMABLE_ADDON_LIMITS[entry.addon.id] || AMORGUESA_ARMABLE_QUESO_LIMITS[entry.addon.id] || 99) && totalAdicionalesQuesos < 5) {
-                              canIncrement = true;
-                            } else {
-                              canIncrement = false;
-                            }
+                            canIncrement = false;
                           } else {
                             if (entry.addon.id in AMORGUESA_ARMABLE_ADDON_LIMITS) {
                               const limit = AMORGUESA_ARMABLE_ADDON_LIMITS[entry.addon.id];
