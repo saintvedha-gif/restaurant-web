@@ -255,16 +255,26 @@ export default function CartDrawer() {
                           .filter(addonEntry => addonEntry.addon.id in AMORGUESA_ARMABLE_QUESO_LIMITS)
                           .reduce((sum, addonEntry) => sum + addonEntry.quantity, 0);
 
-                        let canIncrement = isFinalPriceOption ? false : currentGroupCount < effectiveGroupMax;
+                        // Unificar límite de 5 entre adicionales y quesos para amorguesa-armable
+                        let totalAdicionalesQuesos = 0;
+                        if (isAmorguesa) {
+                          totalAdicionalesQuesos = cartItem.selectedAddons
+                            .filter(a => a.addon.id.startsWith('amor-') && !a.addon.id.startsWith('amor-salsa'))
+                            .reduce((sum, a) => sum + a.quantity, 0);
+                        }
 
-                        // Aplicar límites específicos por addon para amorguesa
+                        let canIncrement = isFinalPriceOption ? false : currentGroupCount < effectiveGroupMax;
                         if (isAmorguesa && !isFinalPriceOption) {
+                          // Límite combinado de 5 entre adicionales y quesos
+                          if (totalAdicionalesQuesos >= 5) {
+                            canIncrement = false;
+                          }
                           if (entry.addon.id in AMORGUESA_ARMABLE_ADDON_LIMITS) {
                             const limit = AMORGUESA_ARMABLE_ADDON_LIMITS[entry.addon.id];
                             canIncrement = canIncrement && entry.quantity < limit;
                           } else if (entry.addon.id in AMORGUESA_ARMABLE_QUESO_LIMITS) {
                             const limit = AMORGUESA_ARMABLE_QUESO_LIMITS[entry.addon.id];
-                            canIncrement = canIncrement && entry.quantity < limit && totalQuesos < AMORGUESA_TOTAL_QUESO_LIMIT;
+                            canIncrement = canIncrement && entry.quantity < limit;
                           }
                         }
 
