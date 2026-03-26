@@ -502,6 +502,15 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                         );
                       }
 
+                      // Desactivar todos los botones + si el total de adicionales+quesos es 5 (amorguesa)
+                      let totalAdicionalesQuesos = 0;
+                      if (isAmorguesaWithLimits(item.id)) {
+                        totalAdicionalesQuesos = selectedAddons.filter(a => a.id.startsWith('amor-') && !a.id.startsWith('amor-salsa')).length;
+                      }
+                      let forceDisablePlus = false;
+                      if (isAmorguesaWithLimits(item.id) && totalAdicionalesQuesos >= 5) {
+                        forceDisablePlus = true;
+                      }
                       return (
                         <div
                           key={addon.id}
@@ -532,7 +541,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                                   <button
                                     type="button"
                                     onClick={() => changeAddonQuantity(addon, group, 1)}
-                                    disabled={!canIncrement}
+                                    disabled={!canIncrement || forceDisablePlus}
                                     className="flex h-9 w-9 items-center justify-center rounded-full bg-yellow-400 text-lg font-black text-black transition-colors hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-35"
                                   >
                                     +
