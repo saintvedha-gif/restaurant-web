@@ -99,15 +99,18 @@ export default function MenuPage() {
           </button>
         </div>
         <section className="mt-0">
-          <section
-            className="rounded-[28px] border border-yellow-400/18 bg-[#101014] p-5 shadow-[0_16px_34px_rgba(0,0,0,0.28)] sm:p-7"
-          >
+          {/* Scroll de categorías por fuera del card */}
+          <div className="mb-4">
             <CategoryNav
               categories={categories}
               activeId={activeCategory}
               onSelect={handleSelectCategory}
             />
-            <div className="flex flex-col gap-3 border-b border-yellow-400/12 pb-5 sm:flex-row sm:items-end sm:justify-between mt-4">
+          </div>
+          <section
+            className="rounded-[28px] border border-yellow-400/18 bg-[#101014] p-5 shadow-[0_16px_34px_rgba(0,0,0,0.28)] sm:p-7"
+          >
+            <div className="flex flex-col gap-3 border-b border-yellow-400/12 pb-5 sm:flex-row sm:items-end sm:justify-between mt-0">
               <h2 className="title-pixel flex items-center gap-2 text-xl font-black text-white sm:gap-3 sm:text-3xl md:text-4xl">
                 <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-400/10 text-sm sm:h-11 sm:w-11 sm:text-xl">{currentCategory.emoji}</span>
                 <span className="leading-tight">{currentCategory.name}</span>
