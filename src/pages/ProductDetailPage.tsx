@@ -346,7 +346,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
   }
 
   return (
-    <div className="theme-page min-h-screen overflow-x-clip bg-[linear-gradient(180deg,#050505_0%,#0c0c0f_100%)] pb-36 text-[#F5F5F5]">
+    <div className="theme-page min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,#050505_0%,#0c0c0f_100%)] pb-36 text-[#F5F5F5]">
       <header className="sticky top-0 z-30 border-b border-yellow-400/20 bg-[#101014] shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
         <div className="section-shell flex items-center justify-between gap-4 py-4">
           <button
@@ -360,8 +360,8 @@ export default function ProductDetailPage({ item, onBack }: Props) {
         </div>
       </header>
 
-      <main className="section-shell py-6 lg:py-8">
-        <div className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-start">
+      <main className="section-shell py-6 lg:py-8 overflow-x-hidden">
+        <div className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-start w-full max-w-full overflow-x-hidden">
           <section className="paper-panel overflow-hidden lg:sticky lg:top-28">
             {item.image && (
               <img
@@ -374,8 +374,8 @@ export default function ProductDetailPage({ item, onBack }: Props) {
             )}
           </section>
 
-          <section className="paper-panel flex min-h-[500px] flex-col">
-            <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6">
+          <section className="paper-panel flex min-h-[500px] flex-col w-full max-w-full overflow-x-hidden">
+            <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6 w-full max-w-full overflow-x-hidden">
               <h1 className="title-pixel break-words text-2xl leading-tight text-white sm:text-4xl">
                 {item.name} {item.emoji}
               </h1>
@@ -416,7 +416,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                     </p>
                   )}
 
-                  <div className={`mt-3 grid gap-3 w-full max-w-full ${group.id === 'salsas-amorguesa' || isMaicitoSizeGroup(group.id) ? 'grid-cols-2 gap-2 min-[420px]:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2'}`}>
+                  <div className={`mt-3 grid gap-3 w-full max-w-full grid-cols-1 ${group.id === 'salsas-amorguesa' || isMaicitoSizeGroup(group.id) ? 'sm:grid-cols-2 min-[420px]:grid-cols-3' : 'sm:grid-cols-2'}`} style={{overflowX:'hidden'}}>
                     {group.addons.map(addon => {
                       const quantity = getAddonQuantity(selectedAddons, addon.id);
                       const groupAddons = group.addons.map(a => a.id);
@@ -488,7 +488,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                       return (
                         <div
                           key={addon.id}
-                          className={`rounded-2xl border transition-colors w-full max-w-full overflow-x-auto ${
+                          className={`rounded-2xl border transition-colors w-full max-w-full overflow-x-hidden break-words ${
                             group.id === 'salsas-amorguesa'
                               ? `px-3 py-3 ${isSelected ? 'border-yellow-300/70 bg-yellow-400/10' : 'border-white/10 bg-[#121217]'}`
                               : `px-4 py-4 ${isSelected ? 'border-yellow-300/70 bg-yellow-400/10' : 'border-white/10 bg-[#121217]'}`
