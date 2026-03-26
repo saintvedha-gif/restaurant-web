@@ -176,7 +176,7 @@ export default function CartDrawer() {
             style={{ overscrollBehavior: 'none', touchAction: 'none' }}
             onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
           >
-          <div className="flex max-h-[85vh] w-full max-w-lg flex-col rounded-t-[32px] border border-yellow-400/20 bg-[#101014] shadow-2xl overscroll-contain" style={{ overscrollBehavior: 'contain' }}>
+            <div className="flex max-h-[85vh] w-full max-w-lg flex-col rounded-t-[32px] border border-yellow-400/20 bg-[#101014] shadow-2xl overscroll-contain" style={{ overscrollBehavior: 'contain' }}>
             {/* Header */}
             <div className="flex items-center justify-between border-b border-yellow-400/20 px-5 pb-3 pt-5 shrink-0">
               <h2 className="text-xl text-white"><span className="title-pixel">Tu pedido</span></h2>
