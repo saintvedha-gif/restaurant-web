@@ -14,12 +14,9 @@ export default function HomePage() {
             <span className="brand-pixel-line brand-pixel-line--bottom mt-3">MAZORCA</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-8 text-white/75 sm:text-lg">
-            Somos un restaurante creado para que disfrutes
-cada bocado. Nuestra especialidad es cocinar
-con amor y convertir tus ideas en verdaderas
-obras de sabor.
-Arma tus salchipapas y maicitos a tu antojo… ¡te
-esperamos!   🌽🔥
+            MM (Mucha Mazorca) está hecho para que pidas como quieras, todo se puede adicionar, todo se puede quitar, poner aparte, como tú quieras 😁
+
+Lo más importante es que hacemos todo con mucho amor, gracias por estar aquí, buen provecho ❤️‍🩹
           </p>
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
             <Link

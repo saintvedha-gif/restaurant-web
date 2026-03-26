@@ -82,9 +82,9 @@ export default function ProductModal({ item, onClose }: Props) {
       className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-        <div className="flex h-full w-full flex-col overflow-hidden bg-[#FFF3E0]">
-        <div className="grid h-full lg:grid-cols-[1.15fr_1fr]">
-            <div className="relative h-64 shrink-0 bg-[#FFE4C2] sm:h-80 lg:h-full">
+      <div className="flex h-full w-full flex-col overflow-hidden bg-[#FFF3E0] max-w-full">
+        <div className="grid h-full w-full max-w-full grid-cols-1 lg:grid-cols-[1.15fr_1fr]">
+          <div className="relative h-64 shrink-0 bg-[#FFE4C2] sm:h-80 lg:h-full max-w-full">
             {item.image && (
               <img
                 src={item.image}
@@ -102,29 +102,29 @@ export default function ProductModal({ item, onClose }: Props) {
             </button>
           </div>
 
-            <div className="flex min-h-0 flex-col border-t border-[#FFD60A]/25 lg:border-l lg:border-t-0">
-            <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-7">
-              <h2 className="font-display text-4xl leading-tight text-[#4A2800] sm:text-5xl">
-                {item.name} {item.emoji}
-              </h2>
-              <p className="mt-3 text-base leading-8 text-[#6A3A00]">{item.description}</p>
-              <div className="mt-5 rounded-2xl border border-[#FFD60A]/35 bg-[#FFE4C2] px-5 py-4">
+            <div className="flex min-h-0 flex-col border-t border-[#FFD60A]/25 lg:border-l lg:border-t-0 max-w-full">
+              <div className="min-h-0 flex-1 overflow-y-auto px-3 py-5 sm:px-6 sm:py-7 max-w-full">
+                <h2 className="font-display text-3xl sm:text-4xl leading-tight text-[#4A2800] break-words">
+                  {item.name} {item.emoji}
+                </h2>
+                <p className="mt-3 text-base leading-8 text-[#6A3A00] break-words">{item.description}</p>
+                <div className="mt-5 rounded-2xl border border-[#FFD60A]/35 bg-[#FFE4C2] px-4 py-4 w-full max-w-full overflow-x-auto">
                 <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#FFD60A]">Precio base</p>
                 <p className="mt-1 text-4xl font-black text-[#FFD60A]">{formatPrice(item.price)}</p>
               </div>
 
-              <div className="mt-6">
+                <div className="mt-6 w-full max-w-full">
                 <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#4A2800]">Adicionales</h3>
                 <p className="mt-1 text-xs text-[#8A5A2A]">Selecciona los que quieras y verás el valor de cada uno.</p>
               </div>
 
-              {relevantGroups.map(group => (
-                <div key={group.id} className="mt-5">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#4A2800]">{group.name}</h3>
-                    <span className="text-xs text-[#8A5A2A]">{group.subtitle}</span>
-                  </div>
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                {relevantGroups.map(group => (
+                  <div key={group.id} className="mt-5 w-full max-w-full">
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3 className="text-sm font-black uppercase tracking-[0.2em] text-[#4A2800] break-words">{group.name}</h3>
+                      <span className="text-xs text-[#8A5A2A] break-words">{group.subtitle}</span>
+                    </div>
+                    <div className="mt-3 grid gap-3 grid-cols-1 sm:grid-cols-2 w-full max-w-full">
                     {group.addons.map(addon => {
                       const isSelected = selectedAddons.some(a => a.id === addon.id);
                       const groupAddons = group.addons.map(a => a.id);
@@ -135,7 +135,7 @@ export default function ProductModal({ item, onClose }: Props) {
                           key={addon.id}
                           onClick={() => !disabled && toggleAddon(addon, group)}
                           disabled={disabled}
-                          className={`rounded-2xl border px-4 py-4 transition-colors text-left ${
+                          className={`rounded-2xl border px-3 py-4 transition-colors text-left w-full max-w-full overflow-x-auto ${
                             isSelected
                               ? 'border-[#FFD60A]/60 bg-[#FFD60A]/10'
                               : disabled
@@ -143,14 +143,14 @@ export default function ProductModal({ item, onClose }: Props) {
                                 : 'border-[#FFD60A]/25 bg-[#FFF3E0] hover:bg-[#FFE4C2]'
                           }`}
                         >
-                          <div className="flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-2 min-w-0">
+                          <div className="flex items-center justify-between gap-3 w-full max-w-full">
+                            <div className="flex items-center gap-2 min-w-0 w-0 flex-1">
                               <div className={`h-6 w-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
                                 isSelected ? 'border-[#00C853] bg-[#00C853]' : 'border-zinc-500'
                               }`}>
                                 {isSelected && <span className="text-white text-xs font-bold">✓</span>}
                               </div>
-                              <span className="text-sm font-semibold text-[#6A3A00] leading-snug">
+                              <span className="text-sm font-semibold text-[#6A3A00] leading-snug break-words">
                                 {addon.emoji} {addon.name}
                               </span>
                             </div>
@@ -167,7 +167,7 @@ export default function ProductModal({ item, onClose }: Props) {
 
             </div>
 
-            <div className="shrink-0 border-t border-[#FFD60A]/25 bg-[#FFF3E0] px-6 py-4 sm:px-8">
+              <div className="shrink-0 border-t border-[#FFD60A]/25 bg-[#FFF3E0] px-3 py-4 sm:px-6 w-full max-w-full">
               {validationError && (
                 <p className="mb-2 text-center text-xs font-semibold text-red-600">{validationError}</p>
               )}
@@ -176,17 +176,17 @@ export default function ProductModal({ item, onClose }: Props) {
                   {selectedAddons.length} adicional(es) seleccionado(s)
                 </p>
               )}
-              <button
-                onClick={handleAdd}
-                disabled={added}
-                className={`w-full py-4 rounded-2xl font-black text-lg transition-all ${
-                  added
-                    ? 'scale-95 bg-[#00C853] text-white'
-                    : 'bg-[#FFD60A] text-black hover:bg-[#FFE45C] hover:text-black active:scale-95'
-                }`}
-              >
-                {added ? '✓ ¡Agregado!' : `Agregar · ${formatPrice(totalPrice)}`}
-              </button>
+                <button
+                  onClick={handleAdd}
+                  disabled={added}
+                  className={`w-full py-4 rounded-2xl font-black text-lg transition-all ${
+                    added
+                      ? 'scale-95 bg-[#00C853] text-white'
+                      : 'bg-[#FFD60A] text-black hover:bg-[#FFE45C] hover:text-black active:scale-95'
+                  }`}
+                >
+                  {added ? '✓ ¡Agregado!' : `Agregar · ${formatPrice(totalPrice)}`}
+                </button>
             </div>
           </div>
         </div>
