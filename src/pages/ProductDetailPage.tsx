@@ -222,6 +222,13 @@ export default function ProductDetailPage({ item, onBack }: Props) {
     const currentGroupCount = countSelectedInGroup(selectedAddons, groupAddonIds);
     const currentAddonQuantity = getAddonQuantity(selectedAddons, addon.id);
 
+    // Unificar límite de 5 entre adicionales y quesos para amorguesa-armable
+    let totalAdicionalesQuesos = 0;
+    if (isAmorguesaWithLimits(item.id)) {
+      const adicionales = selectedAddons.filter(a => a.id.startsWith('amor-') && !a.id.startsWith('amor-salsa'));
+      totalAdicionalesQuesos = adicionales.length;
+    }
+
     if (delta === 1) {
       // Validar límites específicos por addon para amorguesa-armable
       if (isAmorguesaWithLimits(item.id) && group.id === 'adicionales-amorguesa') {
@@ -239,6 +246,12 @@ export default function ProductDetailPage({ item, onBack }: Props) {
           setValidationError(`Máximo ${quesoLimit} de ${addon.name}.`);
           return;
         }
+      }
+
+      // Límite combinado de 5 entre adicionales y quesos
+      if (isAmorguesaWithLimits(item.id) && totalAdicionalesQuesos >= 5) {
+        setValidationError('Máximo 5 adicionales en total entre adicionales y quesos.');
+        return;
       }
 
       if (currentGroupCount >= maxSelections) {
@@ -292,27 +305,31 @@ export default function ProductDetailPage({ item, onBack }: Props) {
     // Validar límites específicos por addon para amorguesa-armable
     let addonsGroupError = '';
     if (isAmorguesaWithLimits(item.id)) {
-      const adicionales = selectedAddons.filter(a => a.id.startsWith('amor-') && !a.id.startsWith('amor-queso') && !a.id.startsWith('amor-salsa'));
-      const quesos = selectedAddons.filter(a => a.id.startsWith('amor-queso'));
-
-      // Validar límites en adicionales
-      for (const [addonId, limit] of Object.entries(AMORGUESA_ARMABLE_ADDON_LIMITS)) {
-        const count = adicionales.filter(a => a.id === addonId).length;
-        if (count > limit) {
-          const addon = adicionales.find(a => a.id === addonId);
-          addonsGroupError = `Superaste el máximo de ${addon?.name || addonId}: máx ${limit}, seleccionaste ${count}.`;
-          break;
-        }
+      const adicionalesYQuesos = selectedAddons.filter(a => a.id.startsWith('amor-') && !a.id.startsWith('amor-salsa'));
+      // Límite combinado de 5 entre adicionales y quesos
+      if (adicionalesYQuesos.length > 5) {
+        addonsGroupError = 'Superaste el máximo de 5 adicionales en total entre adicionales y quesos.';
       }
-
-      // Validar límites en quesos
+      // Validar límites individuales
       if (!addonsGroupError) {
-        for (const [quesoId, limit] of Object.entries(AMORGUESA_ARMABLE_QUESO_LIMITS)) {
-          const count = quesos.filter(a => a.id === quesoId).length;
+        const adicionales = adicionalesYQuesos.filter(a => !a.id.startsWith('amor-queso'));
+        const quesos = adicionalesYQuesos.filter(a => a.id.startsWith('amor-queso'));
+        for (const [addonId, limit] of Object.entries(AMORGUESA_ARMABLE_ADDON_LIMITS)) {
+          const count = adicionales.filter(a => a.id === addonId).length;
           if (count > limit) {
-            const queso = quesos.find(a => a.id === quesoId);
-            addonsGroupError = `Superaste el máximo de ${queso?.name || quesoId}: máx ${limit}, seleccionaste ${count}.`;
+            const addon = adicionales.find(a => a.id === addonId);
+            addonsGroupError = `Superaste el máximo de ${addon?.name || addonId}: máx ${limit}, seleccionaste ${count}.`;
             break;
+          }
+        }
+        if (!addonsGroupError) {
+          for (const [quesoId, limit] of Object.entries(AMORGUESA_ARMABLE_QUESO_LIMITS)) {
+            const count = quesos.filter(a => a.id === quesoId).length;
+            if (count > limit) {
+              const queso = quesos.find(a => a.id === quesoId);
+              addonsGroupError = `Superaste el máximo de ${queso?.name || quesoId}: máx ${limit}, seleccionaste ${count}.`;
+              break;
+            }
           }
         }
       }
