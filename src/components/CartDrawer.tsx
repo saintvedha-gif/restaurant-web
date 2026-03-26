@@ -34,7 +34,7 @@ const AMORGUESA_ARMABLE_QUESO_LIMITS: Record<string, number> = {
   'amor-mix-quesos': 2,
 };
 
-const AMORGUESA_TOTAL_QUESO_LIMIT = 2;
+
 
 const AMORGUESA_WITH_LIMITS_IDS = ['amorguesa-armable', 'amorguesa-clasica'] as const;
 
@@ -251,9 +251,7 @@ export default function CartDrawer() {
                             selectedSizeId
                           )
                           : 999;
-                        const totalQuesos = cartItem.selectedAddons
-                          .filter(addonEntry => addonEntry.addon.id in AMORGUESA_ARMABLE_QUESO_LIMITS)
-                          .reduce((sum, addonEntry) => sum + addonEntry.quantity, 0);
+
 
                         // Unificar límite de 5 entre adicionales y quesos para amorguesa-armable
                         let totalAdicionalesQuesos = 0;
