@@ -57,7 +57,7 @@ function getEffectiveGroupLimit(itemId: string, groupId: string, defaultMax: num
 }
 
 export default function CartDrawer() {
-  const {
+  const { 
     state,
     removeItem,
     increment,
@@ -68,6 +68,7 @@ export default function CartDrawer() {
     clear,
   } = useCart();
   const [open, setOpen] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const count = state.items.reduce((s, i) => s + i.quantity, 0);
 
   // Prevenir scroll en el body cuando el modal está abierto
@@ -123,8 +124,14 @@ export default function CartDrawer() {
     return encodeURIComponent(msg);
   }
 
+
   function handleOrder() {
+    setShowConfirm(true);
+  }
+
+  function confirmAndSendOrder() {
     const msg = buildWhatsAppMessage();
+    setShowConfirm(false);
     if (!msg) return;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank', 'noopener,noreferrer');
   }
@@ -147,6 +154,22 @@ export default function CartDrawer() {
 
       {/* Drawer */}
       {open && (
+                {/* Modal de confirmación antes de WhatsApp */}
+                {showConfirm && (
+                  <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                    <div className="rounded-2xl bg-white p-6 max-w-xs w-full text-center shadow-2xl">
+                      <p className="text-base text-[#4A2800] font-semibold mb-4">
+                        Si llegas a tener algún problema con tu pedido, recuerda comunicarte con MM🌽, para poderte solucionar y que no te lleves una mala experiencia 🫶🏻
+                      </p>
+                      <button
+                        onClick={confirmAndSendOrder}
+                        className="mt-2 w-full rounded-xl bg-yellow-400 py-3 text-lg font-black text-black shadow transition-all hover:bg-yellow-300 active:scale-95"
+                      >
+                        Okay 🫶🏻
+                      </button>
+                    </div>
+                  </div>
+                )}
         <div
           className="fixed inset-0 z-[9999] flex items-end justify-center bg-black/50 backdrop-blur-sm overscroll-none touch-none"
           style={{ overscrollBehavior: 'none', touchAction: 'none' }}
