@@ -112,8 +112,23 @@ export default function MenuPage() {
           >
             <div className="flex flex-col gap-3 border-b border-yellow-400/12 pb-5 sm:flex-row sm:items-end sm:justify-between mt-0">
               <h2 className="title-pixel flex items-center gap-2 text-xl font-black text-white sm:gap-3 sm:text-3xl md:text-4xl">
-                <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-400/10 text-sm sm:h-11 sm:w-11 sm:text-xl">{currentCategory.emoji}</span>
-                <span className="leading-tight">{currentCategory.name}</span>
+                {currentCategory.id === 'postres' ? (
+                  <>
+                    <span className="leading-tight">POSTRECITOS</span>
+                    <span className="ml-1 text-xs font-bold text-white/60 sm:text-base">BY</span>
+                    <img
+                      src="/images/Logo%20Ladino.png"
+                      alt="Logo Ladino"
+                      className="ml-1 h-[2.2em] w-[2.2em] sm:h-[2.7em] sm:w-[2.7em] object-contain inline-block align-middle"
+                      style={{ borderRadius: '50%' }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-400/10 text-sm sm:h-11 sm:w-11 sm:text-xl">{currentCategory.emoji}</span>
+                    <span className="leading-tight">{currentCategory.name}</span>
+                  </>
+                )}
               </h2>
               <span className="rounded-full bg-yellow-400/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.2em] text-yellow-300">
                 {currentItems.length} opciones

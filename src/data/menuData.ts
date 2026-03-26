@@ -36,7 +36,7 @@ export const categories: Category[] = [
   { id: 'soditas', name: 'SODITAS', emoji: '🍸', slug: 'soditas' },
   { id: 'bebidas', name: 'BEBIDAS', emoji: '🥤', slug: 'bebidas' },
   { id: 'salsas', name: 'SALSITAS', emoji: '🌶️', slug: 'salsas' },
-  { id: 'postres', name: 'POSTRECITOS', emoji: '☕', slug: 'postres' },
+  { id: 'postres', name: 'POSTRECITOS', emoji: '🍰', slug: 'postres' },
 ];
 
 export const addonGroups: AddonGroup[] = [
