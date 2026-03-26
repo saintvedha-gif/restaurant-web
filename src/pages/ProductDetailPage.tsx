@@ -416,7 +416,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                     </p>
                   )}
 
-                  <div className={`mt-3 grid gap-3 ${group.id === 'salsas-amorguesa' || isMaicitoSizeGroup(group.id) ? 'grid-cols-2 gap-2 min-[420px]:grid-cols-3' : 'sm:grid-cols-2'}`}>
+                  <div className={`mt-3 grid gap-3 w-full max-w-full ${group.id === 'salsas-amorguesa' || isMaicitoSizeGroup(group.id) ? 'grid-cols-2 gap-2 min-[420px]:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2'}`}>
                     {group.addons.map(addon => {
                       const quantity = getAddonQuantity(selectedAddons, addon.id);
                       const groupAddons = group.addons.map(a => a.id);
@@ -488,7 +488,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                       return (
                         <div
                           key={addon.id}
-                          className={`rounded-2xl border transition-colors ${
+                          className={`rounded-2xl border transition-colors w-full max-w-full overflow-x-auto ${
                             group.id === 'salsas-amorguesa'
                               ? `px-3 py-3 ${isSelected ? 'border-yellow-300/70 bg-yellow-400/10' : 'border-white/10 bg-[#121217]'}`
                               : `px-4 py-4 ${isSelected ? 'border-yellow-300/70 bg-yellow-400/10' : 'border-white/10 bg-[#121217]'}`
@@ -496,13 +496,13 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                         >
                           {group.id !== 'salsas-amorguesa' && (
                             <>
-                              <div className="flex items-start justify-between gap-3">
-                                <div className="min-w-0">
-                                  <p className="text-sm font-semibold leading-snug text-white">{addon.emoji} {addon.name}</p>
+                              <div className="flex items-start justify-between gap-3 w-full max-w-full">
+                                <div className="min-w-0 w-0 flex-1">
+                                  <p className="text-sm font-semibold leading-snug text-white break-words">{addon.emoji} {addon.name}</p>
                                   {perAddonLimit && <p className="mt-1 text-xs text-white/55">Máx. {perAddonLimit}</p>}
                                   {addon.price > 0 && <p className="mt-1 text-xs text-white/55">+ {formatPrice(addon.price)} c/u</p>}
                                 </div>
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 w-auto">
                                   <button
                                     type="button"
                                     onClick={() => changeAddonQuantity(addon, group, -1)}
