@@ -73,13 +73,12 @@ export default function CartDrawer() {
   // Prevenir scroll en el body cuando el modal está abierto
   useEffect(() => {
     if (open) {
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('overflow-hidden');
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.classList.remove('overflow-hidden');
     }
-
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.classList.remove('overflow-hidden');
     };
   }, [open]);
 
@@ -176,7 +175,7 @@ export default function CartDrawer() {
             </div>
 
             {/* Items */}
-            <div className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
+            <div className="flex-1 space-y-3 overflow-y-auto px-5 py-4 overscroll-contain" style={{ overscrollBehavior: 'contain' }}>
               {state.items.length === 0 && (
                 <div className="py-12 text-center text-white/65">
                   <p className="text-5xl mb-3">🌽</p>
