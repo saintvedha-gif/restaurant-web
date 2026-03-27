@@ -4,6 +4,7 @@ export interface Addon {
   emoji: string;
   price: number;
   pricingMode?: 'additive' | 'final';
+  maxAdds?: number;
 }
 
 export interface MenuItem {
@@ -17,6 +18,7 @@ export interface MenuItem {
   categoryId: string;
   addons?: string[]; // addon group ids
   tags?: string[];
+  maxSelections?: number;
 }
 
 export interface Category {
@@ -30,8 +32,8 @@ export interface AddonGroup {
   id: string;
   name: string;
   subtitle: string;
-  minSelections?: number;
   maxSelections: number;
+  minSelections?: number;
   addons: Addon[];
 }
 

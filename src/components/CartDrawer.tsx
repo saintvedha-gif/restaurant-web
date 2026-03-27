@@ -43,7 +43,7 @@ function isAmorguesaWithLimits(itemId: string) {
 }
 
 function getEffectiveGroupLimit(itemId: string, groupId: string, defaultMax: number, selectedSizeId?: string) {
-  if (groupId === 'adicionales-salchi') {
+  if (groupId === 'adicionales-salchi' || groupId === 'adicionales-maicito') {
     if (itemId === 'negrita') return 2;
     if (itemId === 'quetzalcoatl') return 3;
 
@@ -292,19 +292,30 @@ export default function CartDrawer() {
                               .reduce((sum, a) => sum + a.quantity, 0);
                           }
 
-                          let canIncrement = isFinalPriceOption ? false : currentGroupCount < effectiveGroupMax;
-                          if (isAmorguesa && !isFinalPriceOption) {
-                            // Límite combinado de 5 entre adicionales y quesos: si ya hay 5, ningún botón + debe estar habilitado
-                            if (totalAdicionalesQuesos >= 5) {
-                              canIncrement = false;
-                            } else {
-                              if (entry.addon.id in AMORGUESA_ARMABLE_ADDON_LIMITS) {
-                                const limit = AMORGUESA_ARMABLE_ADDON_LIMITS[entry.addon.id];
-                                canIncrement = canIncrement && entry.quantity < limit;
-                              } else if (entry.addon.id in AMORGUESA_ARMABLE_QUESO_LIMITS) {
-                                const limit = AMORGUESA_ARMABLE_QUESO_LIMITS[entry.addon.id];
-                                canIncrement = canIncrement && entry.quantity < limit;
+                          let canIncrement = false;
+                          if (!isFinalPriceOption) {
+                            // Para amorguesa-armable
+                            if (isAmorguesa) {
+                              if (totalAdicionalesQuesos < 5) {
+                                if (entry.addon.id in AMORGUESA_ARMABLE_ADDON_LIMITS) {
+                                  const limit = AMORGUESA_ARMABLE_ADDON_LIMITS[entry.addon.id];
+                                  canIncrement = entry.quantity < limit && totalAdicionalesQuesos < 5;
+                                } else if (entry.addon.id in AMORGUESA_ARMABLE_QUESO_LIMITS) {
+                                  const limit = AMORGUESA_ARMABLE_QUESO_LIMITS[entry.addon.id];
+                                  canIncrement = entry.quantity < limit && totalAdicionalesQuesos < 5;
+                                } else {
+                                  canIncrement = totalAdicionalesQuesos < 5;
+                                }
+                              } else {
+                                canIncrement = false;
                               }
+                            } else if (
+                              currentGroup &&
+                              (currentGroup.id === 'adicionales-salchi' || currentGroup.id === 'adicionales-maicito')
+                            ) {
+                              canIncrement = currentGroupCount < effectiveGroupMax;
+                            } else {
+                              canIncrement = currentGroupCount < effectiveGroupMax;
                             }
                           }
 
