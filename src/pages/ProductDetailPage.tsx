@@ -52,7 +52,8 @@ function isMaicitoSizeGroup(groupId: string) {
 }
 
 function getEffectiveGroupLimits(itemId: string, group: AddonGroup, selectedAddons: Addon[]) {
-  if (group.id === 'adicionales-salchi') {
+  if (group.id === 'adicionales-salchi' || group.id === 'adicionales-maicito') {
+    // Para productos con límites fijos por ID
     if (itemId === 'negrita') {
       return {
         minSelections: group.minSelections ?? 0,
@@ -67,6 +68,7 @@ function getEffectiveGroupLimits(itemId: string, group: AddonGroup, selectedAddo
       };
     }
 
+    // Para productos con límites dinámicos según tamaño seleccionado
     if (itemId === 'viene-la-paloma' || itemId === 'milenial' || itemId === 'malandro') {
       const selectedSize = selectedAddons.find(addon => addon.pricingMode === 'final');
       const sizeLimit = selectedSize ? MAICITO_SIZE_LIMITS[selectedSize.id] : undefined;
@@ -378,20 +380,20 @@ export default function ProductDetailPage({ item, onBack }: Props) {
       </header>
 
       <main className="section-shell py-6 lg:py-8 overflow-x-hidden">
-        <div className="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-start w-full max-w-full overflow-x-hidden">
-          <section className="paper-panel overflow-hidden lg:sticky lg:top-28">
+        <div className="gap-6 w-full max-w-full overflow-x-hidden flex flex-col lg:flex-row lg:items-stretch">
+          <section className="paper-panel overflow-hidden flex-1 flex items-stretch justify-center h-full">
             {item.image && (
               <img
                 src={item.image}
                 alt={item.name}
-                className="h-[280px] w-full object-cover sm:h-[340px] lg:h-[420px]"
+                className="h-[280px] w-full object-cover sm:h-[340px] lg:h-[500px] lg:w-full lg:object-cover"
                 loading="lazy"
                 decoding="async"
               />
             )}
           </section>
 
-          <section className="paper-panel flex min-h-[500px] flex-col w-full max-w-full overflow-x-hidden">
+          <section className="paper-panel flex min-h-[500px] flex-col w-full max-w-full flex-1 overflow-x-hidden h-full">
             <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6 w-full max-w-full overflow-x-hidden">
               <h1 className="title-pixel break-words text-2xl leading-tight text-white sm:text-4xl">
                 {item.name} {item.emoji}
