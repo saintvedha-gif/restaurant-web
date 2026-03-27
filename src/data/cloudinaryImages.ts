@@ -2,7 +2,6 @@
 // No editar manualmente: vuelve a correr el script si cambian las imágenes.
 
 export const CLOUDINARY_IMAGE_MAP: Record<string, string> = {
-  "Amburguesa.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Amburguesa?_a=BAMAOGWQ0",
   "Amorguesa Armable.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Amorguesa%20Armable?_a=BAMAOGWQ0",
   "Amorguesa Clasica.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Amorguesa%20Clasica?_a=BAMAOGWQ0",
   "Amorguesa.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Amorguesa?_a=BAMAOGWQ0",
@@ -27,7 +26,7 @@ export const CLOUDINARY_IMAGE_MAP: Record<string, string> = {
   "Ginger.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Ginger?_a=BAMAOGWQ0",
   "La Doble M.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/La%20Doble%20M?_a=BAMAOGWQ0",
   "La Gloriosa Salchipapa.jpg": "httpshttps://res.cloudinary.com/dv7mmbuew/image/upload/v1774569794/restaurant-web/La_Gloriosa_Salchipapa.jpg://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/La%20Gloriosa%20Salchipapa?_a=BAMAOGWQ0",
-  "MALANDRO.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774634885/Malandro_u2zbsi.png'",
+  "Malandro.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774634885/Malandro_u2zbsi.png",
   "MATRIMONIO.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774569789/restaurant-web/El-Matrimonio.jpg",
   "Milenial.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774569798/restaurant-web/Milenial.jpg",
   "Negrita.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Negrita?_a=BAMAOGWQ0",
@@ -47,9 +46,7 @@ export const CLOUDINARY_IMAGE_MAP: Record<string, string> = {
   "Salchipapita.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Salchipapita?_a=BAMAOGWQ0",
   "Salchipapita.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774567288/restaurant-web/Salchipapita.jpg",
   "SALCHIPAPITAS.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/SALCHIPAPITAS?_a=BAMAOGWQ0",
-  "Salchiper.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Salchiper?_a=BAMAOGWQ0",
-  "SALCHIPER.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Salchiper?_a=BAMAOGWQ0",
-  "Salchiper.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Salchiper?_a=BAMAOGWQ0",
+  "SALCHIPER.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774641504/SALCHIPER_lzqv96.png",
   "Salsa de Caguamole.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Salsa%20de%20Caguamole?_a=BAMAOGWQ0",
   "Salsa de Chipotle.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Salsa%20de%20Chipotle?_a=BAMAOGWQ0",
   "Salsa de Mazorca.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Salsa%20de%20Mazorca?_a=BAMAOGWQ0",
@@ -60,6 +57,6 @@ export const CLOUDINARY_IMAGE_MAP: Record<string, string> = {
   "Sodita de Pepino.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Sodita%20de%20Pepino?_a=BAMAOGWQ0",
   "Sprite.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Sprite?_a=BAMAOGWQ0",
   "Viene la paloma.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Viene%20la%20paloma?_a=BAMAOGWQ0",
-  "Logo_Ladino.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Logo_Ladino?_a=BAMAOGWQ0",
+  "Logo_Ladino.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774569795/restaurant-web/Logo_Ladino.jpg",
   "Salchipapota.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774567288/restaurant-web/Salchipapita.jpg",
 };

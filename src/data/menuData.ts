@@ -228,8 +228,8 @@ export const menuItems: MenuItem[] = [
     description: 'Su base incluye papitas a la francesa, salchichas y salsita tártara de la casa. Esta salchi está pensada para 1 persona que coma muuuuucho, pero la verdad es que te alcanza pa\' 2.',
     price: 29000,
     categoryId: 'salchipapitas',
-    image: getImageUrl('Salchiper.png'),
-    imageHero: getImageUrl('Salchiper.png'),
+    image: getImageUrl('SALCHIPER.jpg'),
+    imageHero: getImageUrl('SALCHIPER.jpg'),
     addons: ['adicionales-salchi'],
   },
   {
@@ -327,7 +327,7 @@ export const menuItems: MenuItem[] = [
     description: 'Para gustos más fuertes. Trae maicito, carne desmechada, tocineta, chorizo, queso mozzarella gratinado y papita de perro.',
     price: 37000,
     categoryId: 'maicitos',
-    image: getImageUrl('MALANDRO.png'),
+    image: getImageUrl('Malandro.png'),
     addons: ['tamano-maicito-37', 'adicionales-maicito'],
   },
   {

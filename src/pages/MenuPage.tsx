@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
+import { getImageUrl } from '../data/getImageUrl';
 import { useSearchParams } from 'react-router-dom';
 import { categories, menuItems } from '../data/menuData';
 import type { MenuItem } from '../types/menu';
@@ -117,7 +118,7 @@ export default function MenuPage() {
                     <span className="leading-tight">POSTRECITOS</span>
                     <span className="ml-1 text-xs font-bold text-white/60 sm:text-base">BY</span>
                     <img
-                      src="/images/Logo%20Ladino.png"
+                      src={getImageUrl('Logo_Ladino.png')}
                       alt="Logo Ladino"
                       className="ml-1 h-[2.2em] w-[2.2em] sm:h-[2.7em] sm:w-[2.7em] object-contain inline-block align-middle"
                       style={{ borderRadius: '50%' }}
