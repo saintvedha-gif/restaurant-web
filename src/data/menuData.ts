@@ -337,7 +337,7 @@ export const menuItems: MenuItem[] = [
     description: 'Un plato creado con amor, perfecto para los fans del maduro. Trae una camita de maduro frito, pollo y tocineta en salsa blanca, salchichas y una cubierta de queso mozzarella con algunos granitos de maíz. Se recomienda solo para 1 persona.',
     price: 34000,
     categoryId: 'maicitos',
-    image: getImageUrl('Negrita.png'),
+    image: getImageUrl('Negrita.jpg'),
     addons: ['adicionales-maicito'],
     maxSelections: 2,
   },

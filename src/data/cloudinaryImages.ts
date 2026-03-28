@@ -29,8 +29,7 @@ export const CLOUDINARY_IMAGE_MAP: Record<string, string> = {
   "Malandro.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774634885/Malandro_u2zbsi.png",
   "MATRIMONIO.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774569789/restaurant-web/El-Matrimonio.jpg",
   "Milenial.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774569798/restaurant-web/Milenial.jpg",
-  "Negrita.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Negrita?_a=BAMAOGWQ0",
-  "Negrita.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Negrita?_a=BAMAOGWQ0",
+  "Negrita.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774721298/Negrita_eojvlu.png",
   "PAPITAS-ENTOCINADAS.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/PAPITAS-ENTOCINADAS?_a=BAMAOGWQ0",
   "Postre de leche Klim.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Postre%20de%20leche%20Klim?_a=BAMAOGWQ0",
   "Postre de Limon.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Postre%20de%20Limon?_a=BAMAOGWQ0",
@@ -57,7 +56,7 @@ export const CLOUDINARY_IMAGE_MAP: Record<string, string> = {
   "Sodita de Pepino.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Sodita%20de%20Pepino?_a=BAMAOGWQ0",
   "Sprite.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Sprite?_a=BAMAOGWQ0",
   "Viene la paloma.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Viene%20la%20paloma?_a=BAMAOGWQ0",
-    "Logo_Ladino.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774720303/Logo_Ladino_fgvznk.png",
+  
   "Salchipapota.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774567288/restaurant-web/Salchipapita.jpg",
 };
 
