@@ -9,15 +9,11 @@ import { CLOUDINARY_IMAGE_MAP } from "./cloudinaryImages";
  * @returns URL relativa local o URL de Cloudinary
  */
 export function getImageUrl(fileName: string): string {
-  // Ruta relativa a public/images
-  const localPath = `/images/${fileName}`;
-  // Se asume que si la imagen local existe, el navegador la carga correctamente
-  // Si no existe, Cloudinary será fallback (el componente <img> intentará ambas)
   if (CLOUDINARY_IMAGE_MAP[fileName]) {
-    return localPath;
+    return CLOUDINARY_IMAGE_MAP[fileName];
   }
-  // Si no está en el mapa, solo intentamos local
-  return localPath;
+  // Si no está en el mapa, intenta local
+  return `/images/${fileName}`;
 }
 
 // Si quieres forzar fallback en el frontend, puedes usar onError en <img>:
