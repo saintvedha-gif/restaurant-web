@@ -10,7 +10,7 @@ img.emoji {
   height: 1em;
   width: 1em;
   margin: 0 .05em 0 .1em;
-  vertical-align: -0.1em;
+  /* vertical-align: -0.1em;  Eliminado para evitar warning con display:inline */
   display: inline;
   pointer-events: none;
 }
@@ -205,6 +205,10 @@ img.emoji {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    /* Compatibilidad estándar */
+    /* https://developer.mozilla.org/en-US/docs/Web/CSS/line-clamp */
+    /* line-clamp estándar */
+    line-clamp: 2;
   }
 
   .text-balance {

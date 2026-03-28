@@ -41,7 +41,7 @@ Lo más importante es que hacemos todo con mucho amor, gracias por estar aquí, 
               <img
                 src={getSizedImageUrl(getImageUrl('FONDO1.jpg'), 960)}
                 alt="Mucha Mazorca especial"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover object-[center_85%]"
                 loading="eager"
                 decoding="async"
                 fetchPriority="high"

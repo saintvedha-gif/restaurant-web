@@ -167,14 +167,13 @@ export default function CartDrawer() {
                   ×
                 </button>
                 <p className="text-base text-[#4A2800] font-semibold mb-6 mt-2">
-                  Si llegas a tener algún problema con tu pedido, recuerda comunicarte con MM🌽, para poderte solucionar y que no te lleves una mala experiencia 💛💛
+                  Si llegas a tener algún problema con tu pedido comunícalo con nosotros para poder ayudarte, la idea es que tengas una buena experiencia ❤️‍🩹
                 </p>
                 <button
                   onClick={confirmAndSendOrder}
                   className="mt-2 w-full rounded-xl bg-yellow-400 py-3 text-lg font-black text-black shadow transition-all hover:bg-yellow-300 active:scale-95 border-2 border-yellow-300"
                 >
-                  Okay 💚
-                </button>
+                  Okay 😄 </button>
               </div>
             </div>
           )}
