@@ -56,7 +56,7 @@ export const CLOUDINARY_IMAGE_MAP: Record<string, string> = {
   "Sodita de Pepino.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Sodita%20de%20Pepino?_a=BAMAOGWQ0",
   "Sprite.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Sprite?_a=BAMAOGWQ0",
   "Viene la paloma.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Viene%20la%20paloma?_a=BAMAOGWQ0",
-  
+  "Logo_Ladino.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774720303/Logo_Ladino.png",
   "Salchipapota.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774567288/restaurant-web/Salchipapita.jpg",
 };
 
