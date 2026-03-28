@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import type { MenuItem, AddonGroup, Addon } from '../types/menu';
 import { addonGroups, formatPrice } from '../data/menuData';
 import { useCart } from '../context/CartContext';
+import { useToast } from '../context/ToastContext';
 
 interface Props {
   item: MenuItem;
   onClose: () => void;
 }
 
-export default function ProductModal({ item, onClose }: Props) {
   const { addItem } = useCart();
+  const { showToast } = useToast();
   const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
   const [added, setAdded] = useState(false);
   const [validationError, setValidationError] = useState('');
@@ -71,6 +72,7 @@ export default function ProductModal({ item, onClose }: Props) {
 
     addItem(item, selectedAddons);
     setAdded(true);
+    showToast('¡Agregado con éxito!');
     setTimeout(() => {
       setAdded(false);
       onClose();
