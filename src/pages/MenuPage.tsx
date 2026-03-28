@@ -120,7 +120,7 @@ export default function MenuPage() {
                     <img
                       src={getImageUrl('Logo_Ladino.png')}
                       alt="Logo Ladino"
-                      className="ml-2 h-8 w-8 sm:h-11 sm:w-11 object-contain inline-block align-middle"
+                      className="ml-2 h-12 w-12 sm:h-16 sm:w-16 object-contain inline-block align-middle"
                       style={{ borderRadius: '50%' }}
                     />
                   </>
