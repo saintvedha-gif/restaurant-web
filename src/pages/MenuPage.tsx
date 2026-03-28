@@ -112,7 +112,7 @@ export default function MenuPage() {
             className="rounded-[28px] border border-yellow-400/18 bg-[#101014] p-5 shadow-[0_16px_34px_rgba(0,0,0,0.28)] sm:p-7"
           >
             <div className="flex flex-col gap-3 border-b border-yellow-400/12 pb-5 sm:flex-row sm:items-end sm:justify-between mt-0">
-              <h2 className="title-pixel flex items-center gap-2 text-xl font-black text-white sm:gap-3 sm:text-3xl md:text-4xl">
+              <h2 className="title-pixel flex items-center gap-2 text-lg font-black text-white sm:gap-3 sm:text-3xl md:text-4xl">
                 {currentCategory.id === 'postres' ? (
                   <>
                     <span className="leading-tight">POSTRECITOS</span>
@@ -120,7 +120,7 @@ export default function MenuPage() {
                     <img
                       src={getImageUrl('Logo_Ladino.png')}
                       alt="Logo Ladino"
-                      className="ml-1 h-[2.2em] w-[2.2em] sm:h-[2.7em] sm:w-[2.7em] object-contain inline-block align-middle"
+                      className="ml-2 h-8 w-8 sm:h-11 sm:w-11 object-contain inline-block align-middle"
                       style={{ borderRadius: '50%' }}
                     />
                   </>
