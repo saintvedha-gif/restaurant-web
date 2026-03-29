@@ -146,6 +146,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
   const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
   const [added, setAdded] = useState(false);
   const [validationError, setValidationError] = useState('');
+  const [showToast, setShowToast] = useState(false); // 👈 NUEVO
 
   const relevantGroups: AddonGroup[] = useMemo(
     () => (item.addons
@@ -361,11 +362,37 @@ export default function ProductDetailPage({ item, onBack }: Props) {
     setSelectedAddons(defaultSelections);
     setValidationError('');
     setAdded(true);
+    setShowToast(true); // 👈 NUEVO
     setTimeout(() => setAdded(false), 700);
+    setTimeout(() => setShowToast(false), 2000); // 👈 NUEVO
   }
 
   return (
     <div className="theme-page min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,#050505_0%,#0c0c0f_100%)] pb-36 text-[#F5F5F5]">
+
+      {/* TOAST 👈 NUEVO */}
+      {showToast && (
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 99999,
+          pointerEvents: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '8px',
+          background: '#00C853',
+          borderRadius: '24px',
+          padding: '28px 48px',
+        }}>
+          <span style={{ fontSize: '52px', lineHeight: '1' }}>✓</span>
+          <span style={{ fontSize: '22px', fontWeight: 900, color: 'white', whiteSpace: 'nowrap' }}>¡Agregado al pedido!</span>
+          <span style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(255,255,255,0.85)', whiteSpace: 'nowrap' }}>{item.name}</span>
+        </div>
+      )}
+
       <header className="sticky top-0 z-30 border-b border-yellow-400/20 bg-[#101014] shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
         <div className="section-shell flex items-center justify-between gap-4 py-4">
           <button
