@@ -360,9 +360,9 @@ export default function ProductDetailPage({ item, onBack }: Props) {
     setSelectedAddons(defaultSelections);
     setValidationError('');
     setAdded(true);
-    setShowToast(true);
-    setTimeout(() => setAdded(false), 500);
-    setTimeout(() => setShowToast(false), 1000);
+    setShowToast(true); // 👈 NUEVO
+    setTimeout(() => setAdded(false), 700);
+    setTimeout(() => setShowToast(false), 2000); // 👈 NUEVO
   }
 
   return (
