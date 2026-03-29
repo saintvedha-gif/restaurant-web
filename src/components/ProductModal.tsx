@@ -72,7 +72,7 @@ interface Props {
 
     addItem(item, selectedAddons);
     setAdded(true);
-    showToast('¡Agregado con éxito!');
+    showToast('¡Producto agregado al carrito!');
     setTimeout(() => {
       setAdded(false);
       onClose();

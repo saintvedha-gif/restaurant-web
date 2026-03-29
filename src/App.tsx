@@ -17,7 +17,6 @@ function ConditionalCartDrawer() {
   return showCartDrawer ? <CartDrawer /> : null;
 }
 
-export default function App() {
   const basename = import.meta.env.MODE === 'production' ? '/restaurant-web' : '/';
   return (
     <ToastProvider>
