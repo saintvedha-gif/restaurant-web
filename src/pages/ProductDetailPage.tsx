@@ -225,11 +225,13 @@ export default function ProductDetailPage({ item, onBack }: Props) {
     const currentGroupCount = countSelectedInGroup(selectedAddons, groupAddonIds);
     const currentAddonQuantity = getAddonQuantity(selectedAddons, addon.id);
 
-    // Unificar límite de 5 entre adicionales y quesos para amorguesa-armable
+    // Unificar límite de 5 entre adicionales y quesos para amorguesa-armable (excluyendo salsas)
     let totalAdicionalesQuesos = 0;
     if (isAmorguesaWithLimits(item.id)) {
-      const adicionales = selectedAddons.filter(a => a.id.startsWith('amor-') && !a.id.startsWith('amor-salsa'));
-      totalAdicionalesQuesos = adicionales.length;
+      // Cuenta todos los adicionales y quesos, pero NO salsas
+      totalAdicionalesQuesos = selectedAddons.filter(a =>
+        (a.id.startsWith('amor-') && !a.id.startsWith('amor-salsa'))
+      ).length;
     }
 
     if (delta === 1) {
@@ -292,16 +294,12 @@ export default function ProductDetailPage({ item, onBack }: Props) {
       return selectedCount > maxSelections;
     });
 
-    // Validar mínimo 1 adicional en amorguesa-armable (excluyendo salsas)
+    // Validar mínimo 1 adicional o queso en amorguesa-armable (excluyendo salsas)
     let minAdicionalError = '';
     if (isAmorguesaWithLimits(item.id)) {
-      const adicionalesGroup = relevantGroups.find(g => g.id === 'adicionales-amorguesa');
-      if (adicionalesGroup) {
-        const adicionalesIds = adicionalesGroup.addons.map(a => a.id);
-        const selectedAdicionalesCount = countSelectedInGroup(selectedAddons, adicionalesIds);
-        if (selectedAdicionalesCount === 0) {
-          minAdicionalError = 'Debes elegir mínimo 1 adicional para la amorguesa.';
-        }
+      const adicionalesYQuesos = selectedAddons.filter(a => a.id.startsWith('amor-') && !a.id.startsWith('amor-salsa'));
+      if (adicionalesYQuesos.length === 0) {
+        minAdicionalError = 'Debes elegir mínimo 1 adicional o queso para la amorguesa.';
       }
     }
 
@@ -362,9 +360,9 @@ export default function ProductDetailPage({ item, onBack }: Props) {
     setSelectedAddons(defaultSelections);
     setValidationError('');
     setAdded(true);
-    setShowToast(true); // 👈 NUEVO
-    setTimeout(() => setAdded(false), 700);
-    setTimeout(() => setShowToast(false), 2000); // 👈 NUEVO
+    setShowToast(true);
+    setTimeout(() => setAdded(false), 500);
+    setTimeout(() => setShowToast(false), 1000);
   }
 
   return (
@@ -372,24 +370,44 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
       {/* TOAST 👈 NUEVO */}
       {showToast && (
-        <div style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 99999,
-          pointerEvents: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '8px',
-          background: '#00C853',
-          borderRadius: '24px',
-          padding: '28px 48px',
-        }}>
-          <span style={{ fontSize: '52px', lineHeight: '1' }}>✓</span>
-          <span style={{ fontSize: '22px', fontWeight: 900, color: 'white', whiteSpace: 'nowrap' }}>¡Agregado al pedido!</span>
-          <span style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(255,255,255,0.85)', whiteSpace: 'nowrap' }}>{item.name}</span>
+        <div
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 99999,
+            pointerEvents: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+            background: '#00C853',
+            borderRadius: '24px',
+            padding: '28px 48px',
+            width: 'auto',
+            maxWidth: '90vw',
+          }}
+        >
+          <style>{`
+            @media (max-width: 600px) {
+              .custom-toast-success {
+                padding: 16px 18px !important;
+              }
+              .custom-toast-success .toast-icon {
+                font-size: 32px !important;
+              }
+              .custom-toast-success .toast-title {
+                font-size: 15px !important;
+              }
+              .custom-toast-success .toast-desc {
+                font-size: 11px !important;
+              }
+            }
+          `}</style>
+          <span className="custom-toast-success toast-icon" style={{ fontSize: '52px', lineHeight: '1' }}>✓</span>
+          <span className="custom-toast-success toast-title" style={{ fontSize: '22px', fontWeight: 900, color: 'white', whiteSpace: 'nowrap' }}>¡Agregado al pedido!</span>
+          <span className="custom-toast-success toast-desc" style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(255,255,255,0.85)', whiteSpace: 'nowrap' }}>{item.name}</span>
         </div>
       )}
 
