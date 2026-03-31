@@ -68,7 +68,7 @@ export const addonGroups: AddonGroup[] = [
       { id: 'maduro', name: 'Maduro', emoji: '🍌', price: 7000 },
       { id: 'doritos', name: 'Doritos', emoji: '🔺', price: 5000 },
       { id: 'maicito', name: 'Maicito', emoji: '🌽', price: 16000 },
-      { id: 'huevitos', name: 'Huevitos de Codornis', emoji: '🥚', price: 10000 },
+      { id: 'huevitos', name: 'Huevitos de Codorniz', emoji: '🥚', price: 10000 },
       { id: 'takis', name: 'Takis', emoji: '🔥', price: 5000 },
       { id: 'extra-queso', name: 'Extra Queso Mozzarella', emoji: '🧀', price: 10000 },
       { id: 'extra-salsas', name: 'Extra-salsas', emoji: '🍍', price: 4000 },
@@ -110,7 +110,7 @@ export const addonGroups: AddonGroup[] = [
   maxSelections: 10 ,
   addons: [
     { id: 'maduro', name: 'Maduro', emoji: '🍌', price: 4000 },
-    { id: 'huevitos', name: 'Huevitos de Codornis', emoji: '🥚', price: 5000 },
+    { id: 'huevitos', name: 'Huevitos de Codorniz', emoji: '🥚', price: 5000 },
     { id: 'papitas-fritas', name: 'Papitas fritas 300gr', emoji: '🍟', price: 7000 },
     { id: 'extra-salsas', name: 'Extra-salsas', emoji: '🍍', price: 4000 },
     { id: 'salchicha', name: 'Salchicha', emoji: '🌭', price: 5000 },
