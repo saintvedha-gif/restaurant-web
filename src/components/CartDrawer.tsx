@@ -101,22 +101,16 @@ export default function CartDrawer() {
       return [baseLine, ...addonLines].join('\n');
     };
 
-    const foodBlock = foodItems.length > 0
-      ? foodItems.map(formatCartItemLine).join('\n\n')
-      : 'Sin comida';
-
-    const drinkBlock = drinkItems.length > 0
-      ? drinkItems.map(formatCartItemLine).join('\n\n')
-      : 'Sin bebida';
+    // Unir todos los productos (comida y bebida) en un solo bloque, sin encabezados
+    const allItems = [...foodItems, ...drinkItems];
+    const itemsBlock = allItems.length > 0
+      ? allItems.map(formatCartItemLine).join('\n\n')
+      : '';
 
     const msg = [
       `${emojiHeart} Holaaaa, deseo ordenar este manjar de dioses:`,
       '',
-      'Comida',
-      foodBlock,
-      '',
-      'Bebida',
-      drinkBlock,
+      itemsBlock,
       '',
       `💰 Total: ${formatPrice(state.total)}`,
     ].join('\n');
