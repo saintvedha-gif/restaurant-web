@@ -1,5 +1,8 @@
-import { createContext, useContext, useReducer, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useReducer, type ReactNode } from 'react';
 import type { CartAddon, CartItem, CartState, MenuItem, Addon } from '../types/menu';
+
+const CART_STORAGE_KEY = 'mucha-mazorca-cart-v1';
+const EMPTY_CART_STATE: CartState = { items: [], total: 0 };
 
 type CartAction =
   | { type: 'ADD_ITEM'; payload: { menuItem: MenuItem; selectedAddons: Addon[] } }
@@ -52,6 +55,63 @@ function createCartItemId(menuItemId: string): string {
   }
 
   return `${menuItemId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function normalizeCartState(rawState: unknown): CartState {
+  if (!rawState || typeof rawState !== 'object' || !('items' in rawState)) {
+    return EMPTY_CART_STATE;
+  }
+
+  const unsafeItems = (rawState as { items?: unknown }).items;
+  if (!Array.isArray(unsafeItems)) {
+    return EMPTY_CART_STATE;
+  }
+
+  const items: CartItem[] = unsafeItems
+    .filter((entry): entry is Partial<CartItem> => !!entry && typeof entry === 'object')
+    .map(entry => {
+      const menuItem = entry.menuItem as MenuItem | undefined;
+      const selectedAddons = Array.isArray(entry.selectedAddons)
+        ? (entry.selectedAddons as CartAddon[])
+        : [];
+      const quantity = Number.isFinite(entry.quantity) ? Math.max(1, Math.floor(entry.quantity as number)) : 1;
+
+      if (!menuItem || !menuItem.id) {
+        return null;
+      }
+
+      return {
+        id: entry.id && typeof entry.id === 'string' ? entry.id : createCartItemId(menuItem.id),
+        menuItem,
+        quantity,
+        selectedAddons,
+        totalPrice: calcItemTotal(menuItem, selectedAddons, quantity),
+      };
+    })
+    .filter((entry): entry is CartItem => entry !== null);
+
+  return {
+    items,
+    total: items.reduce((sum, item) => sum + item.totalPrice, 0),
+  };
+}
+
+function readPersistedCartState(): CartState {
+  if (typeof window === 'undefined') {
+    return EMPTY_CART_STATE;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(CART_STORAGE_KEY);
+    if (!raw) {
+      return EMPTY_CART_STATE;
+    }
+
+    const parsed = JSON.parse(raw) as unknown;
+    return normalizeCartState(parsed);
+  } catch {
+    return EMPTY_CART_STATE;
+  }
 }
 
 function cartReducer(state: CartState, action: CartAction): CartState {
@@ -151,7 +211,15 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, { items: [], total: 0 });
+  const [state, dispatch] = useReducer(cartReducer, EMPTY_CART_STATE, () => readPersistedCartState());
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state));
+  }, [state]);
 
   const addItem = (menuItem: MenuItem, selectedAddons: Addon[]) =>
     dispatch({ type: 'ADD_ITEM', payload: { menuItem, selectedAddons: [...selectedAddons] } });

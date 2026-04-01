@@ -1,60 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { addonGroups, formatPrice, WHATSAPP_NUMBER } from '../data/menuData';
-
-const PRODUCT_ADDON_LIMITS: Record<string, Partial<Record<string, number>>> = {
-  salchiper: { 'adicionales-salchi': 8 },
-  salchipapita: { 'adicionales-salchi': 10 },
-  salchipapota: { 'adicionales-salchi': 12 },
-  salchifeliz: { 'adicionales-salchi': 3 },
-};
-
-const MAICITO_SIZE_LIMITS: Record<string, number> = {
-  'milenial-pequeno': 2,
-  'maicito37-pequeno': 2,
-  'milenial-mediano': 3,
-  'maicito37-mediano': 3,
-  'milenial-grande': 3,
-  'maicito37-grande': 3,
-};
-
-// Límites específicos por addon individual para amorguesa-armable
-const AMORGUESA_ARMABLE_ADDON_LIMITS: Record<string, number> = {
-  'amor-tocino': 3,
-  'amor-croqueta': 3,
-  'amor-pepinillos': 3,
-  'amor-cebolla': 2,
-  'amor-philadelphia': 5,
-};
-
-const AMORGUESA_ARMABLE_QUESO_LIMITS: Record<string, number> = {
-  'amor-queso-cheddar': 2,
-  'amor-colbyjack': 2,
-  'amor-mozzarella': 2,
-  'amor-mix-quesos': 2,
-};
-
-
-
-const AMORGUESA_WITH_LIMITS_IDS = ['amorguesa-armable', 'amorguesa-clasica'] as const;
-
-function isAmorguesaWithLimits(itemId: string) {
-  return AMORGUESA_WITH_LIMITS_IDS.includes(itemId as typeof AMORGUESA_WITH_LIMITS_IDS[number]);
-}
-
-function getEffectiveGroupLimit(itemId: string, groupId: string, defaultMax: number, selectedSizeId?: string) {
-  if (groupId === 'adicionales-salchi' || groupId === 'adicionales-maicito') {
-    if (itemId === 'negrita') return 2;
-    if (itemId === 'quetzalcoatl') return 3;
-
-    if (itemId === 'viene-la-paloma' || itemId === 'milenial' || itemId === 'malandro') {
-      const sizeLimit = selectedSizeId ? MAICITO_SIZE_LIMITS[selectedSizeId] : undefined;
-      if (sizeLimit) return sizeLimit;
-    }
-  }
-
-  return PRODUCT_ADDON_LIMITS[itemId]?.[groupId] ?? defaultMax;
-}
+import {
+  AMORGUESA_COMBINED_MAX,
+  getEffectiveGroupMax,
+  getPerAddonLimit,
+  isAmorguesaWithLimits,
+} from '../data/addonRules';
 
 export default function CartDrawer() {
   const { 
@@ -268,7 +220,7 @@ export default function CartDrawer() {
                               .reduce((sum, addonEntry) => sum + addonEntry.quantity, 0)
                             : 0;
                           const effectiveGroupMax = currentGroup
-                            ? getEffectiveGroupLimit(
+                            ? getEffectiveGroupMax(
                               cartItem.menuItem.id,
                               currentGroup.id,
                               currentGroup.maxSelections,
@@ -289,15 +241,12 @@ export default function CartDrawer() {
                           if (!isFinalPriceOption) {
                             // Para amorguesa-armable
                             if (isAmorguesa) {
-                              if (totalAdicionalesQuesos < 5) {
-                                if (entry.addon.id in AMORGUESA_ARMABLE_ADDON_LIMITS) {
-                                  const limit = AMORGUESA_ARMABLE_ADDON_LIMITS[entry.addon.id];
-                                  canIncrement = entry.quantity < limit && totalAdicionalesQuesos < 5;
-                                } else if (entry.addon.id in AMORGUESA_ARMABLE_QUESO_LIMITS) {
-                                  const limit = AMORGUESA_ARMABLE_QUESO_LIMITS[entry.addon.id];
-                                  canIncrement = entry.quantity < limit && totalAdicionalesQuesos < 5;
+                              if (totalAdicionalesQuesos < AMORGUESA_COMBINED_MAX) {
+                                const perAddonLimit = getPerAddonLimit(cartItem.menuItem.id, currentGroup?.id ?? '', entry.addon.id);
+                                if (perAddonLimit) {
+                                  canIncrement = entry.quantity < perAddonLimit && totalAdicionalesQuesos < AMORGUESA_COMBINED_MAX;
                                 } else {
-                                  canIncrement = totalAdicionalesQuesos < 5;
+                                  canIncrement = totalAdicionalesQuesos < AMORGUESA_COMBINED_MAX;
                                 }
                               } else {
                                 canIncrement = false;

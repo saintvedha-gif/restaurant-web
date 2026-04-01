@@ -39,7 +39,7 @@ export default function MenuCard({ item, onSelect }: Props) {
         </div>
 
         {item.image && (
-          <div className="shrink-0 overflow-hidden rounded-[12px] bg-[#101014] ring-1 ring-yellow-400/15" style={{width: '88px', height: '88px'}}>
+          <div className="shrink-0 overflow-hidden rounded-[12px] bg-[#101014] ring-1 ring-yellow-400/15" style={{width: '70px', height: '88px'}}>
             <img
               src={getSizedImageUrl(item.image, 220)}
               alt={item.name}

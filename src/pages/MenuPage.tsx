@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { getImageUrl } from '../data/getImageUrl';
 import { useSearchParams } from 'react-router-dom';
-import { categories, menuItems } from '../data/menuData';
+import { categories, getImageUrl, menuItems } from '../data/menuData';
 import type { MenuItem } from '../types/menu';
 import CategoryNav from '../components/CategoryNav';
 import MenuCard from '../components/MenuCard';
@@ -9,11 +8,6 @@ import ProductDetailPage from './ProductDetailPage';
 
 export default function MenuPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeCategory, setActiveCategory] = useState<string>(() => {
-    const initialCategory = searchParams.get('categoria');
-    const exists = categories.some(category => category.id === initialCategory);
-    return exists && initialCategory ? initialCategory : categories[0].id;
-  });
 
   const itemsByCategory = useMemo(
     () => categories.reduce<Record<string, MenuItem[]>>((acc, category) => {
@@ -26,7 +20,8 @@ export default function MenuPage() {
   const [showCopied, setShowCopied] = useState(false);
 
   const shareMenu = useCallback(async () => {
-    const url = 'https://saintvedha-gif.github.io/restaurant-web/menu';
+    const appBaseUrl = new URL(import.meta.env.BASE_URL, window.location.origin);
+    const url = new URL('menu', appBaseUrl).toString();
     if (navigator.share) {
       await navigator.share({ title: 'Menú Mucha Mazorca 🌽', url });
     } else {
@@ -35,6 +30,12 @@ export default function MenuPage() {
       setTimeout(() => setShowCopied(false), 2500);
     }
   }, []);
+
+  const activeCategory = useMemo(() => {
+    const categoryFromUrl = searchParams.get('categoria');
+    const exists = categories.some(category => category.id === categoryFromUrl);
+    return exists && categoryFromUrl ? categoryFromUrl : categories[0].id;
+  }, [searchParams]);
 
   const currentCategory = categories.find(cat => cat.id === activeCategory) ?? categories[0];
   const currentItems = itemsByCategory[currentCategory.id] ?? [];
@@ -54,6 +55,19 @@ export default function MenuPage() {
     setSearchParams(next, { replace: true });
   }, [searchParams, selectedItem, selectedItemId, setSearchParams]);
 
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get('categoria');
+    const exists = categories.some(category => category.id === categoryFromUrl);
+
+    if (exists && categoryFromUrl) {
+      return;
+    }
+
+    const next = new URLSearchParams(searchParams);
+    next.set('categoria', categories[0].id);
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
+
   function openProductDetail(item: MenuItem) {
     const next = new URLSearchParams(searchParams);
     next.set('categoria', item.categoryId);
@@ -70,7 +84,10 @@ export default function MenuPage() {
 
   function handleSelectCategory(categoryId: string) {
     if (categoryId === activeCategory) return;
-    setActiveCategory(categoryId);
+    const next = new URLSearchParams(searchParams);
+    next.set('categoria', categoryId);
+    next.delete('producto');
+    setSearchParams(next, { replace: false });
   }
 
   if (selectedItem) {

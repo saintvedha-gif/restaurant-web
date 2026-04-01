@@ -24,8 +24,8 @@ export const CLOUDINARY_IMAGE_MAP: Record<string, string> = {
   "Galeria 8.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Galeria%208?_a=BAMAOGWQ0",
   "Galeria7.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Galeria7?_a=BAMAOGWQ0",
   "Ginger.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Ginger?_a=BAMAOGWQ0",
-  "La Doble M.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/La%20Doble%20M?_a=BAMAOGWQ0",
-  "La Gloriosa Salchipapa.jpg": "httpshttps://res.cloudinary.com/dv7mmbuew/image/upload/v1774569794/restaurant-web/La_Gloriosa_Salchipapa.jpg://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/La%20Gloriosa%20Salchipapa?_a=BAMAOGWQ0",
+  "La Doble M.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/q_auto/f_auto/v1774569792/restaurant-web/La_Doble_M.jpg",
+  "La Gloriosa Salchipapa.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774569794/restaurant-web/La_Gloriosa_Salchipapa.jpg",
   "Malandro.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774634885/Malandro_u2zbsi.png",
   "MATRIMONIO.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774569789/restaurant-web/El-Matrimonio.jpg",
   "Milenial.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774569798/restaurant-web/Milenial.jpg",
@@ -42,7 +42,7 @@ export const CLOUDINARY_IMAGE_MAP: Record<string, string> = {
   "QUETZALCOATL.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/QUETZALCOATL?_a=BAMAOGWQ0",
   "SALCHI-CARNITA.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774567285/restaurant-web/Salchicarnita.jpg",
   "SALCHIFELIZ.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774567286/restaurant-web/SALCHIFELIZ.png",
-  "Salchipapita.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Salchipapita?_a=BAMAOGWQ0",
+  "Salchipapota.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/q_auto/f_auto/v1775061375/Salchipapota_ubc59q.jpg",
   "Salchipapita.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774567288/restaurant-web/Salchipapita.jpg",
   "SALCHIPAPITAS.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/SALCHIPAPITAS?_a=BAMAOGWQ0",
   "SALCHIPER.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774641504/SALCHIPER_lzqv96.png",
@@ -57,6 +57,5 @@ export const CLOUDINARY_IMAGE_MAP: Record<string, string> = {
   "Sprite.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Sprite?_a=BAMAOGWQ0",
   "Viene la paloma.jpeg": "https://res.cloudinary.com/dv7mmbuew/image/upload/f_auto,q_auto/v1/restaurant-web/Viene%20la%20paloma?_a=BAMAOGWQ0",
   "Logo_Ladino.png": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774720303/Logo_Ladino.png",
-  "Salchipapota.jpg": "https://res.cloudinary.com/dv7mmbuew/image/upload/v1774567288/restaurant-web/Salchipapita.jpg",
 };
 

@@ -1,8 +1,26 @@
 import type { Category, MenuItem, AddonGroup } from '../types/menu';
 import { CLOUDINARY_IMAGE_MAP } from './cloudinaryImages.ts';
 
+const IMAGE_ALIASES: Record<string, string> = {
+  'La Doble M.jpeg': 'La Doble M.jpg',
+  'La_Gloriosa_Salchipapa.jpg': 'La Gloriosa Salchipapa.jpg',
+  'Viene la Paloma.jpeg': 'Viene la paloma.jpeg',
+};
+
+function findCloudinaryImage(fileName: string): string | undefined {
+  const normalizedName = IMAGE_ALIASES[fileName] ?? fileName;
+  const directMatch = CLOUDINARY_IMAGE_MAP[normalizedName] ?? CLOUDINARY_IMAGE_MAP[fileName];
+  if (directMatch) return directMatch;
+
+  const fallbackKey = Object.keys(CLOUDINARY_IMAGE_MAP).find(
+    key => key.toLowerCase() === normalizedName.toLowerCase()
+  );
+
+  return fallbackKey ? CLOUDINARY_IMAGE_MAP[fallbackKey] : undefined;
+}
+
 export const getImageUrl = (fileName: string): string => {
-  const cloudinaryUrl = CLOUDINARY_IMAGE_MAP[fileName];
+  const cloudinaryUrl = findCloudinaryImage(fileName);
   if (cloudinaryUrl) {
     return cloudinaryUrl;
   }
