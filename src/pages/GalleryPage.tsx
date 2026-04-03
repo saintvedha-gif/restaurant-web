@@ -37,6 +37,17 @@ export default function GalleryPage() {
                 className={idx <= 2
                   ? 'aspect-square w-full object-cover object-center transition-transform duration-500 hover:scale-105'
                   : 'h-64 w-full object-cover transition-transform duration-500 hover:scale-105'}
+                style={
+                  idx === 0
+                    ? { objectPosition: 'center 85%' }
+                    : idx === 3
+                      ? { objectPosition: 'center 52%' }
+                      : idx === 6
+                        ? { objectPosition: 'center 70%' }
+                        : idx === 7
+                          ? { objectPosition: 'center 75%' }
+                      : undefined
+                }
                 loading="lazy"
                 decoding="async"
               />

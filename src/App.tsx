@@ -17,7 +17,7 @@ function ConditionalCartDrawer() {
 }
 
 export default function App() {
-  const basename = import.meta.env.MODE === 'production' ? '/restaurant-web' : '/';
+  const basename = import.meta.env.BASE_URL;
   return (
     <CartProvider>
       <BrowserRouter basename={basename}>

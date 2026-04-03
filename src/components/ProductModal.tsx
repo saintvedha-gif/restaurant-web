@@ -133,7 +133,8 @@ export default function ProductModal({ item, onClose }: Props) {
           <div className="flex min-h-0 flex-col border-t border-[#FFD60A]/25 lg:border-l lg:border-t-0 max-w-full">
             <div className="min-h-0 flex-1 overflow-y-auto px-3 py-5 sm:px-6 sm:py-7 max-w-full">
               <h2 className="font-display text-3xl sm:text-4xl leading-tight text-[#4A2800] break-words">
-                {item.name} {item.emoji}
+                <span>{item.name}</span>{' '}
+                <span className="inline-flex items-center whitespace-nowrap">{item.emoji}</span>
               </h2>
               <p className="mt-3 text-base leading-8 text-[#6A3A00] break-words">{item.description}</p>
               <div className="mt-5 rounded-2xl border border-[#FFD60A]/35 bg-[#FFE4C2] px-4 py-4 w-full max-w-full overflow-x-auto">

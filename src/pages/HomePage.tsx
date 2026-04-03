@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <div className="theme-page bg-[#050505] text-white">
       {/* ── HERO ── */}
-      <section className="section-shell grid min-h-[75vh] items-center gap-10 py-12 lg:grid-cols-[1.15fr_0.85fr] lg:py-16">
+      <section className="section-shell grid min-h-[75vh] items-center gap-6 py-12 lg:grid-cols-[1.15fr_0.85fr] lg:py-16">
         <div className="anim-fade-right">
           <h1 className="brand-pixel-card w-fit max-w-full">
             <span className="brand-pixel-line brand-pixel-line--top">MUCHA</span>
@@ -44,7 +44,6 @@ Lo más importante es que hacemos todo con mucho amor, gracias por estar aquí, 
                 className="h-full w-full object-cover object-[center_85%]"
                 loading="eager"
                 decoding="async"
-                fetchPriority="high"
                 sizes="(max-width: 1024px) 100vw, 430px"
               />
             </div>
@@ -62,7 +61,7 @@ Lo más importante es que hacemos todo con mucho amor, gracias por estar aquí, 
             </h2>
           </div>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
             {topItems.map((item, idx) => (
               <Link
                 key={item.id}

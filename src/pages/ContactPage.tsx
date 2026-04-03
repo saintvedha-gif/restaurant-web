@@ -3,9 +3,9 @@ import { WHATSAPP_NUMBER } from '../data/menuData';
 
 const LOCATION_LABEL = 'Cucuta, Colombia';
 const INSTAGRAM_HANDLE = '@muchamazork';
-const MAPS_QUERY = '7.8761769,-72.4871155';
+const MAPS_QUERY = 'Mucha Mazorca, Cucuta, Norte de Santander';
 const MAPS_EMBED = `https://www.google.com/maps?q=${MAPS_QUERY}&output=embed`;
-const MAPS_LINK = 'https://maps.app.goo.gl/fuBfCxAti2QiLeNx6?g_st=aw';
+const MAPS_LINK = 'https://www.google.com/maps/place/Mucha+Mazorca/@7.8762,-72.4871,17z/data=!3m1!4b1!4m6!3m5!1s0x8e66458e17dc72f3:0xed6cddde4f839119!8m2!3d7.8762!4d-72.4871!16s%2Fg%2F11tmj5t69m?entry=ttu&g_ep=EgoyMDI2MDMzMS4wIKXMDSoASAFQAw%3D%3D';
 
 type DayKey = 'domingo' | 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes' | 'sabado';
 

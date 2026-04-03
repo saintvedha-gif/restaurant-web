@@ -5,7 +5,6 @@ import { WHATSAPP_NUMBER } from '../data/menuData';
 
 const socialLinks = [
   { name: 'Instagram', href: 'https://www.instagram.com/muchamazork', handle: '@muchamazork' },
-  { name: 'Facebook', href: 'https://www.facebook.com', handle: 'Mucha Mazorca' },
   { name: 'TikTok', href: 'https://www.tiktok.com/@muchamazorca', handle: '@muchamazorca' },
 ];
 
@@ -164,11 +163,6 @@ export default function SiteLayout() {
           {/* Fila 1: redes + estado */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <SocialIcon href="https://www.facebook.com" label="Facebook">
-                <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
-                  <path d="M13.5 9H16V6h-2.5C10.9 6 9 7.9 9 10.5V13H7v3h2v6h3v-6h3l.5-3H12v-2.5c0-.8.7-1.5 1.5-1.5z" />
-                </svg>
-              </SocialIcon>
               <SocialIcon href="https://www.instagram.com/muchamazork" label="Instagram">
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-none stroke-current stroke-[1.8]">
                   <rect x="3.5" y="3.5" width="17" height="17" rx="5" />

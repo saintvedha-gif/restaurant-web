@@ -349,7 +349,8 @@ export default function ProductDetailPage({ item, onBack }: Props) {
           <section className="paper-panel flex min-h-[500px] flex-col w-full max-w-full flex-1 overflow-x-hidden h-full">
             <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6 w-full max-w-full overflow-x-hidden">
               <h1 className="title-pixel break-words text-2xl leading-tight text-white sm:text-4xl">
-                {item.name} {item.emoji}
+                <span>{item.name}</span>{' '}
+                <span className="inline-flex items-center whitespace-nowrap">{item.emoji}</span>
               </h1>
               <p className="mt-3 text-base leading-8 text-white/75">{item.description}</p>
 
