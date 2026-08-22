@@ -5,6 +5,7 @@ import type { MenuItem } from '../types/menu';
 import CategoryNav from '../components/CategoryNav';
 import MenuCard from '../components/MenuCard';
 import ProductDetailPage from './ProductDetailPage';
+import { useTwemoji } from '../hooks/useTwemoji';
 
 export default function MenuPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -45,6 +46,7 @@ export default function MenuPage() {
     if (!selectedItemId) return null;
     return menuItems.find(item => item.id === selectedItemId) ?? null;
   }, [selectedItemId]);
+  useTwemoji([activeCategory, selectedItemId]);
 
   useEffect(() => {
     if (!selectedItemId) return;

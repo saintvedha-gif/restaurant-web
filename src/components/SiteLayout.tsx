@@ -1,92 +1,13 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import twemoji from '@twemoji/api';
+import { useTwemoji } from '../hooks/useTwemoji';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { WHATSAPP_NUMBER } from '../data/menuData';
+import { getCurrentColombiaTime, isOpenNow } from '../data/openingHours';
 
 const socialLinks = [
   { name: 'Instagram', href: 'https://www.instagram.com/muchamazork', handle: '@muchamazork' },
   { name: 'TikTok', href: 'https://www.tiktok.com/@muchamazorca', handle: '@muchamazorca' },
 ];
-
-type DayKey = 'domingo' | 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes' | 'sabado';
-
-const OPENING_HOURS: Record<DayKey, { open: number; close: number }> = {
-  lunes: { open: 17 * 60, close: 22 * 60 },
-  martes: { open: 17 * 60, close: 22 * 60 },
-  miercoles: { open: 17 * 60, close: 22 * 60 },
-  jueves: { open: 17 * 60, close: 22 * 60 },
-  viernes: { open: 18 * 60, close: 23 * 60 },
-  sabado: { open: 18 * 60, close: 23 * 60 },
-  domingo: { open: 18 * 60, close: 23 * 60 },
-};
-
-function normalizeDay(value: string): DayKey {
-  const normalized = value
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
-
-  if (normalized === 'domingo') return 'domingo';
-  if (normalized === 'lunes') return 'lunes';
-  if (normalized === 'martes') return 'martes';
-  if (normalized === 'miercoles') return 'miercoles';
-  if (normalized === 'jueves') return 'jueves';
-  if (normalized === 'viernes') return 'viernes';
-  return 'sabado';
-}
-
-function getCurrentColombiaTime() {
-  const formatter = new Intl.DateTimeFormat('es-CO', {
-    timeZone: 'America/Bogota',
-    weekday: 'long',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  });
-
-  const parts = formatter.formatToParts(new Date());
-  const weekday = parts.find(part => part.type === 'weekday')?.value ?? 'lunes';
-  const hour = Number(parts.find(part => part.type === 'hour')?.value ?? '0');
-  const minute = Number(parts.find(part => part.type === 'minute')?.value ?? '0');
-
-  return {
-    day: normalizeDay(weekday),
-    hour,
-    minute,
-  };
-}
-
-function isOpenNow(day: DayKey, minutesOfDay: number) {
-  const currentDaySchedule = OPENING_HOURS[day];
-
-  if (currentDaySchedule.close > 24 * 60) {
-    return minutesOfDay >= currentDaySchedule.open;
-  }
-
-  if (minutesOfDay >= currentDaySchedule.open && minutesOfDay < currentDaySchedule.close) {
-    return true;
-  }
-
-  const previousDay = (
-    {
-      domingo: 'sabado',
-      lunes: 'domingo',
-      martes: 'lunes',
-      miercoles: 'martes',
-      jueves: 'miercoles',
-      viernes: 'jueves',
-      sabado: 'viernes',
-    } as const
-  )[day];
-
-  const previousDaySchedule = OPENING_HOURS[previousDay];
-  if (previousDaySchedule.close > 24 * 60) {
-    const overnightClose = previousDaySchedule.close - 24 * 60;
-    return minutesOfDay < overnightClose;
-  }
-
-  return false;
-}
 
 export default function SiteLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -94,21 +15,11 @@ export default function SiteLayout() {
   const [showFloatingActions, setShowFloatingActions] = useState(false);
   const location = useLocation();
 
-  const parseTwemoji = () => {
-    twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
-  };
-
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  useEffect(() => {
-    const parseTimer = window.setTimeout(() => {
-      parseTwemoji();
-    }, 0);
-
-    return () => window.clearTimeout(parseTimer);
-  }, [location.pathname, mobileMenuOpen]);
+  useTwemoji([location.pathname, mobileMenuOpen]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', 'dark');

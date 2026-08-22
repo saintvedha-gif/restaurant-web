@@ -269,7 +269,7 @@ export default function CartDrawer() {
                                 </p>
                                 <p className="text-[11px] text-white/55">
                                   {isFinalPriceOption
-                                    ? `Tamano seleccionado · ${formatPrice(entry.addon.price)}`
+                                    ? `Tamaño seleccionado · ${formatPrice(entry.addon.price)}`
                                     : isAmorguesaSauce
                                       ? 'Salsa seleccionada'
                                       : `${entry.quantity} x ${formatPrice(entry.addon.price)}`}

@@ -11,6 +11,7 @@ import {
 } from '../data/addonRules';
 import { useCart } from '../context/CartContext';
 import type { Addon, AddonGroup, MenuItem } from '../types/menu';
+import { useTwemoji } from '../hooks/useTwemoji';
 
 interface Props {
   item: MenuItem;
@@ -55,6 +56,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
   const [added, setAdded] = useState(false);
   const [validationError, setValidationError] = useState('');
   const [showToast, setShowToast] = useState(false); // 👈 NUEVO
+  useTwemoji([item.id]);
 
   const relevantGroups: AddonGroup[] = useMemo(
     () => (item.addons
