@@ -258,6 +258,18 @@ El proyecto es compatible con cualquier host estático:
 
 Solo requiere servir el contenido de la carpeta `dist/` generada por el build.
 
+### Hostinger con GitHub Actions
+Cada push a `main` genera el build y publica automáticamente `dist/` en Hostinger mediante FTP.
+
+En GitHub, configura estos secretos en `Settings > Secrets and variables > Actions`:
+
+- `HOSTINGER_FTP_SERVER`: servidor FTP de Hostinger
+- `HOSTINGER_FTP_USERNAME`: usuario FTP
+- `HOSTINGER_FTP_PASSWORD`: contraseña FTP
+- `HOSTINGER_SERVER_DIR`: normalmente `/public_html/`
+
+No guardes las credenciales en el repositorio. El archivo `public/.htaccess` se copia al build para servir correctamente los módulos JavaScript y las rutas de React.
+
 ---
 
 ## 📱 SEO y Metaetiquetas
