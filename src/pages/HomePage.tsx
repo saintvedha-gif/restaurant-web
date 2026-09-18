@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <div className="theme-page bg-[#050505] text-white">
       {/* ── HERO ── */}
-      <section className="section-shell grid min-h-[75vh] items-center gap-6 py-12 lg:grid-cols-[1.15fr_0.85fr] lg:py-16">
+      <section className="section-shell grid min-h-[min(75vh,720px)] items-center gap-6 py-12 lg:grid-cols-[1.15fr_0.85fr] lg:py-16">
         <div className="anim-fade-right">
           <h1 className="brand-pixel-card w-fit max-w-full">
             <span className="brand-pixel-line brand-pixel-line--top">MUCHA</span>

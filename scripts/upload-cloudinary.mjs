@@ -53,6 +53,12 @@ for (const fileName of files) {
     public_id: publicId,
     overwrite: true,
     resource_type: 'image',
+    eager: [
+      { fetch_format: 'auto', quality: 'auto:good', crop: 'limit', width: 220 },  // MenuCard
+      { fetch_format: 'auto', quality: 'auto:good', crop: 'limit', width: 720 },  // HomePage destacados
+      { fetch_format: 'auto', quality: 'auto:good', crop: 'limit', width: 960 },  // HomePage hero background
+    ],
+    eager_async: true,
   });
 
   const optimizedUrl = cloudinary.url(uploadResult.public_id, {

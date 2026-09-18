@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { addonGroups, formatPrice } from '../data/menuData';
+import { useEffect, useMemo, useState } from "react";
+import { addonGroups, formatPrice } from "../data/menuData";
 import {
   AMORGUESA_ARMABLE_ADDON_LIMITS,
   AMORGUESA_ARMABLE_QUESO_LIMITS,
@@ -8,37 +8,41 @@ import {
   getPerAddonLimit,
   isAmorguesaWithLimits,
   isMaicitoSizeGroup,
-} from '../data/addonRules';
-import { useCart } from '../context/CartContext';
-import type { Addon, AddonGroup, MenuItem } from '../types/menu';
-import { useTwemoji } from '../hooks/useTwemoji';
+} from "../data/addonRules";
+import { useCart } from "../context/CartContext";
+import type { Addon, AddonGroup, MenuItem } from "../types/menu";
+import { useTwemoji } from "../hooks/useTwemoji";
 
 interface Props {
   item: MenuItem;
   onBack: () => void;
 }
 
-function countSelectedInGroup(selectedAddons: Addon[], groupAddonIds: string[]) {
-  return selectedAddons.filter(addon => groupAddonIds.includes(addon.id)).length;
+function countSelectedInGroup(
+  selectedAddons: Addon[],
+  groupAddonIds: string[],
+) {
+  return selectedAddons.filter((addon) => groupAddonIds.includes(addon.id))
+    .length;
 }
 
 function getAddonQuantity(selectedAddons: Addon[], addonId: string) {
-  return selectedAddons.filter(addon => addon.id === addonId).length;
+  return selectedAddons.filter((addon) => addon.id === addonId).length;
 }
 
-
 function shouldHideGroupMeta(itemId: string, groupId: string) {
-  if (isAmorguesaWithLimits(itemId) && [
-    'salsas-amorguesa',
-    'quesos-amorguesa',
-    'adicionales-amorguesa',
-  ].includes(groupId)) {
+  if (
+    isAmorguesaWithLimits(itemId) &&
+    ["salsas-amorguesa", "quesos-amorguesa", "adicionales-amorguesa"].includes(
+      groupId,
+    )
+  ) {
     return true;
   }
 
   return (
-    (itemId === 'milenial' && groupId === 'tamano-milenial') ||
-    (itemId === 'malandro' && groupId === 'tamano-maicito-37')
+    (itemId === "milenial" && groupId === "tamano-milenial") ||
+    (itemId === "malandro" && groupId === "tamano-maicito-37")
   );
 }
 
@@ -47,63 +51,77 @@ function shouldHideGroupSubtitle(itemId: string, groupId: string) {
     return true;
   }
 
-  return groupId === 'adicionales-salchi' && ['quetzalcoatl', 'milenial', 'malandro'].includes(itemId);
+  return (
+    groupId === "adicionales-salchi" &&
+    ["quetzalcoatl", "milenial", "malandro"].includes(itemId)
+  );
 }
 
 export default function ProductDetailPage({ item, onBack }: Props) {
   const { addItem } = useCart();
   const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
   const [added, setAdded] = useState(false);
-  const [validationError, setValidationError] = useState('');
+  const [validationError, setValidationError] = useState("");
   const [showToast, setShowToast] = useState(false); // 👈 NUEVO
   useTwemoji([item.id]);
 
   const relevantGroups: AddonGroup[] = useMemo(
-    () => (item.addons
-      ? item.addons.map(id => addonGroups.find(g => g.id === id)).filter(Boolean) as AddonGroup[]
-      : []),
-    [item.addons]
+    () =>
+      item.addons
+        ? (item.addons
+            .map((id) => addonGroups.find((g) => g.id === id))
+            .filter(Boolean) as AddonGroup[])
+        : [],
+    [item.addons],
   );
 
   const defaultSelections = useMemo(
-    () => relevantGroups.flatMap(group => {
-      // For groups with final-price options, default to the option matching listed price.
-      if (group.addons.some(addon => addon.pricingMode === 'final')) {
-        const matchingSize = group.addons.find(addon => addon.price === item.price);
-        if (matchingSize) return [matchingSize];
-      }
+    () =>
+      relevantGroups.flatMap((group) => {
+        // For groups with final-price options, default to the option matching listed price.
+        if (group.addons.some((addon) => addon.pricingMode === "final")) {
+          const matchingSize = group.addons.find(
+            (addon) => addon.price === item.price,
+          );
+          if (matchingSize) return [matchingSize];
+        }
 
-      return [];
-    }),
-    [item.price, relevantGroups]
+        return [];
+      }),
+    [item.price, relevantGroups],
   );
 
   useEffect(() => {
     setSelectedAddons(defaultSelections);
-    setValidationError('');
+    setValidationError("");
     setAdded(false);
   }, [defaultSelections, item.id]);
 
   const finalPriceAddonIds = useMemo(
-    () => relevantGroups
-      .flatMap(group => group.addons)
-      .filter(addon => addon.pricingMode === 'final')
-      .map(addon => addon.id),
-    [relevantGroups]
+    () =>
+      relevantGroups
+        .flatMap((group) => group.addons)
+        .filter((addon) => addon.pricingMode === "final")
+        .map((addon) => addon.id),
+    [relevantGroups],
   );
 
-  const selectedSize = selectedAddons.find(addon => finalPriceAddonIds.includes(addon.id));
+  const selectedSize = selectedAddons.find((addon) =>
+    finalPriceAddonIds.includes(addon.id),
+  );
   const nonSizeAddonsTotal = selectedAddons
-    .filter(addon => !finalPriceAddonIds.includes(addon.id))
+    .filter((addon) => !finalPriceAddonIds.includes(addon.id))
     .reduce((s, a) => s + a.price, 0);
 
   const salchiperCountableAdds = useMemo(() => {
-    if (item.id !== 'salchiper') return 0;
+    if (item.id !== "salchiper") return 0;
 
-    const salchiGroup = relevantGroups.find(group => group.id === 'adicionales-salchi');
+    const salchiGroup = relevantGroups.find(
+      (group) => group.id === "adicionales-salchi",
+    );
     if (!salchiGroup) return 0;
 
-    const groupAddonIds = salchiGroup.addons.map(addon => addon.id);
+    const groupAddonIds = salchiGroup.addons.map((addon) => addon.id);
     return countSelectedInGroup(selectedAddons, groupAddonIds);
   }, [item.id, relevantGroups, selectedAddons]);
 
@@ -111,42 +129,56 @@ export default function ProductDetailPage({ item, onBack }: Props) {
   const totalPrice = basePrice + nonSizeAddonsTotal;
 
   function selectFinalAddon(addon: Addon, group: AddonGroup) {
-    setValidationError('');
-    const groupAddonIds = group.addons.map(groupAddon => groupAddon.id);
-    setSelectedAddons(prev => [
-      ...prev.filter(selectedAddon => !groupAddonIds.includes(selectedAddon.id)),
+    setValidationError("");
+    const groupAddonIds = group.addons.map((groupAddon) => groupAddon.id);
+    setSelectedAddons((prev) => [
+      ...prev.filter(
+        (selectedAddon) => !groupAddonIds.includes(selectedAddon.id),
+      ),
       addon,
     ]);
   }
 
   function selectSingleAddon(addon: Addon, group: AddonGroup) {
-    setValidationError('');
-    const groupAddonIds = group.addons.map(groupAddon => groupAddon.id);
-    setSelectedAddons(prev => [
-      ...prev.filter(selectedAddon => !groupAddonIds.includes(selectedAddon.id)),
+    setValidationError("");
+    const groupAddonIds = group.addons.map((groupAddon) => groupAddon.id);
+    setSelectedAddons((prev) => [
+      ...prev.filter(
+        (selectedAddon) => !groupAddonIds.includes(selectedAddon.id),
+      ),
       addon,
     ]);
   }
 
   function changeAddonQuantity(addon: Addon, group: AddonGroup, delta: 1 | -1) {
-    setValidationError('');
-    const { minSelections, maxSelections } = getEffectiveGroupLimits(item.id, group, selectedSize?.id);
-    const groupAddonIds = group.addons.map(groupAddon => groupAddon.id);
-    const currentGroupCount = countSelectedInGroup(selectedAddons, groupAddonIds);
+    setValidationError("");
+    const { minSelections, maxSelections } = getEffectiveGroupLimits(
+      item.id,
+      group,
+      selectedSize?.id,
+    );
+    const groupAddonIds = group.addons.map((groupAddon) => groupAddon.id);
+    const currentGroupCount = countSelectedInGroup(
+      selectedAddons,
+      groupAddonIds,
+    );
     const currentAddonQuantity = getAddonQuantity(selectedAddons, addon.id);
 
     // Unificar límite de 5 entre adicionales y quesos para amorguesa-armable (excluyendo salsas)
     let totalAdicionalesQuesos = 0;
     if (isAmorguesaWithLimits(item.id)) {
       // Cuenta todos los adicionales y quesos, pero NO salsas
-      totalAdicionalesQuesos = selectedAddons.filter(a =>
-        (a.id.startsWith('amor-') && !a.id.startsWith('amor-salsa'))
+      totalAdicionalesQuesos = selectedAddons.filter(
+        (a) => a.id.startsWith("amor-") && !a.id.startsWith("amor-salsa"),
       ).length;
     }
 
     if (delta === 1) {
       // Validar límites específicos por addon para amorguesa-armable
-      if (isAmorguesaWithLimits(item.id) && group.id === 'adicionales-amorguesa') {
+      if (
+        isAmorguesaWithLimits(item.id) &&
+        group.id === "adicionales-amorguesa"
+      ) {
         const addonLimit = AMORGUESA_ARMABLE_ADDON_LIMITS[addon.id];
         if (addonLimit && currentAddonQuantity >= addonLimit) {
           setValidationError(`Máximo ${addonLimit} de ${addon.name}.`);
@@ -155,7 +187,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
       }
 
       // Validar límites específicos por addon para quesos en amorguesa-armable
-      if (isAmorguesaWithLimits(item.id) && group.id === 'quesos-amorguesa') {
+      if (isAmorguesaWithLimits(item.id) && group.id === "quesos-amorguesa") {
         const quesoLimit = AMORGUESA_ARMABLE_QUESO_LIMITS[addon.id];
         if (quesoLimit && currentAddonQuantity >= quesoLimit) {
           setValidationError(`Máximo ${quesoLimit} de ${addon.name}.`);
@@ -164,80 +196,111 @@ export default function ProductDetailPage({ item, onBack }: Props) {
       }
 
       // Límite combinado de 5 entre adicionales y quesos
-      if (isAmorguesaWithLimits(item.id) && totalAdicionalesQuesos >= AMORGUESA_COMBINED_MAX) {
-        setValidationError(`Máximo ${AMORGUESA_COMBINED_MAX} adicionales en total entre adicionales y quesos.`);
+      if (
+        isAmorguesaWithLimits(item.id) &&
+        totalAdicionalesQuesos >= AMORGUESA_COMBINED_MAX
+      ) {
+        setValidationError(
+          `Máximo ${AMORGUESA_COMBINED_MAX} adicionales en total entre adicionales y quesos.`,
+        );
         return;
       }
 
       if (currentGroupCount >= maxSelections) {
-        setValidationError(`Máximo ${maxSelections} adicional(es) en este grupo.`);
+        setValidationError(
+          `Máximo ${maxSelections} adicional(es) en este grupo.`,
+        );
         return;
       }
-      setSelectedAddons(prev => [...prev, addon]);
+      setSelectedAddons((prev) => [...prev, addon]);
       return;
     }
 
-    if (currentAddonQuantity === 0 || currentGroupCount <= minSelections) return;
+    if (currentAddonQuantity === 0 || currentGroupCount <= minSelections)
+      return;
 
-    setSelectedAddons(prev => {
-      const removeIndex = prev.findIndex(selectedAddon => selectedAddon.id === addon.id);
+    setSelectedAddons((prev) => {
+      const removeIndex = prev.findIndex(
+        (selectedAddon) => selectedAddon.id === addon.id,
+      );
       if (removeIndex === -1) return prev;
       return prev.filter((_, index) => index !== removeIndex);
     });
   }
 
   function handleAdd() {
-    const missingGroup = relevantGroups.find(group => {
-      const { minSelections } = getEffectiveGroupLimits(item.id, group, selectedSize?.id);
-      const groupIds = group.addons.map(a => a.id);
+    const missingGroup = relevantGroups.find((group) => {
+      const { minSelections } = getEffectiveGroupLimits(
+        item.id,
+        group,
+        selectedSize?.id,
+      );
+      const groupIds = group.addons.map((a) => a.id);
       const selectedCount = countSelectedInGroup(selectedAddons, groupIds);
 
       if (minSelections === 0) return false;
       return selectedCount < minSelections;
     });
 
-    const exceededGroup = relevantGroups.find(group => {
-      const { maxSelections } = getEffectiveGroupLimits(item.id, group, selectedSize?.id);
+    const exceededGroup = relevantGroups.find((group) => {
+      const { maxSelections } = getEffectiveGroupLimits(
+        item.id,
+        group,
+        selectedSize?.id,
+      );
       if (maxSelections <= 0) return false;
-      const groupIds = group.addons.map(a => a.id);
+      const groupIds = group.addons.map((a) => a.id);
       const selectedCount = countSelectedInGroup(selectedAddons, groupIds);
       return selectedCount > maxSelections;
     });
 
     // Solo la amorguesa armable exige minimo 1 entre adicionales + quesos (sin salsas)
-    let minAdicionalError = '';
-    if (item.id === 'amorguesa-armable') {
-      const adicionalesYQuesos = selectedAddons.filter(a => a.id.startsWith('amor-') && !a.id.startsWith('amor-salsa'));
+    let minAdicionalError = "";
+    if (item.id === "amorguesa-armable") {
+      const adicionalesYQuesos = selectedAddons.filter(
+        (a) => a.id.startsWith("amor-") && !a.id.startsWith("amor-salsa"),
+      );
       if (adicionalesYQuesos.length === 0) {
-        minAdicionalError = 'Debes elegir mínimo 1 adicional o queso para la amorguesa.';
+        minAdicionalError =
+          "Debes elegir mínimo 1 adicional o queso para la amorguesa.";
       }
     }
 
     // Validar límites específicos por addon para amorguesa-armable
-    let addonsGroupError = '';
+    let addonsGroupError = "";
     if (isAmorguesaWithLimits(item.id)) {
-      const adicionalesYQuesos = selectedAddons.filter(a => a.id.startsWith('amor-') && !a.id.startsWith('amor-salsa'));
+      const adicionalesYQuesos = selectedAddons.filter(
+        (a) => a.id.startsWith("amor-") && !a.id.startsWith("amor-salsa"),
+      );
       // Límite combinado de 5 entre adicionales y quesos
       if (adicionalesYQuesos.length > AMORGUESA_COMBINED_MAX) {
         addonsGroupError = `Superaste el máximo de ${AMORGUESA_COMBINED_MAX} adicionales en total entre adicionales y quesos.`;
       }
       // Validar límites individuales
       if (!addonsGroupError) {
-        const adicionales = adicionalesYQuesos.filter(a => !a.id.startsWith('amor-queso'));
-        const quesos = adicionalesYQuesos.filter(a => a.id.startsWith('amor-queso'));
-        for (const [addonId, limit] of Object.entries(AMORGUESA_ARMABLE_ADDON_LIMITS)) {
-          const count = adicionales.filter(a => a.id === addonId).length;
+        const adicionales = adicionalesYQuesos.filter(
+          (a) => !a.id.startsWith("amor-queso"),
+        );
+        const quesos = adicionalesYQuesos.filter((a) =>
+          a.id.startsWith("amor-queso"),
+        );
+        for (const [addonId, limit] of Object.entries(
+          AMORGUESA_ARMABLE_ADDON_LIMITS,
+        )) {
+          const count = adicionales.filter((a) => a.id === addonId).length;
           if (count > limit) {
-            const addon = adicionales.find(a => a.id === addonId);
+            const addon = adicionales.find((a) => a.id === addonId);
             addonsGroupError = `Superaste el máximo de ${addon?.name || addonId}: máx ${limit}, seleccionaste ${count}.`;
             break;
           }
         }
         if (!addonsGroupError) {
-          for (const [quesoId, limit] of Object.entries(AMORGUESA_ARMABLE_QUESO_LIMITS)) {
-            const count = quesos.filter(a => a.id === quesoId).length;
+          for (const [quesoId, limit] of Object.entries(
+            AMORGUESA_ARMABLE_QUESO_LIMITS,
+          )) {
+            const count = quesos.filter((a) => a.id === quesoId).length;
             if (count > limit) {
-              const queso = quesos.find(a => a.id === quesoId);
+              const queso = quesos.find((a) => a.id === quesoId);
               addonsGroupError = `Superaste el máximo de ${queso?.name || quesoId}: máx ${limit}, seleccionaste ${count}.`;
               break;
             }
@@ -252,12 +315,16 @@ export default function ProductDetailPage({ item, onBack }: Props) {
     }
 
     if (missingGroup) {
-      setValidationError(`Debes elegir ${missingGroup.name.toLowerCase()} para continuar.`);
+      setValidationError(
+        `Debes elegir ${missingGroup.name.toLowerCase()} para continuar.`,
+      );
       return;
     }
 
     if (exceededGroup) {
-      setValidationError(`Superaste el máximo permitido en ${exceededGroup.name.toLowerCase()}.`);
+      setValidationError(
+        `Superaste el máximo permitido en ${exceededGroup.name.toLowerCase()}.`,
+      );
       return;
     }
 
@@ -268,7 +335,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
     addItem(item, [...selectedAddons]);
     setSelectedAddons(defaultSelections);
-    setValidationError('');
+    setValidationError("");
     setAdded(true);
     setShowToast(true); // 👈 NUEVO
     setTimeout(() => setAdded(false), 700);
@@ -277,26 +344,25 @@ export default function ProductDetailPage({ item, onBack }: Props) {
 
   return (
     <div className="theme-page min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,#050505_0%,#0c0c0f_100%)] pb-36 text-[#F5F5F5]">
-
       {/* TOAST 👈 NUEVO */}
       {showToast && (
         <div
           style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
             zIndex: 99999,
-            pointerEvents: 'none',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '8px',
-            background: '#00C853',
-            borderRadius: '24px',
-            padding: '28px 48px',
-            width: 'auto',
-            maxWidth: '90vw',
+            pointerEvents: "none",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "8px",
+            background: "#00C853",
+            borderRadius: "24px",
+            padding: "28px 48px",
+            width: "auto",
+            maxWidth: "90vw",
           }}
         >
           <style>{`
@@ -315,109 +381,204 @@ export default function ProductDetailPage({ item, onBack }: Props) {
               }
             }
           `}</style>
-          <span className="custom-toast-success toast-icon" style={{ fontSize: '52px', lineHeight: '1' }}>✓</span>
-          <span className="custom-toast-success toast-title" style={{ fontSize: '22px', fontWeight: 900, color: 'white', whiteSpace: 'nowrap' }}>¡Agregado al pedido!</span>
-          <span className="custom-toast-success toast-desc" style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(255,255,255,0.85)', whiteSpace: 'nowrap' }}>{item.name}</span>
+          <span
+            className="custom-toast-success toast-icon"
+            style={{ fontSize: "52px", lineHeight: "1" }}
+          >
+            ✓
+          </span>
+          <span
+            className="custom-toast-success toast-title"
+            style={{
+              fontSize: "22px",
+              fontWeight: 900,
+              color: "white",
+              whiteSpace: "nowrap",
+            }}
+          >
+            ¡Agregado al pedido!
+          </span>
+          <span
+            className="custom-toast-success toast-desc"
+            style={{
+              fontSize: "15px",
+              fontWeight: 600,
+              color: "rgba(255,255,255,0.85)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {item.name}
+          </span>
         </div>
       )}
 
       <header className="sticky top-0 z-30 border-b border-yellow-400/20 bg-[#101014] shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
         <div className="section-shell flex items-center justify-between gap-4 py-4">
-          <button
-            onClick={onBack}
-            className="btn-secondary-sm gap-2"
-          >
+          <button onClick={onBack} className="btn-secondary-sm gap-2">
             <span>←</span>
             <span>Volver al menu</span>
           </button>
-          <p className="hidden text-sm font-bold uppercase tracking-[0.18em] text-yellow-300 sm:block">Detalle del producto</p>
+          <p className="hidden text-sm font-bold uppercase tracking-[0.18em] text-yellow-300 sm:block">
+            Detalle del producto
+          </p>
         </div>
       </header>
 
       <main className="section-shell py-6 lg:py-8 overflow-x-hidden">
         <div className="gap-6 w-full max-w-full overflow-x-hidden flex flex-col lg:flex-row lg:items-stretch">
-          <section className="paper-panel overflow-hidden flex-1 flex items-stretch justify-center h-full">
+          {/* Sin marco de proporcion fija: el borde amarillo va pegado a la
+              foto, no a un contenedor 4/3 -- las fotos del menu son verticales
+              y forzarlas a un marco horizontal dejaba huecos enormes a los
+              lados. Solo se limita el alto para que en celular la foto no se
+              coma la pantalla antes del nombre y los adicionales. */}
+          <section
+            className="
+              paper-panel mx-auto flex w-full max-w-[720px] flex-none
+              items-center justify-center
+              border-transparent bg-transparent p-3 shadow-none
+              lg:mx-0 lg:w-1/2 lg:self-start lg:sticky lg:top-6
+            "
+          >
             {item.image && (
-              <img
-                src={item.image}
-                alt={item.name}
-                className="h-[280px] w-full object-cover sm:h-[340px] lg:h-[500px] lg:w-full lg:object-cover"
-                loading="lazy"
-                decoding="async"
-              />
+              <div
+                className="
+                  relative flex w-full items-center justify-center
+                  overflow-hidden rounded-[24px]
+                  bg-[#111116]
+                  ring-4 ring-yellow-400
+                  shadow-[0_12px_35px_rgba(0,0,0,0.35)]
+                  min-h-[260px] max-h-[380px]
+                  sm:min-h-[300px] sm:max-h-[430px]
+                  lg:min-h-0 lg:max-h-[680px]
+                "
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="
+                    block max-h-full max-w-full
+                    object-contain object-center
+                  "
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
             )}
           </section>
 
-          <section className="paper-panel flex min-h-[500px] flex-col w-full max-w-full flex-1 overflow-x-hidden h-full">
-            <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-7 sm:py-6 w-full max-w-full overflow-x-hidden">
+          <section className="paper-panel flex w-full max-w-full flex-1 flex-col overflow-x-hidden lg:min-h-[500px]">
+            <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-7 sm:py-6 w-full max-w-full overflow-x-hidden">
               <h1 className="title-pixel break-words text-2xl leading-tight text-white sm:text-4xl">
-                <span>{item.name}</span>{' '}
-                <span className="inline-flex items-center whitespace-nowrap">{item.emoji}</span>
+                <span>{item.name}</span>{" "}
+                <span className="inline-flex items-center whitespace-nowrap">
+                  {item.emoji}
+                </span>
               </h1>
-              <p className="mt-3 text-base leading-8 text-white/75">{item.description}</p>
+              <p className="mt-3 text-base leading-8 text-white/75">
+                {item.description}
+              </p>
 
               <div className="mt-5 rounded-2xl border border-yellow-400/20 bg-[#141419] px-5 py-4">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-yellow-300">Precio base</p>
-                <p className="mt-1 text-4xl font-black text-yellow-300">{formatPrice(item.price)}</p>
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-yellow-300">
+                  Precio base
+                </p>
+                <p className="mt-1 text-4xl font-black text-yellow-300">
+                  {formatPrice(item.price)}
+                </p>
               </div>
 
-              {relevantGroups.map(group => (
+              {relevantGroups.map((group) => (
                 <div key={group.id} className="mt-5">
                   {(() => {
-                    const { minSelections, maxSelections } = getEffectiveGroupLimits(item.id, group, selectedSize?.id);
-                    const hideGroupMeta = shouldHideGroupMeta(item.id, group.id);
+                    const { minSelections, maxSelections } =
+                      getEffectiveGroupLimits(item.id, group, selectedSize?.id);
+                    const hideGroupMeta = shouldHideGroupMeta(
+                      item.id,
+                      group.id,
+                    );
 
                     return (
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="title-pixel break-words text-sm uppercase text-white">{group.name}</h3>
-                    {!hideGroupMeta && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-white/55">
-                        {minSelections > 0
-                          ? `Mínimo ${minSelections} opción(es) · Máximo ${maxSelections}`
-                          : `Máximo ${maxSelections}`}
-                      </span>
-                    </div>
-                    )}
-                  </div>
+                      <div className="flex flex-wrap items-baseline justify-between gap-2">
+                        <h3 className="title-pixel break-words text-sm uppercase text-white">
+                          {group.name}
+                        </h3>
+                        {!hideGroupMeta && (
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-white/55">
+                              {minSelections > 0
+                                ? `Mínimo ${minSelections} opción(es) · Máximo ${maxSelections}`
+                                : `Máximo ${maxSelections}`}
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     );
                   })()}
 
-                  {!shouldHideGroupSubtitle(item.id, group.id) && group.subtitle.trim().length > 0 && (
-                    <p className="mt-1 text-xs text-white/55">
-                      {group.id.startsWith('tamano')
-                        ? group.subtitle
-                        : group.subtitle}
-                    </p>
-                  )}
+                  {!shouldHideGroupSubtitle(item.id, group.id) &&
+                    group.subtitle.trim().length > 0 && (
+                      <p className="mt-1 text-xs text-white/55">
+                        {group.id.startsWith("tamano")
+                          ? group.subtitle
+                          : group.subtitle}
+                      </p>
+                    )}
 
-                  <div className={`mt-3 grid gap-3 w-full max-w-full grid-cols-1 ${group.id === 'salsas-amorguesa' || isMaicitoSizeGroup(group.id) ? 'sm:grid-cols-2 min-[420px]:grid-cols-3' : 'sm:grid-cols-2'}`} style={{overflowX:'hidden'}}>
-                    {group.addons.map(addon => {
-                      const quantity = getAddonQuantity(selectedAddons, addon.id);
-                      const groupAddons = group.addons.map(a => a.id);
-                      const { minSelections, maxSelections } = getEffectiveGroupLimits(item.id, group, selectedSize?.id);
-                      const currentGroupCount = countSelectedInGroup(selectedAddons, groupAddons);
-                      const isFinalPriceOption = addon.pricingMode === 'final';
-                      const isSauceSingleSelect = group.id === 'salsas-amorguesa';
-                      const perAddonLimit = getPerAddonLimit(item.id, group.id, addon.id);
-                      
+                  <div
+                    className={`mt-3 grid gap-3 w-full max-w-full grid-cols-1 ${group.id === "salsas-amorguesa" || isMaicitoSizeGroup(group.id) ? "sm:grid-cols-2 min-[420px]:grid-cols-3" : "sm:grid-cols-2"}`}
+                    style={{ overflowX: "hidden" }}
+                  >
+                    {group.addons.map((addon) => {
+                      const quantity = getAddonQuantity(
+                        selectedAddons,
+                        addon.id,
+                      );
+                      const groupAddons = group.addons.map((a) => a.id);
+                      const { minSelections, maxSelections } =
+                        getEffectiveGroupLimits(
+                          item.id,
+                          group,
+                          selectedSize?.id,
+                        );
+                      const currentGroupCount = countSelectedInGroup(
+                        selectedAddons,
+                        groupAddons,
+                      );
+                      const isFinalPriceOption = addon.pricingMode === "final";
+                      const isSauceSingleSelect =
+                        group.id === "salsas-amorguesa";
+                      const perAddonLimit = getPerAddonLimit(
+                        item.id,
+                        group.id,
+                        addon.id,
+                      );
+
                       // Validar límites específicos por addon para amorguesa-armable
-                      let canIncrement = isFinalPriceOption ? true : currentGroupCount < maxSelections;
-                      if (!isFinalPriceOption && isAmorguesaWithLimits(item.id)) {
-                        if (group.id === 'adicionales-amorguesa') {
-                          const addonLimit = AMORGUESA_ARMABLE_ADDON_LIMITS[addon.id];
+                      let canIncrement = isFinalPriceOption
+                        ? true
+                        : currentGroupCount < maxSelections;
+                      if (
+                        !isFinalPriceOption &&
+                        isAmorguesaWithLimits(item.id)
+                      ) {
+                        if (group.id === "adicionales-amorguesa") {
+                          const addonLimit =
+                            AMORGUESA_ARMABLE_ADDON_LIMITS[addon.id];
                           if (addonLimit && quantity >= addonLimit) {
                             canIncrement = false;
                           }
-                        } else if (group.id === 'quesos-amorguesa') {
-                          const quesoLimit = AMORGUESA_ARMABLE_QUESO_LIMITS[addon.id];
+                        } else if (group.id === "quesos-amorguesa") {
+                          const quesoLimit =
+                            AMORGUESA_ARMABLE_QUESO_LIMITS[addon.id];
                           if (quesoLimit && quantity >= quesoLimit) {
                             canIncrement = false;
                           }
                         }
                       }
-                      
-                      const canDecrement = isFinalPriceOption ? quantity === 0 && minSelections === 0 : quantity > 0 && currentGroupCount > minSelections;
+
+                      const canDecrement = isFinalPriceOption
+                        ? quantity === 0 && minSelections === 0
+                        : quantity > 0 && currentGroupCount > minSelections;
                       const isSelected = quantity > 0;
 
                       if (isSauceSingleSelect) {
@@ -428,11 +589,13 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                             onClick={() => selectSingleAddon(addon, group)}
                             className={`rounded-xl border px-2 py-2 text-center transition-colors ${
                               isSelected
-                                ? 'border-yellow-300/70 bg-yellow-400/12'
-                                : 'border-white/10 bg-[#121217] hover:border-yellow-300/50 hover:bg-[#18181d]'
+                                ? "border-yellow-300/70 bg-yellow-400/12"
+                                : "border-white/10 bg-[#121217] hover:border-yellow-300/50 hover:bg-[#18181d]"
                             }`}
                           >
-                            <p className="text-[11px] font-semibold leading-tight text-white">{addon.emoji} {addon.name}</p>
+                            <p className="text-[11px] font-semibold leading-tight text-white">
+                              {addon.emoji} {addon.name}
+                            </p>
                           </button>
                         );
                       }
@@ -444,17 +607,25 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                             onClick={() => selectFinalAddon(addon, group)}
                             className={`border text-left transition-colors ${
                               isMaicitoSizeGroup(group.id)
-                                ? 'rounded-xl px-2 py-2'
-                                : 'rounded-2xl px-4 py-4'
+                                ? "rounded-xl px-2 py-2"
+                                : "rounded-2xl px-4 py-4"
                             } ${
                               isSelected
-                                ? 'border-yellow-300 bg-yellow-400/10'
-                                : 'border-white/10 bg-[#121217] hover:border-yellow-300/50 hover:bg-[#18181d]'
+                                ? "border-yellow-300 bg-yellow-400/10"
+                                : "border-white/10 bg-[#121217] hover:border-yellow-300/50 hover:bg-[#18181d]"
                             }`}
                           >
                             <div className="flex items-center justify-between gap-3">
-                              <p className={`${isMaicitoSizeGroup(group.id) ? 'text-[11px]' : 'text-sm'} font-semibold leading-snug text-white`}>{addon.emoji} {addon.name}</p>
-                              <span className={`${isMaicitoSizeGroup(group.id) ? 'text-[11px]' : 'text-sm'} shrink-0 font-black text-yellow-300`}>{formatPrice(addon.price)}</span>
+                              <p
+                                className={`${isMaicitoSizeGroup(group.id) ? "text-[11px]" : "text-sm"} font-semibold leading-snug text-white`}
+                              >
+                                {addon.emoji} {addon.name}
+                              </p>
+                              <span
+                                className={`${isMaicitoSizeGroup(group.id) ? "text-[11px]" : "text-sm"} shrink-0 font-black text-yellow-300`}
+                              >
+                                {formatPrice(addon.price)}
+                              </span>
                             </div>
                           </button>
                         );
@@ -463,42 +634,65 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                       // Desactivar todos los botones + si el total de adicionales+quesos alcanza el tope (amorguesa)
                       let totalAdicionalesQuesos = 0;
                       if (isAmorguesaWithLimits(item.id)) {
-                        totalAdicionalesQuesos = selectedAddons.filter(a => a.id.startsWith('amor-') && !a.id.startsWith('amor-salsa')).length;
+                        totalAdicionalesQuesos = selectedAddons.filter(
+                          (a) =>
+                            a.id.startsWith("amor-") &&
+                            !a.id.startsWith("amor-salsa"),
+                        ).length;
                       }
                       let forceDisablePlus = false;
-                      if (isAmorguesaWithLimits(item.id) && totalAdicionalesQuesos >= AMORGUESA_COMBINED_MAX) {
+                      if (
+                        isAmorguesaWithLimits(item.id) &&
+                        totalAdicionalesQuesos >= AMORGUESA_COMBINED_MAX
+                      ) {
                         forceDisablePlus = true;
                       }
                       return (
                         <div
                           key={addon.id}
                           className={`rounded-2xl border transition-colors w-full max-w-full overflow-x-hidden break-words ${
-                            group.id === 'salsas-amorguesa'
-                              ? `px-3 py-3 ${isSelected ? 'border-yellow-300/70 bg-yellow-400/10' : 'border-white/10 bg-[#121217]'}`
-                              : `px-4 py-4 ${isSelected ? 'border-yellow-300/70 bg-yellow-400/10' : 'border-white/10 bg-[#121217]'}`
+                            group.id === "salsas-amorguesa"
+                              ? `px-3 py-3 ${isSelected ? "border-yellow-300/70 bg-yellow-400/10" : "border-white/10 bg-[#121217]"}`
+                              : `px-4 py-4 ${isSelected ? "border-yellow-300/70 bg-yellow-400/10" : "border-white/10 bg-[#121217]"}`
                           }`}
                         >
-                          {group.id !== 'salsas-amorguesa' && (
+                          {group.id !== "salsas-amorguesa" && (
                             <>
                               <div className="flex items-start justify-between gap-3 w-full max-w-full">
                                 <div className="min-w-0 w-0 flex-1">
-                                  <p className="text-sm font-semibold leading-snug text-white break-words">{addon.emoji} {addon.name}</p>
-                                  {perAddonLimit && <p className="mt-1 text-xs text-white/55">Máx. {perAddonLimit}</p>}
-                                  {addon.price > 0 && <p className="mt-1 text-xs text-white/55">+ {formatPrice(addon.price)} c/u</p>}
+                                  <p className="text-sm font-semibold leading-snug text-white break-words">
+                                    {addon.emoji} {addon.name}
+                                  </p>
+                                  {perAddonLimit && (
+                                    <p className="mt-1 text-xs text-white/55">
+                                      Máx. {perAddonLimit}
+                                    </p>
+                                  )}
+                                  {addon.price > 0 && (
+                                    <p className="mt-1 text-xs text-white/55">
+                                      + {formatPrice(addon.price)} c/u
+                                    </p>
+                                  )}
                                 </div>
                                 <div className="flex items-center gap-2 w-auto">
                                   <button
                                     type="button"
-                                    onClick={() => changeAddonQuantity(addon, group, -1)}
+                                    onClick={() =>
+                                      changeAddonQuantity(addon, group, -1)
+                                    }
                                     disabled={!canDecrement}
                                     className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-[#0b0b0e] text-lg font-black text-white transition-colors disabled:cursor-not-allowed disabled:opacity-35"
                                   >
                                     −
                                   </button>
-                                  <span className="w-7 text-center text-sm font-black text-yellow-300">{quantity}</span>
+                                  <span className="w-7 text-center text-sm font-black text-yellow-300">
+                                    {quantity}
+                                  </span>
                                   <button
                                     type="button"
-                                    onClick={() => changeAddonQuantity(addon, group, 1)}
+                                    onClick={() =>
+                                      changeAddonQuantity(addon, group, 1)
+                                    }
                                     disabled={!canIncrement || forceDisablePlus}
                                     className="flex h-9 w-9 items-center justify-center rounded-full bg-yellow-400 text-lg font-black text-black transition-colors hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-35"
                                   >
@@ -515,7 +709,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                 </div>
               ))}
 
-              {item.id === 'salchiper' && salchiperCountableAdds >= 6 && (
+              {item.id === "salchiper" && salchiperCountableAdds >= 6 && (
                 <div className="mt-5 rounded-2xl border border-yellow-400/25 bg-yellow-400/10 px-4 py-3 text-sm text-yellow-200">
                   ✅ Desde 6 adicionales te lo enviamos en envase más grande.
                 </div>
@@ -523,16 +717,22 @@ export default function ProductDetailPage({ item, onBack }: Props) {
             </div>
 
             <div className="border-t border-yellow-400/20 bg-[#101014] px-5 py-4 sm:px-7">
-              {validationError && <p className="mb-2 text-center text-xs font-semibold text-red-600">{validationError}</p>}
+              {validationError && (
+                <p className="mb-2 text-center text-xs font-semibold text-red-600">
+                  {validationError}
+                </p>
+              )}
               <button
                 onClick={handleAdd}
                 className={`w-full rounded-2xl py-4 text-lg font-black transition-all ${
                   added
-                    ? 'scale-95 bg-white text-black'
-                    : 'bg-[#FFD60A] text-black hover:bg-[#FFE45C] active:scale-95'
+                    ? "scale-95 bg-white text-black"
+                    : "bg-[#FFD60A] text-black hover:bg-[#FFE45C] active:scale-95"
                 }`}
               >
-                {added ? '✓ Agregado al pedido' : `Agregar al pedido · ${formatPrice(totalPrice)}`}
+                {added
+                  ? "✓ Agregado al pedido"
+                  : `Agregar al pedido · ${formatPrice(totalPrice)}`}
               </button>
             </div>
           </section>

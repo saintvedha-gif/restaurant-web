@@ -46,8 +46,8 @@ export default function MenuCard({ item, onSelect }: Props) {
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
               decoding="async"
-              sizes="88px"
-              width={88}
+              sizes="70px"
+              width={70}
               height={88}
             />
           </div>

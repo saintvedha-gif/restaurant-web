@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useReducer, type ReactNode } from 'react';
 import type { CartAddon, CartItem, CartState, MenuItem, Addon } from '../types/menu';
+import { addonGroups } from '../data/menuData';
+import { getEffectiveGroupMax, getPerAddonLimit } from '../data/addonRules';
 
 const CART_STORAGE_KEY = 'mucha-mazorca-cart-v1';
 const EMPTY_CART_STATE: CartState = { items: [], total: 0 };
@@ -40,6 +42,41 @@ function calcItemTotal(item: MenuItem, addons: CartAddon[], qty: number): number
 
 function isFinalPriceAddon(addons: CartAddon[], addonId: string): boolean {
   return addons.some(entry => entry.addon.id === addonId && entry.addon.pricingMode === 'final');
+}
+
+function getSelectedSizeId(addons: CartAddon[]): string | undefined {
+  return addons.find(entry => entry.addon.pricingMode === 'final')?.addon.id;
+}
+
+/**
+ * Misma validación que ya usa ProductDetailPage.tsx (máximo por grupo, límites
+ * por adicional en amorguesa-armable, límites de tamaño en maicitos). Se replica
+ * acá para que el reducer no confíe ciegamente en que la UI ya filtró todo —
+ * así el carrito nunca puede quedar con cantidades imposibles.
+ */
+function canIncrementAddon(item: MenuItem, addons: CartAddon[], addonId: string): boolean {
+  const group = addonGroups.find(g => g.addons.some(a => a.id === addonId));
+  if (!group) return true; // grupo desconocido: no bloqueamos por datos que no reconocemos
+
+  const addonDef = group.addons.find(a => a.id === addonId);
+  if (!addonDef || addonDef.pricingMode === 'final') return false;
+
+  const selectedSizeId = getSelectedSizeId(addons);
+  const maxSelections = getEffectiveGroupMax(item.id, group.id, group.maxSelections, selectedSizeId);
+  const groupAddonIds = new Set(group.addons.map(a => a.id));
+  const currentGroupCount = addons
+    .filter(entry => groupAddonIds.has(entry.addon.id))
+    .reduce((sum, entry) => sum + entry.quantity, 0);
+
+  if (currentGroupCount >= maxSelections) return false;
+
+  const perAddonLimit = getPerAddonLimit(item.id, group.id, addonId);
+  if (perAddonLimit) {
+    const currentQty = addons.find(entry => entry.addon.id === addonId)?.quantity ?? 0;
+    if (currentQty >= perAddonLimit) return false;
+  }
+
+  return true;
 }
 
 function recalcItem(cartItem: CartItem): CartItem {
@@ -156,6 +193,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       const items = state.items.map(i => {
         if (i.id !== action.payload.cartItemId) return i;
         if (isFinalPriceAddon(i.selectedAddons, action.payload.addonId)) return i;
+        if (!canIncrementAddon(i.menuItem, i.selectedAddons, action.payload.addonId)) return i;
         const updatedAddons = i.selectedAddons.map(entry =>
           entry.addon.id === action.payload.addonId
             ? { ...entry, quantity: entry.quantity + 1 }
