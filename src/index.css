@@ -56,7 +56,7 @@ img.emoji {
   }
 
   ::selection {
-    background: #FFD60A;
+    background: rgb(var(--accent-400));
     color: #111111;
   }
 }
@@ -105,7 +105,7 @@ img.emoji {
   }
 
   .brand-pixel-line {
-    font-family: 'Press Start 2P', monospace;
+    font-family: var(--font-title);
     font-size: clamp(2.1rem, 6.7vw, 4.6rem);
     letter-spacing: 0.06em;
     line-height: 1;
@@ -118,11 +118,11 @@ img.emoji {
   }
 
   .brand-pixel-line--bottom {
-    color: #FFD60A;
+    color: rgb(var(--accent-400));
   }
 
   .title-pixel {
-    font-family: 'Press Start 2P', monospace;
+    font-family: var(--font-title);
     letter-spacing: 0.04em;
     line-height: 1.35;
   }
@@ -180,7 +180,7 @@ img.emoji {
   }
 
   .theme-logo-accent {
-    color: #FFD60A;
+    color: rgb(var(--accent-400));
     margin-left: 0.1em;
   }
 }
@@ -425,4 +425,11 @@ html[data-theme='dark'] .brand-pixel-line--bottom {
   80% {
     transform: translateY(0) rotate(4deg);
   }
+}
+
+:root {
+  --accent-400: 255 214 10;
+  --accent-300: 255 224 51;
+  --font-title: 'Press Start 2P', monospace;
+  --font-body: 'Sora';
 }

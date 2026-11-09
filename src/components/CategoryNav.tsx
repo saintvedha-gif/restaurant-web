@@ -80,8 +80,8 @@ export default function CategoryNav({ categories, activeId, onSelect }: Props) {
               onClick={() => handleClick(cat.id)}
               className={`flex shrink-0 min-w-0 max-w-[90vw] snap-start items-center gap-1 whitespace-nowrap rounded-full px-2 py-1.5 text-[11px] font-bold transition-all sm:gap-1.5 sm:px-4 sm:py-2.5 sm:text-sm ${
                 activeId === cat.id
-                  ? 'bg-[#FFD60A] text-black shadow-md shadow-[#FFD60A]/30 font-extrabold'
-                  : 'bg-[#17171d] text-white/75 hover:bg-[#202028] hover:text-[#FFD60A]'
+                  ? 'bg-yellow-400 text-black shadow-md shadow-yellow-400/30 font-extrabold'
+                  : 'bg-[#17171d] text-white/75 hover:bg-[#202028] hover:text-yellow-400'
               }`}
             >
               <span>{cat.emoji}</span>

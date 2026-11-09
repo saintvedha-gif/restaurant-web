@@ -22,7 +22,7 @@ export default function MenuCard({ item, onSelect }: Props) {
               {item.name}
             </h3>
             {item.tags?.includes('popular') && (
-              <span className="rounded-full border border-yellow-400/30 bg-[#FFD60A] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em] text-black shadow-[0_2px_8px_rgba(0,0,0,0.3)] sm:text-xs sm:tracking-[0.12em]">
+              <span className="rounded-full border border-yellow-400/30 bg-yellow-400 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em] text-black shadow-[0_2px_8px_rgba(0,0,0,0.3)] sm:text-xs sm:tracking-[0.12em]">
                 Popular
               </span>
             )}

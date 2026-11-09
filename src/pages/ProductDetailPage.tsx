@@ -727,7 +727,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                 className={`w-full rounded-2xl py-4 text-lg font-black transition-all ${
                   added
                     ? "scale-95 bg-white text-black"
-                    : "bg-[#FFD60A] text-black hover:bg-[#FFE45C] active:scale-95"
+                    : "bg-yellow-400 text-black hover:bg-yellow-300 active:scale-95"
                 }`}
               >
                 {added

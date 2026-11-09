@@ -1,69 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
-import { WHATSAPP_NUMBER } from '../data/menuData';
+import { DAY_ORDER as WEEK_ORDER, OPENING_HOURS, getCurrentColombiaTime, isOpenNow } from '../data/openingHours';
+import { getContactInfo } from '../data/siteSettings';
 
-const LOCATION_LABEL = 'Cucuta, Colombia';
 const INSTAGRAM_HANDLE = '@muchamazork';
-const MAPS_QUERY = 'Mucha Mazorca, Cucuta, Norte de Santander';
-const MAPS_EMBED = `https://www.google.com/maps?q=${MAPS_QUERY}&output=embed`;
-const MAPS_LINK = 'https://www.google.com/maps/place/Mucha+Mazorca/@7.8762,-72.4871,17z/data=!3m1!4b1!4m6!3m5!1s0x8e66458e17dc72f3:0xed6cddde4f839119!8m2!3d7.8762!4d-72.4871!16s%2Fg%2F11tmj5t69m?entry=ttu&g_ep=EgoyMDI2MDMzMS4wIKXMDSoASAFQAw%3D%3D';
 
-type DayKey = 'domingo' | 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes' | 'sabado';
-
-const SERVICE_TYPES = [
-  { id: 'domicilio', name: 'A domicilio', note: 'Entrega gratuita.' },
+const SERVICE_TYPES: { id: string; name: string; note?: string }[] = [
+  { id: 'domicilio', name: 'A domicilio' },
   { id: 'llevar', name: 'Para llevar' },
   { id: 'local', name: 'En el local' },
 ];
 
-const DAY_ORDER: DayKey[] = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
-
-const OPENING_HOURS: Record<DayKey, { open: number; close: number; label: string }> = {
-  lunes: { open: 17 * 60, close: 22 * 60, label: '5:00 PM - 10:00 PM' },
-  martes: { open: 17 * 60, close: 22 * 60, label: '5:00 PM - 10:00 PM' },
-  miercoles: { open: 17 * 60, close: 22 * 60, label: '5:00 PM - 10:00 PM' },
-  jueves: { open: 17 * 60, close: 22 * 60, label: '5:00 PM - 10:00 PM' },
-  viernes: { open: 18 * 60, close: 23 * 60, label: '6:00 PM - 11:00 PM' },
-  sabado: { open: 18 * 60, close: 23 * 60, label: '6:00 PM - 11:00 PM' },
-  domingo: { open: 18 * 60, close: 23 * 60, label: '6:00 PM - 11:00 PM' },
-};
-
-function normalizeDay(value: string): DayKey {
-  const normalized = value
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
-
-  if (normalized === 'miercoles') return 'miercoles';
-  if (normalized === 'sabado') return 'sabado';
-  if (normalized === 'domingo') return 'domingo';
-  if (normalized === 'lunes') return 'lunes';
-  if (normalized === 'martes') return 'martes';
-  if (normalized === 'jueves') return 'jueves';
-  return 'viernes';
-}
-
-function getCurrentColombiaTime() {
-  const formatter = new Intl.DateTimeFormat('es-CO', {
-    timeZone: 'America/Bogota',
-    weekday: 'long',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  });
-
-  const parts = formatter.formatToParts(new Date());
-  const weekday = parts.find(part => part.type === 'weekday')?.value ?? 'lunes';
-  const hour = Number(parts.find(part => part.type === 'hour')?.value ?? '0');
-  const minute = Number(parts.find(part => part.type === 'minute')?.value ?? '0');
-
-  return {
-    day: normalizeDay(weekday),
-    minutes: hour * 60 + minute,
-    timeLabel: `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`,
-  };
-}
+const DAY_ORDER = [...WEEK_ORDER];
 
 export default function ContactPage() {
+  const contact = getContactInfo();
   const [clockTick, setClockTick] = useState(0);
 
   useEffect(() => {
@@ -77,14 +27,14 @@ export default function ContactPage() {
   const currentStatus = useMemo(() => {
     const now = getCurrentColombiaTime();
     const today = OPENING_HOURS[now.day];
-    const isOpen = now.minutes >= today.open && now.minutes < today.close;
+    const isOpen = isOpenNow(now.day, now.minutes);
 
     return {
       isOpen,
       day: now.day,
       timeLabel: now.timeLabel,
       statusLabel: isOpen ? 'Abierto ahora' : 'Cerrado ahora',
-      helperLabel: isOpen ? `Hasta las ${today.label.split(' - ')[1]}` : `Hoy abre de ${today.label}`,
+      helperLabel: isOpen ? `Hasta las ${today.label.split(' - ')[1]}` : today.closed ? 'Hoy no abrimos' : `Hoy abre de ${today.label}`,
     };
   }, [clockTick]);
 
@@ -95,9 +45,9 @@ export default function ContactPage() {
           <div className="space-y-4">
             <article className="rounded-[22px] border border-yellow-400/15 bg-[#141419] p-5">
               <h2 className="text-xl text-white"><span className="title-pixel">Ubicacion</span></h2>
-              <p className="mt-2 text-white/70">{LOCATION_LABEL}</p>
+              <p className="mt-2 text-white/70">{contact.address}, {contact.city}</p>
               <a
-                href={MAPS_LINK}
+                href={contact.mapsLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary-sm mt-4"
@@ -108,9 +58,9 @@ export default function ContactPage() {
 
             <article className="rounded-[22px] border border-yellow-400/15 bg-[#141419] p-5">
               <h2 className="text-xl text-white"><span className="title-pixel">WhatsApp</span></h2>
-              <p className="mt-2 text-white/70">+57 350 338 4530</p>
+              <p className="mt-2 text-white/70">{contact.whatsappDisplay}</p>
               <a
-                href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                href={`https://wa.me/${contact.whatsappNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary-sm mt-4"
@@ -173,7 +123,7 @@ export default function ContactPage() {
                     <div
                       key={day}
                       className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${
-                        isToday ? 'bg-[#FFD60A]/12 text-[#FFD60A] font-bold' : 'text-white/65'
+                        isToday ? 'bg-yellow-400/12 text-yellow-400 font-bold' : 'text-white/65'
                       }`}
                     >
                       <span className="capitalize">{day}</span>
@@ -189,7 +139,7 @@ export default function ContactPage() {
             <div className="mt-4 overflow-hidden rounded-[18px] border border-yellow-400/15">
               <iframe
                 title="Mapa Mucha Mazorca"
-                src={MAPS_EMBED}
+                src={contact.mapsEmbed}
                 loading="lazy"
                 className="h-[420px] w-full"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -197,7 +147,7 @@ export default function ContactPage() {
             </div>
 
             <a
-              href={MAPS_LINK}
+              href={contact.mapsLink}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-secondary-sm mt-4"

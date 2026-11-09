@@ -4,6 +4,7 @@ import { categories, getImageUrl, menuItems } from '../data/menuData';
 import type { MenuItem } from '../types/menu';
 import CategoryNav from '../components/CategoryNav';
 import MenuCard from '../components/MenuCard';
+import { getText } from '../data/siteSettings';
 import ProductDetailPage from './ProductDetailPage';
 import { useTwemoji } from '../hooks/useTwemoji';
 
@@ -101,8 +102,8 @@ export default function MenuPage() {
       <main className="section-shell min-w-0 w-full overflow-x-clip py-6 lg:py-10">
         <div className="mb-5 flex flex-col gap-3 sm:mb-4 sm:flex-row sm:items-center sm:justify-between w-full max-w-full overflow-x-clip">
           <div className="min-w-0 w-full max-w-full">
-            <h1 className="title-pixel text-[1.65rem] font-black leading-[1.1] tracking-tight text-white sm:text-3xl break-words truncate">Nuestro menú</h1>
-            <p className="mt-1 max-w-[24rem] text-sm text-white/65 break-words truncate">Escoge tu favorito y pídelo por WhatsApp</p>
+            <h1 className="title-pixel text-[1.65rem] font-black leading-[1.1] tracking-tight text-white sm:text-3xl break-words truncate">{getText('menuTitle')}</h1>
+            <p className="mt-1 max-w-[24rem] text-sm text-white/65 break-words truncate">{getText('menuSubtitle')}</p>
           </div>
           <button
             type="button"

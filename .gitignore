@@ -8,5 +8,10 @@ build/
 npm-debug.log*
 yarn-error.log*
 .idea/
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .eslintcache
+dist/
+tsconfig.tsbuildinfo
+*.tsbuildinfo

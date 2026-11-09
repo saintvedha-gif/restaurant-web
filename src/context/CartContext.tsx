@@ -8,6 +8,7 @@ const EMPTY_CART_STATE: CartState = { items: [], total: 0 };
 
 type CartAction =
   | { type: 'ADD_ITEM'; payload: { menuItem: MenuItem; selectedAddons: Addon[] } }
+  | { type: 'ADD_LINE'; payload: { menuItem: MenuItem; selectedAddons: Addon[]; quantity: number } }
   | { type: 'REMOVE_ITEM'; payload: { cartItemId: string } }
   | { type: 'INCREMENT'; payload: { cartItemId: string } }
   | { type: 'DECREMENT'; payload: { cartItemId: string } }
@@ -167,6 +168,19 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       const items = [...state.items, newItem];
       return { items, total: items.reduce((s, i) => s + i.totalPrice, 0) };
     }
+    case 'ADD_LINE': {
+      const { menuItem, selectedAddons, quantity } = action.payload;
+      const mappedAddons = mapAddonsForCart(selectedAddons);
+      const newItem: CartItem = {
+        id: createCartItemId(menuItem.id),
+        menuItem,
+        quantity,
+        selectedAddons: mappedAddons,
+        totalPrice: calcItemTotal(menuItem, mappedAddons, quantity),
+      };
+      const items = [...state.items, newItem];
+      return { items, total: items.reduce((sum, i) => sum + i.totalPrice, 0) };
+    }
     case 'REMOVE_ITEM': {
       const items = state.items.filter(i => i.id !== action.payload.cartItemId);
       return { items, total: items.reduce((s, i) => s + i.totalPrice, 0) };
@@ -237,6 +251,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 interface CartContextType {
   state: CartState;
   addItem: (menuItem: MenuItem, selectedAddons: Addon[]) => void;
+  addLine: (menuItem: MenuItem, selectedAddons: Addon[], quantity: number) => void;
   removeItem: (cartItemId: string) => void;
   increment: (cartItemId: string) => void;
   decrement: (cartItemId: string) => void;
@@ -261,6 +276,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = (menuItem: MenuItem, selectedAddons: Addon[]) =>
     dispatch({ type: 'ADD_ITEM', payload: { menuItem, selectedAddons: [...selectedAddons] } });
+  const addLine = (menuItem: MenuItem, selectedAddons: Addon[], quantity: number) =>
+    dispatch({ type: 'ADD_LINE', payload: { menuItem, selectedAddons: [...selectedAddons], quantity } });
   const removeItem = (cartItemId: string) =>
     dispatch({ type: 'REMOVE_ITEM', payload: { cartItemId } });
   const increment = (cartItemId: string) =>
@@ -279,6 +296,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     <CartContext.Provider value={{
       state,
       addItem,
+      addLine,
       removeItem,
       increment,
       decrement,

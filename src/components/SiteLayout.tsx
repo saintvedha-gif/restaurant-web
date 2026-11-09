@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useTwemoji } from '../hooks/useTwemoji';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { WHATSAPP_NUMBER } from '../data/menuData';
-import { getCurrentColombiaTime, isOpenNow } from '../data/openingHours';
+import { getContactInfo, getText } from '../data/siteSettings';
+import InstallButton from './InstallButton';
+import PushButton from './PushButton';
+import { getCurrentColombiaTime, groupedHours, isOpenNow } from '../data/openingHours';
 
 const socialLinks = [
   { name: 'Instagram', href: 'https://www.instagram.com/muchamazork', handle: '@muchamazork' },
@@ -10,6 +12,7 @@ const socialLinks = [
 ];
 
 export default function SiteLayout() {
+  const contact = getContactInfo();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [clockTick, setClockTick] = useState(0);
   const [showFloatingActions, setShowFloatingActions] = useState(false);
@@ -99,11 +102,11 @@ export default function SiteLayout() {
             </span>
 
             {/* Ubicación — solo en desktop */}
-            <p className="hidden font-semibold sm:block">📍 Cúcuta, Norte de Santander</p>
+            <p className="hidden font-semibold sm:block">📍 {contact.city}</p>
           </div>
 
           {/* Fila 2: ubicación en móvil */}
-          <p className="mt-1 text-center font-semibold sm:hidden">📍 Cúcuta, Norte de Santander</p>
+          <p className="mt-1 text-center font-semibold sm:hidden">📍 {contact.city}</p>
         </div>
       </div>
 
@@ -133,6 +136,9 @@ export default function SiteLayout() {
             <NavItem to="/">Inicio</NavItem>
             <NavItem to="/menu">Menú</NavItem>
             <NavItem to="/galeria">Galería</NavItem>
+            <NavItem to="/mis-pedidos">Mis pedidos</NavItem>
+            <InstallButton />
+            <PushButton />
             <NavItem to="/contacto" asCta>
               <span className="title-pixel">Pide ahora</span>
             </NavItem>
@@ -145,6 +151,9 @@ export default function SiteLayout() {
               <MobileNavItem to="/">Inicio</MobileNavItem>
               <MobileNavItem to="/menu">Menú</MobileNavItem>
               <MobileNavItem to="/galeria">Galería</MobileNavItem>
+              <MobileNavItem to="/mis-pedidos">Mis pedidos</MobileNavItem>
+              <InstallButton className="w-full py-3" />
+              <PushButton />
               <MobileNavItem to="/contacto" asCta><span className="title-pixel">Pide ahora</span></MobileNavItem>
             </div>
           </div>
@@ -158,7 +167,7 @@ export default function SiteLayout() {
       {showFloatingActions && (
       <div className="fixed bottom-5 right-4 z-50 flex flex-col items-center gap-3 sm:bottom-6 sm:right-5">
         <a
-          href={`https://wa.me/${WHATSAPP_NUMBER}`}
+          href={`https://wa.me/${contact.whatsappNumber}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#00C853] text-white shadow-[0_12px_24px_rgba(0,200,83,0.35)] transition-colors duration-200 sm:h-auto sm:w-auto sm:gap-2 sm:px-5 sm:py-3 sm:text-sm sm:font-bold"
@@ -178,20 +187,21 @@ export default function SiteLayout() {
               <span className="title-pixel text-[0.82rem] font-black text-yellow-400 sm:text-[1rem]">MAZORCA</span>
             </p>
             <p className="mt-4 text-sm leading-7 text-white/70">
-              ¡Tu antojo, tu combinacion, tu Mucha Mazorca!💛🌽
+              {getText('footerSlogan')}
             </p>
           </div>
 
           <div>
             <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-yellow-300">Horario</p>
-            <p className="mt-3 text-sm text-white/70">Lun - Jue: 5:00 PM - 10:00 PM</p>
-            <p className="mt-2 text-sm text-white/70">Vie - Dom: 6:00 PM - 11:00 PM</p>
+            {groupedHours().map(g => (
+              <p key={g.days} className="mt-2 text-sm text-white/70">{g.days}: {g.label}</p>
+            ))}
           </div>
 
           <div>
             <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-yellow-300">Contacto</p>
-            <p className="mt-3 text-sm leading-7 text-white/70">Cl. 41 #58, Barrio Bogota </p>
-            <p className="text-sm text-white/70">Cúcuta, Norte de Santander</p>
+            <p className="mt-3 text-sm leading-7 text-white/70">{contact.address}</p>
+            <p className="text-sm text-white/70">{contact.city}</p>
             <div className="mt-3 space-y-2">
               {socialLinks.map(social => (
                 <a
@@ -199,7 +209,7 @@ export default function SiteLayout() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-sm font-semibold text-white/70 transition-colors hover:text-[#FFD60A]"
+                  className="block text-sm font-semibold text-white/70 transition-colors hover:text-yellow-400"
                 >
                   {social.name} · {social.handle}
                 </a>
@@ -208,7 +218,7 @@ export default function SiteLayout() {
           </div>
         </div>
         <p className="section-shell mt-12 border-t border-yellow-400/10 pt-6 text-xs text-white/45">
-          © 2026 Mucha Mazorca - Diseño Profesional Full Stack
+          © 2026 Mucha Mazorca - Todos los derechos reservados.
         </p>
       </footer>
     </div>

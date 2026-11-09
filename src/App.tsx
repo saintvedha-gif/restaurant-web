@@ -9,6 +9,8 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const MenuPage = lazy(() => import('./pages/MenuPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 const GalleryPage = lazy(() => import('./pages/GalleryPage'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
+const MyOrdersPage = lazy(() => import('./pages/MyOrdersPage'));
 
 function ConditionalCartDrawer() {
   const location = useLocation();
@@ -23,11 +25,13 @@ export default function App() {
       <BrowserRouter basename={basename}>
         <Suspense fallback={<div className="section-shell py-16 text-center text-white/70">Cargando...</div>}>
           <Routes>
+            <Route path="/admin" element={<AdminPage />} />
             <Route element={<SiteLayout />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/menu" element={<MenuPage />} />
               <Route path="/contacto" element={<ContactPage />} />
               <Route path="/galeria" element={<GalleryPage />} />
+              <Route path="/mis-pedidos" element={<MyOrdersPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>

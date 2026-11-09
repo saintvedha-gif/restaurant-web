@@ -258,6 +258,11 @@ El proyecto es compatible con cualquier host estático:
 
 Solo requiere servir el contenido de la carpeta `dist/` generada por el build.
 
+### Pedidos centralizados
+Para habilitar el registro de pedidos y la pestaña **Pedidos** del panel, la API propia debe exponer los endpoints de pedidos y la sesión del administrador debe seguir activa en el mismo dominio.
+
+El cliente puede autorizar guardar los datos del pedido para que el restaurante lo gestione. Las coordenadas solo se guardan si el cliente comparte su ubicación y autoriza el guardado. Si la base de datos no está disponible, WhatsApp sigue abriéndose y el sitio indica que el pedido no quedó en el panel. El panel permite eliminar los pedidos cancelados o entregados.
+
 ### Hostinger con GitHub Actions
 Cada push a `main` genera el build y publica automáticamente `dist/` en Hostinger mediante FTP.
 
