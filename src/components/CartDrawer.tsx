@@ -6,7 +6,7 @@ import { buildWhatsAppText } from '../utils/whatsappMessage';
 import { promos } from '../data/promos';
 import { calculateBestDiscount } from '../utils/promoEngine';
 import type { OrderData } from '../types/order';
-import { formatOrderInfo, isOrderValid, loadOrder, saveOrder } from '../utils/orderInfo';
+import { clearSavedOrder, DEFAULT_ORDER, formatOrderInfo, isOrderValid, loadOrder, saveOrder } from '../utils/orderInfo';
 import { createOrder } from '../lib/orders';
 import { useCart } from '../context/CartContext';
 import { addonGroups, formatPrice } from '../data/menuData';
@@ -31,16 +31,36 @@ export default function CartDrawer() {
   const [open, setOpen] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [order, setOrder] = useState<OrderData>(loadOrder);
-  const [saveOrderToPanel, setSaveOrderToPanel] = useState(false);
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  const [marketingConsent, setMarketingConsent] = useState(false);
   const [savingOrder, setSavingOrder] = useState(false);
   const [orderNotice, setOrderNotice] = useState<{ type: 'success' | 'warning'; text: string } | null>(null);
   const orderValid = isOrderValid(order);
+  const legacyWhatsAppMode = !siteSettings.deliveryEnabled && !siteSettings.pickupEnabled;
   const discount = calculateBestDiscount(state.items, promos);
   const finalTotal = state.total - discount.amount;
 
   useEffect(() => {
+    if (legacyWhatsAppMode) {
+      clearSavedOrder();
+      setMarketingConsent(false);
+      setOrder(current => current.name || current.phone || current.address || current.reference || current.coords
+        ? { ...DEFAULT_ORDER }
+        : current);
+      return;
+    }
     saveOrder(order);
-  }, [order]);
+  }, [legacyWhatsAppMode, order]);
+  useEffect(() => {
+    if (legacyWhatsAppMode) return;
+    const availableType = siteSettings.deliveryEnabled ? 'domicilio' : 'recoger';
+    if (
+      (order.type === 'domicilio' && !siteSettings.deliveryEnabled) ||
+      (order.type === 'recoger' && !siteSettings.pickupEnabled)
+    ) {
+      setOrder(current => ({ ...current, type: availableType, coords: null }));
+    }
+  }, [legacyWhatsAppMode, order.type]);
   const count = state.items.reduce((s, i) => s + i.quantity, 0);
 
   // Prevenir scroll en el body cuando el modal está abierto
@@ -78,7 +98,9 @@ export default function CartDrawer() {
       ? allItems.map(formatCartItemLine).join('\n\n')
       : '';
 
-    const msg = buildWhatsAppText(siteSettings.whatsappTemplate, {
+    const msg = legacyWhatsAppMode
+      ? itemsBlock
+      : buildWhatsAppText(siteSettings.whatsappTemplate, {
       productos: itemsBlock,
       promo: discount.promo ? `🎁 Promo: ${discount.promo.title} (-${formatPrice(discount.amount)})` : '',
       total: formatPrice(finalTotal),
@@ -91,7 +113,7 @@ export default function CartDrawer() {
 
 
   function handleOrder() {
-    if (!orderValid) return;
+    if (legacyWhatsAppMode ? state.items.length === 0 : !orderValid) return;
     setShowConfirm(true);
   }
 
@@ -105,15 +127,12 @@ export default function CartDrawer() {
       '_blank',
       'noopener,noreferrer'
     );
-    saveToHistory(state.items, finalTotal, order.type, discount.promo?.title);
-
-    if (!saveOrderToPanel) {
-      setOrderNotice({
-        type: 'warning',
-        text: 'Abrimos WhatsApp. Como no autorizaste guardar los datos, el pedido no aparecerá en el panel.',
-      });
+    if (legacyWhatsAppMode) {
+      setOrderNotice({ type: 'success', text: 'WhatsApp abierto con los productos. En este modo no guardamos datos personales ni pedidos.' });
+      setMarketingConsent(false);
       return;
     }
+    saveToHistory(state.items, finalTotal, order.type, discount.promo?.title);
 
     setSavingOrder(true);
     setOrderNotice(null);
@@ -125,6 +144,7 @@ export default function CartDrawer() {
         discountAmount: discount.amount,
         total: finalTotal,
         promoTitle: discount.promo?.title,
+        marketingConsent,
       });
       setOrderNotice({ type: 'success', text: 'Pedido guardado en el panel y WhatsApp abierto.' });
     } catch (error) {
@@ -136,6 +156,7 @@ export default function CartDrawer() {
       });
     } finally {
       setSavingOrder(false);
+      setMarketingConsent(false);
     }
   }
 
@@ -258,8 +279,19 @@ export default function CartDrawer() {
 
                     {cartItem.selectedAddons.length > 0 && (
                       <div className="mt-3 space-y-2 border-t border-yellow-400/15 pt-3">
-                        <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-yellow-300">Adicionales</p>
-                        {cartItem.selectedAddons.map(entry => {
+                        <button
+                          type="button"
+                          aria-expanded={expandedItems[cartItem.id] ?? true}
+                          onClick={() => setExpandedItems(current => ({
+                            ...current,
+                            [cartItem.id]: !(current[cartItem.id] ?? true),
+                          }))}
+                          className="flex w-full items-center justify-between text-left text-[11px] font-extrabold uppercase tracking-[0.18em] text-yellow-300"
+                        >
+                          <span>Adicionales y tamaños ({cartItem.selectedAddons.length})</span>
+                          <span aria-hidden="true">{(expandedItems[cartItem.id] ?? true) ? '⌃' : '⌄'}</span>
+                        </button>
+                        {(expandedItems[cartItem.id] ?? true) && cartItem.selectedAddons.map(entry => {
                           const isFinalPriceOption = entry.addon.pricingMode === 'final';
                           const isAmorguesaSauce = entry.addon.id.startsWith('amor-salsa');
                           const isAmorguesa = isAmorguesaWithLimits(cartItem.menuItem.id);
@@ -270,7 +302,11 @@ export default function CartDrawer() {
                           const currentGroup = allowedGroups.find(group =>
                             group?.addons.some(addon => addon.id === entry.addon.id)
                           );
-                          const groupAddonIds = currentGroup ? currentGroup.addons.map(addon => addon.id) : [];
+                          const groupAddonIds = currentGroup
+                            ? currentGroup.addons
+                              .filter(addon => !addon.categoryId || addon.categoryId === cartItem.menuItem.categoryId)
+                              .map(addon => addon.id)
+                            : [];
                           const currentGroupCount = groupAddonIds.length > 0
                             ? cartItem.selectedAddons
                               .filter(addonEntry => groupAddonIds.includes(addonEntry.addon.id))
@@ -281,7 +317,8 @@ export default function CartDrawer() {
                               cartItem.menuItem.id,
                               currentGroup.id,
                               currentGroup.maxSelections,
-                              selectedSizeId
+                              selectedSizeId,
+                              cartItem.menuItem.addonGroupLimits?.[currentGroup.id]?.maxSelections
                             )
                             : 999;
 
@@ -294,20 +331,13 @@ export default function CartDrawer() {
                               .reduce((sum, a) => sum + a.quantity, 0);
                           }
 
+                          const perAddonLimit = entry.addon.maxAdds !== undefined
+                            ? entry.addon.maxAdds ?? undefined
+                            : getPerAddonLimit(cartItem.menuItem.id, currentGroup?.id ?? '', entry.addon.id);
                           let canIncrement = false;
                           if (!isFinalPriceOption) {
-                            // Para amorguesa-armable
                             if (isAmorguesa) {
-                              if (totalAdicionalesQuesos < AMORGUESA_COMBINED_MAX) {
-                                const perAddonLimit = getPerAddonLimit(cartItem.menuItem.id, currentGroup?.id ?? '', entry.addon.id);
-                                if (perAddonLimit) {
-                                  canIncrement = entry.quantity < perAddonLimit && totalAdicionalesQuesos < AMORGUESA_COMBINED_MAX;
-                                } else {
-                                  canIncrement = totalAdicionalesQuesos < AMORGUESA_COMBINED_MAX;
-                                }
-                              } else {
-                                canIncrement = false;
-                              }
+                              canIncrement = totalAdicionalesQuesos < AMORGUESA_COMBINED_MAX;
                             } else if (
                               currentGroup &&
                               (currentGroup.id === 'adicionales-salchi' || currentGroup.id === 'adicionales-maicito')
@@ -315,6 +345,9 @@ export default function CartDrawer() {
                               canIncrement = currentGroupCount < effectiveGroupMax;
                             } else {
                               canIncrement = currentGroupCount < effectiveGroupMax;
+                            }
+                            if (perAddonLimit !== undefined && entry.quantity >= perAddonLimit) {
+                              canIncrement = false;
                             }
                           }
 
@@ -346,6 +379,7 @@ export default function CartDrawer() {
                                 <div className="flex items-center gap-1 shrink-0">
                                   <button
                                     onClick={() => decrementAddon(cartItem.id, entry.addon.id)}
+                                    disabled={entry.quantity <= (entry.addon.minAdds ?? 1)}
                                     className="flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-[#0c0c10] text-xs font-bold text-white hover:bg-[#17171d]"
                                   >−</button>
                                   <span className="w-4 text-center text-xs font-black text-white">{entry.quantity}</span>
@@ -371,23 +405,26 @@ export default function CartDrawer() {
                     )}
                   </div>
                 ))}
-                {state.items.length > 0 && <OrderForm value={order} onChange={setOrder} />}
+                {state.items.length > 0 && legacyWhatsAppMode && (
+                  <p className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 p-3 text-xs leading-5 text-yellow-100/75">
+                    El restaurante recibe pedidos por WhatsApp. No pediremos ni guardaremos tus datos personales en este modo.
+                  </p>
+                )}
+                {state.items.length > 0 && !legacyWhatsAppMode && (
+                  <OrderForm
+                    value={order}
+                    onChange={setOrder}
+                    deliveryEnabled={siteSettings.deliveryEnabled}
+                    pickupEnabled={siteSettings.pickupEnabled}
+                    marketingConsent={marketingConsent}
+                    onMarketingConsentChange={setMarketingConsent}
+                  />
+                )}
               </div>
 
               {/* Footer */}
               {state.items.length > 0 && (
                 <div className="space-y-3 border-t border-yellow-400/20 px-5 py-4 shrink-0">
-                  <label className="flex items-start gap-2 text-xs leading-5 text-white/65">
-                    <input
-                      type="checkbox"
-                      className="mt-1 h-4 w-4 shrink-0 accent-yellow-400"
-                      checked={saveOrderToPanel}
-                      onChange={e => setSaveOrderToPanel(e.target.checked)}
-                    />
-                    <span>
-                      Autorizo guardar mis datos y este pedido para que el restaurante pueda gestionarlo. Si comparto mi ubicación, también se guardarán las coordenadas.
-                    </span>
-                  </label>
                   {orderNotice && (
                     <p
                       role="status"
@@ -410,17 +447,20 @@ export default function CartDrawer() {
                     <span className="font-semibold text-white/75">Total del pedido</span>
                     <span className="text-xl font-black text-white">{formatPrice(finalTotal)}</span>
                   </div>
+                  <p className="text-[11px] leading-4 text-white/55">
+                    Al hacer el pedido, tus datos se enviarán al restaurante para gestionarlo. Si compartes tu ubicación, también se guardarán las coordenadas.
+                  </p>
                   <button
                     onClick={handleOrder}
-                    disabled={!orderValid || savingOrder}
+                    disabled={(!legacyWhatsAppMode && !orderValid) || savingOrder}
                     className="disabled:cursor-not-allowed disabled:opacity-50 flex w-full items-center justify-center gap-2 rounded-[22px] bg-yellow-400 py-4 text-lg font-black text-black shadow-lg shadow-black/30 transition-all hover:bg-yellow-300 active:scale-95"
                   >
                     <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                     </svg>
-                    {savingOrder ? 'Guardando pedido...' : 'Pedir por WhatsApp'}
+                    {savingOrder ? 'Guardando pedido...' : legacyWhatsAppMode ? 'Continuar por WhatsApp' : 'Pedir por WhatsApp'}
                   </button>
-                  {!orderValid && (<p className="text-center text-xs text-white/55">Completa tu nombre, celular y dirección para pedir</p>)}
+                  {!legacyWhatsAppMode && !orderValid && (<p className="text-center text-xs text-white/55">Completa tu nombre, celular y dirección para pedir</p>)}
                 </div>
               )}
             </div>

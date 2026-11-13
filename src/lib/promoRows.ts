@@ -16,6 +16,8 @@ export interface PromoRow {
   category_ids: string[];
   start_date: string | null;
   end_date: string | null;
+  start_time: string | null;
+  end_time: string | null;
   days: number[];
   sort_order: number;
 }
@@ -37,6 +39,8 @@ export function rowToPromo(r: PromoRow): Promo {
     categoryIds: r.category_ids ?? [],
     startDate: r.start_date ?? undefined,
     endDate: r.end_date ?? undefined,
+    startTime: r.start_time ?? undefined,
+    endTime: r.end_time ?? undefined,
     days: r.days ?? [],
   };
 }

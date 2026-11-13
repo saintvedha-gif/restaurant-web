@@ -24,6 +24,30 @@ img.emoji {
 
 @layer base {
   * {
+    scrollbar-width: thin;
+    scrollbar-color: #34343b #0a0a0d;
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #0a0a0d;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    border: 2px solid #0a0a0d;
+    border-radius: 999px;
+    background: #34343b;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: #55555f;
+  }
+
+  * {
     -webkit-tap-highlight-color: transparent;
   }
 

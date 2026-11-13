@@ -47,6 +47,14 @@ export function saveOrder(order: OrderData): void {
   }
 }
 
+export function clearSavedOrder(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // The browser may block local storage.
+  }
+}
+
 export function isOrderValid(order: OrderData): boolean {
   const nameOk = order.name.trim().length >= 2;
   const phoneOk = order.phone.replace(/\D/g, '').length >= 7;

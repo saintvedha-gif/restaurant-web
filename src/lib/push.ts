@@ -1,4 +1,5 @@
 import { apiFetch } from './api';
+import { getReadyServiceWorker } from './pwa';
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY as string | undefined;
 
@@ -19,40 +20,41 @@ export function pushSupported(): boolean {
 }
 
 export async function isSubscribed(): Promise<boolean> {
-  const reg = await navigator.serviceWorker.ready;
+  const reg = await getReadyServiceWorker();
   return (await reg.pushManager.getSubscription()) !== null;
 }
 
-export async function subscribePush(): Promise<'ok' | 'denied' | 'error'> {
-  try {
-    const permission = await Notification.requestPermission();
-    if (permission !== 'granted') return 'denied';
+export async function subscribePush(): Promise<'ok' | 'denied'> {
+  const permission =
+    Notification.permission === 'granted'
+      ? 'granted'
+      : await Notification.requestPermission();
+  if (permission !== 'granted') return 'denied';
 
-    const reg = await navigator.serviceWorker.ready;
-    const sub =
-      (await reg.pushManager.getSubscription()) ??
-      (await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY!) as BufferSource,
-      }));
+  const reg = await getReadyServiceWorker();
+  const sub =
+    (await reg.pushManager.getSubscription()) ??
+    (await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY!) as BufferSource,
+    }));
 
-    const json = sub.toJSON();
-    const p256dh = json.keys?.p256dh;
-    const auth = json.keys?.auth;
-    if (!json.endpoint || !p256dh || !auth) return 'error';
-
-    await apiFetch('/api/push/subscribe', {
-      method: 'POST',
-      body: JSON.stringify({ endpoint: json.endpoint, keys: { p256dh, auth } }),
-    });
-    return 'ok';
-  } catch {
-    return 'error';
+  const json = sub.toJSON();
+  const p256dh = json.keys?.p256dh;
+  const auth = json.keys?.auth;
+  if (!json.endpoint || !p256dh || !auth) {
+    throw new Error('El navegador no entregó los datos de la suscripción.');
   }
+
+  await apiFetch('/api/push/subscribe', {
+    method: 'POST',
+    body: JSON.stringify({ endpoint: json.endpoint, keys: { p256dh, auth } }),
+  });
+  return 'ok';
 }
 
 export async function unsubscribePush(): Promise<void> {
-  const reg = await navigator.serviceWorker.ready;
+  const reg = await getReadyServiceWorker();
   const sub = await reg.pushManager.getSubscription();
   if (sub) await sub.unsubscribe();
 }

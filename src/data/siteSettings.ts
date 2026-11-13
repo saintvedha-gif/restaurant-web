@@ -7,6 +7,8 @@ export interface SiteSettings {
   texts: Record<string, string>;
   whatsappTemplate: string;
   whatsappNumber: string;
+  deliveryEnabled: boolean;
+  pickupEnabled: boolean;
   address: string;
   city: string;
   mapsLink: string;
@@ -75,6 +77,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   texts: {},
   whatsappTemplate: DEFAULT_WA_TEMPLATE,
   whatsappNumber: '573503384530',
+  deliveryEnabled: true,
+  pickupEnabled: true,
   address: 'Cl. 41 #58, Barrio Bogota',
   city: 'Cúcuta, Norte de Santander',
   mapsLink: '',

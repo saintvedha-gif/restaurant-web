@@ -28,13 +28,28 @@ const SAMPLE = {
   nombre: 'Juan',
 };
 
+const SETTINGS_SECTIONS = [
+  { id: 'principal', label: 'Página principal', description: 'Bienvenida y botones' },
+  { id: 'menu', label: 'Menú', description: 'Título y descripción' },
+  { id: 'whatsapp', label: 'WhatsApp', description: 'Mensaje de pedidos' },
+  { id: 'appearance', label: 'Diseño', description: 'Colores y tipografías' },
+  { id: 'business', label: 'Negocio', description: 'Contacto y modalidades' },
+  { id: 'hours', label: 'Horarios', description: 'Atención semanal' },
+  { id: 'footer', label: 'Pie de página', description: 'Frase final' },
+] as const;
+
+type SettingsSection = typeof SETTINGS_SECTIONS[number]['id'];
+
 export default function AdminSettings() {
+  const [activeSection, setActiveSection] = useState<SettingsSection>('principal');
   const [accent, setAccent] = useState(siteSettings.accent);
   const [titleFont, setTitleFont] = useState(siteSettings.titleFont);
   const [bodyFont, setBodyFont] = useState(siteSettings.bodyFont);
   const [texts, setTexts] = useState<Record<string, string>>({ ...siteSettings.texts });
   const [template, setTemplate] = useState(siteSettings.whatsappTemplate);
   const [whatsappNumber, setWhatsappNumber] = useState(siteSettings.whatsappNumber);
+  const [deliveryEnabled, setDeliveryEnabled] = useState(siteSettings.deliveryEnabled);
+  const [pickupEnabled, setPickupEnabled] = useState(siteSettings.pickupEnabled);
   const [address, setAddress] = useState(siteSettings.address);
   const [city, setCity] = useState(siteSettings.city);
   const [mapsLink, setMapsLink] = useState(siteSettings.mapsLink);
@@ -121,6 +136,8 @@ export default function AdminSettings() {
       texts: cleanTexts,
       whatsappTemplate: template.trim(),
       whatsappNumber: waDigits,
+      deliveryEnabled,
+      pickupEnabled,
       address: address.trim(),
       city: city.trim(),
       mapsLink: mapsLink.trim(),
@@ -146,10 +163,122 @@ export default function AdminSettings() {
   }
 
   const preview = buildWhatsAppText(template, SAMPLE);
+  const currentSection = SETTINGS_SECTIONS.find(section => section.id === activeSection) ?? SETTINGS_SECTIONS[0];
+  const textFor = (key: string) => texts[key]?.trim() || TEXT_FIELDS.find(field => field.key === key)?.default || '';
+  const sectionTextKeys: Partial<Record<SettingsSection, string[]>> = {
+    principal: ['heroText', 'heroButton1', 'heroButton2', 'topTitleA', 'topTitleB'],
+    menu: ['menuTitle', 'menuSubtitle'],
+    whatsapp: ['confirmMessage'],
+    footer: ['footerSlogan'],
+  };
+  const visibleTextFields = TEXT_FIELDS.filter(field => sectionTextKeys[activeSection]?.includes(field.key));
 
   return (
     <div className="space-y-4 pb-28">
-      <div className={card}>
+      <nav className="flex gap-2 overflow-x-auto pb-1" aria-label="Secciones de personalización">
+        {SETTINGS_SECTIONS.map(section => (
+          <button
+            key={section.id}
+            type="button"
+            onClick={() => setActiveSection(section.id)}
+            aria-pressed={activeSection === section.id}
+            className={`shrink-0 rounded-xl border px-3 py-2 text-left transition ${
+              activeSection === section.id
+                ? 'border-yellow-300 bg-yellow-400 text-black'
+                : 'border-white/10 bg-[#111116] text-white/65 hover:border-yellow-400/40'
+            }`}
+          >
+            <span className="block text-xs font-black">{section.label}</span>
+            <span className={`mt-0.5 block text-[10px] ${activeSection === section.id ? 'text-black/65' : 'text-white/40'}`}>{section.description}</span>
+          </button>
+        ))}
+      </nav>
+
+      <section className={`${card} border-yellow-400/35`} aria-live="polite">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className={label}>Vista previa en tiempo real</p>
+            <p className="text-xs text-white/45">Página · {currentSection.label}. Los cambios aquí aún no se publican.</p>
+          </div>
+          <span className="rounded-full bg-[#00C853]/10 px-2.5 py-1 text-[10px] font-bold text-[#00C853]">BORRADOR</span>
+        </div>
+        <div
+          className="overflow-hidden rounded-2xl border border-white/10 bg-[#09090c] p-4 sm:p-5"
+          style={{ fontFamily: fontFamilyValue(bodyFont) }}
+        >
+          {activeSection === 'principal' && (
+            <div className="space-y-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: validAccent ? accent : DEFAULT_SETTINGS.accent }}>Mucha Mazorca</p>
+              <h2 className="text-2xl font-black text-white" style={{ fontFamily: fontFamilyValue(titleFont) }}>MUCHA MAZORCA 🌽</h2>
+              <p className="whitespace-pre-line text-sm leading-6 text-white/70">{textFor('heroText')}</p>
+              <div className="flex flex-wrap gap-2">
+                <span className="rounded-full px-4 py-2 text-xs font-black text-black" style={{ backgroundColor: validAccent ? accent : DEFAULT_SETTINGS.accent }}>{textFor('heroButton1')}</span>
+                <span className="rounded-full border px-4 py-2 text-xs font-black" style={{ borderColor: validAccent ? accent : DEFAULT_SETTINGS.accent, color: validAccent ? accent : DEFAULT_SETTINGS.accent }}>{textFor('heroButton2')}</span>
+              </div>
+              <p className="border-t border-white/10 pt-3 text-sm font-black text-white" style={{ fontFamily: fontFamilyValue(titleFont) }}>
+                {textFor('topTitleA')} <span style={{ color: validAccent ? accent : DEFAULT_SETTINGS.accent }}>{textFor('topTitleB')}</span>
+              </p>
+            </div>
+          )}
+          {activeSection === 'menu' && (
+            <div className="space-y-4">
+              <p className="text-xs font-black uppercase tracking-[0.16em]" style={{ color: validAccent ? accent : DEFAULT_SETTINGS.accent }}>Nuestro menú</p>
+              <h2 className="text-2xl font-black text-white" style={{ fontFamily: fontFamilyValue(titleFont) }}>{textFor('menuTitle')}</h2>
+              <p className="text-sm text-white/65">{textFor('menuSubtitle')}</p>
+              <div className="flex gap-2 text-[10px] font-bold text-black">
+                {['🌽 MAICITOS', '🍔 AMORGUESAS', '🍟 SALCHIPAPITAS'].map(category => (
+                  <span key={category} className="rounded-full px-2 py-1" style={{ backgroundColor: validAccent ? accent : DEFAULT_SETTINGS.accent }}>{category}</span>
+                ))}
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                <p className="font-bold text-white">Maicito especial</p>
+                <p className="mt-1 text-xs text-white/55">Elige tus adicionales favoritos</p>
+              </div>
+            </div>
+          )}
+          {activeSection === 'whatsapp' && (
+            <pre className="whitespace-pre-wrap text-sm leading-6 text-white/85">{preview}</pre>
+          )}
+          {activeSection === 'appearance' && (
+            <div className="space-y-3">
+              <h2 className="text-2xl font-black text-white" style={{ fontFamily: fontFamilyValue(titleFont) }}>MUCHA MAZORCA</h2>
+              <p className="text-sm text-white/70" style={{ fontFamily: fontFamilyValue(bodyFont) }}>Así se combinan los títulos, textos y elementos destacados.</p>
+              <button type="button" className="rounded-full px-5 py-3 text-sm font-black text-black" style={{ backgroundColor: validAccent ? accent : DEFAULT_SETTINGS.accent }}>Botón principal</button>
+            </div>
+          )}
+          {activeSection === 'business' && (
+            <div className="space-y-3">
+              <h2 className="text-xl font-black text-white" style={{ fontFamily: fontFamilyValue(titleFont) }}>Haz tu pedido</h2>
+              <p className="text-sm text-white/70">{address}, {city}</p>
+              <p className="text-xs text-white/50">WhatsApp: {whatsappNumber || 'Sin configurar'}</p>
+              <div className="flex flex-wrap gap-2">
+                {deliveryEnabled && <span className="rounded-full px-3 py-2 text-xs font-bold text-black" style={{ backgroundColor: validAccent ? accent : DEFAULT_SETTINGS.accent }}>🛵 Domicilio</span>}
+                {pickupEnabled && <span className="rounded-full px-3 py-2 text-xs font-bold text-black" style={{ backgroundColor: validAccent ? accent : DEFAULT_SETTINGS.accent }}>🏃 Recoger</span>}
+                {!deliveryEnabled && !pickupEnabled && <span className="rounded-full border border-white/15 px-3 py-2 text-xs text-white/60">Pedido clásico por WhatsApp</span>}
+              </div>
+            </div>
+          )}
+          {activeSection === 'hours' && (
+            <div className="space-y-2">
+              <h2 className="text-xl font-black text-white" style={{ fontFamily: fontFamilyValue(titleFont) }}>Horario de atención</h2>
+              {DAY_ORDER.map(day => (
+                <p key={day} className="flex justify-between gap-3 border-b border-white/5 pb-2 text-xs text-white/70">
+                  <span>{DAY_LABELS[day]}</span>
+                  <span>{hours[day].closed ? 'Cerrado' : `${hours[day].open} – ${hours[day].close}`}</span>
+                </p>
+              ))}
+            </div>
+          )}
+          {activeSection === 'footer' && (
+            <div className="space-y-3 border-t-2 pt-4" style={{ borderColor: validAccent ? accent : DEFAULT_SETTINGS.accent }}>
+              <p className="text-sm font-bold text-white" style={{ fontFamily: fontFamilyValue(titleFont) }}>{textFor('footerSlogan')}</p>
+              <p className="text-xs text-white/55">{address}, {city}</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {activeSection === 'whatsapp' && <div className={card}>
         <p className={label}>💬 Mensaje de WhatsApp</p>
         <p className="text-xs text-white/55">
           Así le llega el pedido al restaurante. Toca una etiqueta para meterla en el mensaje.
@@ -180,9 +309,9 @@ export default function AdminSettings() {
         <button type="button" onClick={() => setTemplate(DEFAULT_WA_TEMPLATE)} className="text-xs font-semibold text-white/60 underline">
           Restaurar mensaje original
         </button>
-      </div>
+      </div>}
 
-      <div className={card}>
+      {activeSection === 'appearance' && <div className={card}>
         <p className={label}>🎨 Color principal</p>
         <p className="text-xs text-white/55">Se usa en botones, bordes y textos destacados. El fondo oscuro no cambia.</p>
         <div className="flex flex-wrap gap-2">
@@ -205,9 +334,9 @@ export default function AdminSettings() {
           <span style={{ color: validAccent ? accent : '#FFD60A' }} className="text-sm font-black">Texto destacado</span>
         </div>
         {tooDark && <p className="text-xs text-red-400">Muy oscuro: el texto negro del botón no se leería.</p>}
-      </div>
+      </div>}
 
-      <div className={card}>
+      {activeSection === 'appearance' && <div className={card}>
         <p className={label}>🔤 Tipografías</p>
         <div>
           <label className={label}>Letra de los títulos</label>
@@ -226,14 +355,28 @@ export default function AdminSettings() {
         <button type="button" onClick={resetDesign} className="text-xs font-semibold text-white/60 underline">
           Restaurar colores y letras originales
         </button>
-      </div>
+      </div>}
 
-      <div className={card}>
+      {activeSection === 'business' && <div className={card}>
         <p className={label}>📍 Datos del negocio</p>
         <div>
           <label className={label}>WhatsApp de pedidos</label>
           <input className={input} type="tel" inputMode="numeric" value={whatsappNumber} onChange={e => setWhatsappNumber(e.target.value)} placeholder="573503384530" />
           <p className="mt-1 text-xs text-white/50">Con código de país y sin espacios ni +. Colombia empieza por 57.</p>
+        </div>
+        <div className="space-y-2 rounded-xl border border-white/10 bg-[#0c0c10] p-3">
+          <p className={label}>Opciones de pedido</p>
+          <label className="flex items-center gap-3 text-sm text-white/80">
+            <input type="checkbox" className="h-5 w-5 accent-yellow-400" checked={deliveryEnabled} onChange={event => setDeliveryEnabled(event.target.checked)} />
+            Domicilio habilitado
+          </label>
+          <label className="flex items-center gap-3 text-sm text-white/80">
+            <input type="checkbox" className="h-5 w-5 accent-yellow-400" checked={pickupEnabled} onChange={event => setPickupEnabled(event.target.checked)} />
+            Recoger en el local habilitado
+          </label>
+          {!deliveryEnabled && !pickupEnabled && (
+            <p className="text-xs leading-5 text-yellow-200/70">Si ambas opciones están apagadas, el sitio usará el pedido clásico por WhatsApp y no guardará datos personales ni pedidos en el panel.</p>
+          )}
         </div>
         <div>
           <label className={label}>Dirección</label>
@@ -248,9 +391,9 @@ export default function AdminSettings() {
           <input className={input} value={mapsLink} onChange={e => setMapsLink(e.target.value)} placeholder="https://maps.app.goo.gl/..." />
           <p className="mt-1 text-xs text-white/50">Si lo dejas vacío, el mapa se arma con la dirección.</p>
         </div>
-      </div>
+      </div>}
 
-      <div className={card}>
+      {activeSection === 'hours' && <div className={card}>
         <p className={label}>🕒 Horario de atención</p>
         <p className="text-xs text-white/55">Este horario mueve el "Abierto ahora / Cerrado", la página de contacto y el pie de página. Si cierran después de medianoche, pon la hora normal (ej. 01:00).</p>
         <div className="space-y-2">
@@ -280,12 +423,12 @@ export default function AdminSettings() {
         <button type="button" onClick={copyMondayToAll} className="text-xs font-semibold text-white/60 underline">
           Copiar el horario del lunes a todos los días
         </button>
-      </div>
+      </div>}
 
-      <div className={card}>
+      {visibleTextFields.length > 0 && <div className={card}>
         <p className={label}>✏️ Textos de la página</p>
         <p className="text-xs text-white/55">Si dejas un campo vacío, se usa el texto original (el que ves en gris).</p>
-        {TEXT_FIELDS.map(f => (
+        {visibleTextFields.map(f => (
           <div key={f.key}>
             <label className={label}>{f.label}</label>
             {f.multiline ? (
@@ -295,7 +438,7 @@ export default function AdminSettings() {
             )}
           </div>
         ))}
-      </div>
+      </div>}
 
       {error && <p className="text-sm text-red-400">{error}</p>}
       {msg && <p className="text-sm font-bold text-[#00C853]">{msg}</p>}

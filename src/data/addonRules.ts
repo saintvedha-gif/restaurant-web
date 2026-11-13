@@ -48,8 +48,10 @@ export function getEffectiveGroupMax(
   itemId: string,
   groupId: string,
   defaultMax: number,
-  selectedSizeId?: string
+  selectedSizeId?: string,
+  productMax?: number
 ): number {
+  if (productMax !== undefined) return productMax;
   if (groupId === 'adicionales-salchi' || groupId === 'adicionales-maicito') {
     if (itemId === 'negrita') return 2;
     if (itemId === 'quetzalcoatl') return 3;
@@ -70,8 +72,21 @@ export function getEffectiveGroupMax(
 export function getEffectiveGroupLimits(
   itemId: string,
   group: Pick<AddonGroup, 'id' | 'maxSelections' | 'minSelections'>,
-  selectedSizeId?: string
+  selectedSizeId?: string,
+  productLimits?: { minSelections?: number; maxSelections?: number }
 ) {
+  if (productLimits) {
+    return {
+      minSelections: productLimits.minSelections ?? group.minSelections ?? 0,
+      maxSelections: getEffectiveGroupMax(
+        itemId,
+        group.id,
+        group.maxSelections,
+        selectedSizeId,
+        productLimits.maxSelections
+      ),
+    };
+  }
   const isAmorguesaGroup =
     isAmorguesaWithLimits(itemId) &&
     (group.id === 'adicionales-amorguesa' || group.id === 'quesos-amorguesa');

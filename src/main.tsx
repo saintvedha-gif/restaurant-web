@@ -3,8 +3,11 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { loadMenuFromApi } from './lib/loadMenu'
+import { loadCategoriesFromApi } from './lib/loadCategories'
+import { loadAddonGroupsFromApi } from './lib/loadAddonGroups'
 import { loadPromosFromApi } from './lib/loadPromos'
 import { loadSettingsFromApi } from './lib/loadSettings'
+import { loadGalleryFromApi } from './lib/gallery'
 import { applyTheme } from './lib/theme'
 import { siteSettings } from './data/siteSettings'
 import { initPwa } from './lib/pwa'
@@ -16,7 +19,7 @@ initPwa()
 
 async function start() {
   // Trae el menu actualizado antes de pintar (si falla, usa el menu local)
-  await Promise.all([loadMenuFromApi(), loadPromosFromApi(), loadSettingsFromApi()])
+  await Promise.all([loadMenuFromApi(), loadCategoriesFromApi(), loadAddonGroupsFromApi(), loadPromosFromApi(), loadSettingsFromApi(), loadGalleryFromApi()])
   applyTheme(siteSettings)
 
   createRoot(document.getElementById('root')!).render(

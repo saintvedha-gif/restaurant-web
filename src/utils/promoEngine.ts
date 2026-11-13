@@ -3,18 +3,30 @@ import type { Promo } from '../data/promos';
 
 const DAY_NAMES = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-export function getColombiaToday(): { date: string; dow: number } {
-  const date = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' });
+export function getColombiaToday(): { date: string; dow: number; time: string } {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Bogota',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(new Date());
+  const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+  const date = `${values.year}-${values.month}-${values.day}`;
   const dow = new Date(`${date}T12:00:00Z`).getUTCDay();
-  return { date, dow };
+  return { date, dow, time: `${values.hour}:${values.minute}` };
 }
 
 export function isPromoActiveNow(p: Promo): boolean {
   if (!p.active) return false;
-  const { date, dow } = getColombiaToday();
+  const { date, dow, time } = getColombiaToday();
   if (p.startDate && date < p.startDate) return false;
   if (p.endDate && date > p.endDate) return false;
   if (p.days.length > 0 && !p.days.includes(dow)) return false;
+  if (p.startTime && time < p.startTime) return false;
+  if (p.endTime && time > p.endTime) return false;
   return true;
 }
 
@@ -76,5 +88,6 @@ export function describeSchedule(p: Promo): string {
   const days = p.days.length === 0 || p.days.length === 7 ? 'Todos los días' : p.days.map(d => DAY_NAMES[d]).join(', ');
   const from = p.startDate ? `desde ${p.startDate}` : '';
   const to = p.endDate ? `hasta ${p.endDate}` : 'sin fecha de fin';
-  return [days, from, to].filter(Boolean).join(' · ');
+  const hours = p.startTime && p.endTime ? `${p.startTime}–${p.endTime}` : '';
+  return [days, from, to, hours].filter(Boolean).join(' · ');
 }

@@ -1,10 +1,15 @@
 export interface Addon {
   id: string;
   name: string;
+  description?: string;
   emoji: string;
+  categoryId?: string | null;
   price: number;
   pricingMode?: 'additive' | 'final';
-  maxAdds?: number;
+  minAdds?: number | null;
+  maxAdds?: number | null;
+  active?: boolean;
+  sortOrder?: number;
 }
 
 export interface MenuItem {
@@ -19,6 +24,7 @@ export interface MenuItem {
   addons?: string[]; // addon group ids
   tags?: string[];
   maxSelections?: number;
+  addonGroupLimits?: Record<string, { minSelections?: number; maxSelections?: number }>;
 }
 
 export interface Category {
@@ -35,6 +41,8 @@ export interface AddonGroup {
   maxSelections: number;
   minSelections?: number;
   addons: Addon[];
+  active?: boolean;
+  sortOrder?: number;
 }
 
 export interface CartItem {

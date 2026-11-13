@@ -24,6 +24,8 @@ export async function loadSettingsFromApi(timeoutMs = 2500): Promise<void> {
 
     const wa = typeof d.whatsappNumber === 'string' ? d.whatsappNumber.replace(/\D/g, '') : '';
     siteSettings.whatsappNumber = /^\d{10,15}$/.test(wa) ? wa : DEFAULT_SETTINGS.whatsappNumber;
+    siteSettings.deliveryEnabled = d.deliveryEnabled !== false;
+    siteSettings.pickupEnabled = d.pickupEnabled !== false;
     siteSettings.address = typeof d.address === 'string' && d.address.trim() ? d.address.trim() : DEFAULT_SETTINGS.address;
     siteSettings.city = typeof d.city === 'string' && d.city.trim() ? d.city.trim() : DEFAULT_SETTINGS.city;
     siteSettings.mapsLink = typeof d.mapsLink === 'string' && /^https?:\/\//.test(d.mapsLink) ? d.mapsLink : '';

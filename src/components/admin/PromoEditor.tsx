@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { apiFetch } from '../../lib/api';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 import { categories } from '../../data/menuData';
 import { makeId } from '../../lib/ids';
 import type { PromoRow } from '../../lib/promoRows';
 import type { PromoType } from '../../data/promos';
 import ImageUploader from './ImageUploader';
+import EmojiPicker from './EmojiPicker';
 
 interface Props {
   row: PromoRow | null;
@@ -29,6 +31,7 @@ function toggle<T>(list: T[], value: T): T[] {
 }
 
 export default function PromoEditor({ row, nextSort, onClose, onSaved }: Props) {
+  useBodyScrollLock(true);
   const [title, setTitle] = useState(row?.title ?? '');
   const [subtitle, setSubtitle] = useState(row?.subtitle ?? '');
   const [badge, setBadge] = useState(row?.badge ?? 'PROMO');
@@ -45,6 +48,8 @@ export default function PromoEditor({ row, nextSort, onClose, onSaved }: Props) 
   const [productIds, setProductIds] = useState<string[]>(row?.product_ids ?? []);
   const [startDate, setStartDate] = useState(row?.start_date ?? '');
   const [endDate, setEndDate] = useState(row?.end_date ?? '');
+  const [startTime, setStartTime] = useState(row?.start_time?.slice(0, 5) ?? '');
+  const [endTime, setEndTime] = useState(row?.end_time?.slice(0, 5) ?? '');
   const [days, setDays] = useState<number[]>(row?.days ?? []);
   const [products, setProducts] = useState<ProductOption[]>([]);
   const [search, setSearch] = useState('');
@@ -73,6 +78,8 @@ export default function PromoEditor({ row, nextSort, onClose, onSaved }: Props) 
     if (type !== 'none' && scope === 'categories' && categoryIds.length === 0) return setError('Elige al menos una categoría');
     if (type !== 'none' && scope === 'products' && productIds.length === 0) return setError('Elige al menos un producto');
     if (startDate && endDate && endDate < startDate) return setError('La fecha final es antes que la inicial');
+    if (Boolean(startTime) !== Boolean(endTime)) return setError('Indica la hora de inicio y la hora de fin');
+    if (startTime && endTime && endTime < startTime) return setError('La hora final no puede ser anterior a la hora de inicio');
 
     const payload = {
       title: title.trim(),
@@ -89,6 +96,8 @@ export default function PromoEditor({ row, nextSort, onClose, onSaved }: Props) 
       categoryIds: type !== 'none' && scope === 'categories' ? categoryIds : [],
       startDate: startDate || undefined,
       endDate: endDate || undefined,
+      startTime: startTime || undefined,
+      endTime: endTime || undefined,
       days: days.length === 7 ? [] : [...days].sort(),
     };
 
@@ -150,15 +159,24 @@ export default function PromoEditor({ row, nextSort, onClose, onSaved }: Props) 
 
         <div>
           <label className={label}>Título</label>
-          <input className={input} value={title} onChange={e => setTitle(e.target.value)} placeholder="Miércoles de promo" />
+          <div className="flex gap-2">
+            <input className={input} value={title} onChange={e => setTitle(e.target.value)} placeholder="Miércoles de promo" />
+            <EmojiPicker compact separator=" " value={title} onChange={setTitle} maxLength={120} />
+          </div>
         </div>
         <div>
           <label className={label}>Texto corto (opcional)</label>
-          <input className={input} value={subtitle} onChange={e => setSubtitle(e.target.value)} placeholder="Si lo dejas vacío, se genera solo" />
+          <div className="flex gap-2">
+            <input className={input} value={subtitle} onChange={e => setSubtitle(e.target.value)} placeholder="Si lo dejas vacío, se genera solo" />
+            <EmojiPicker compact separator=" " value={subtitle} onChange={setSubtitle} maxLength={255} />
+          </div>
         </div>
         <div>
           <label className={label}>Etiqueta</label>
-          <input className={input} value={badge} onChange={e => setBadge(e.target.value)} placeholder="SOLO HOY" />
+          <div className="flex gap-2">
+            <input className={input} value={badge} onChange={e => setBadge(e.target.value)} placeholder="SOLO HOY" />
+            <EmojiPicker compact separator=" " value={badge} onChange={setBadge} maxLength={40} />
+          </div>
         </div>
 
         <div>
@@ -174,7 +192,7 @@ export default function PromoEditor({ row, nextSort, onClose, onSaved }: Props) 
         {(type === 'percent' || type === 'amount') && (
           <div>
             <label className={label}>{type === 'percent' ? 'Porcentaje (%)' : 'Pesos a descontar'}</label>
-            <input className={input} type="number" inputMode="numeric" value={value} onChange={e => setValue(e.target.value)} />
+            <input className={input} type="text" inputMode="numeric" value={value} onChange={e => setValue(e.target.value.replace(/[^\d]/g, ''))} />
           </div>
         )}
 
@@ -182,11 +200,11 @@ export default function PromoEditor({ row, nextSort, onClose, onSaved }: Props) 
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={label}>Lleva</label>
-              <input className={input} type="number" inputMode="numeric" value={getQty} onChange={e => setGetQty(e.target.value)} />
+              <input className={input} type="number" inputMode="numeric" value={getQty} onChange={e => setGetQty(e.target.value)} onWheel={event => event.currentTarget.blur()} />
             </div>
             <div>
               <label className={label}>Paga</label>
-              <input className={input} type="number" inputMode="numeric" value={buyQty} onChange={e => setBuyQty(e.target.value)} />
+              <input className={input} type="number" inputMode="numeric" value={buyQty} onChange={e => setBuyQty(e.target.value)} onWheel={event => event.currentTarget.blur()} />
             </div>
             <p className="col-span-2 text-xs text-white/50">2x1 = lleva 2, paga 1. 3x2 = lleva 3, paga 2.</p>
           </div>
@@ -249,6 +267,18 @@ export default function PromoEditor({ row, nextSort, onClose, onSaved }: Props) 
             <input className={input} type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
           </div>
           <p className="col-span-2 text-xs text-white/50">Si dejas las fechas vacías, la promo no vence nunca.</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className={label}>Hora de inicio (Colombia)</label>
+            <input className={input} type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
+          </div>
+          <div>
+            <label className={label}>Hora de fin (Colombia)</label>
+            <input className={input} type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
+          </div>
+          <p className="col-span-2 text-xs text-white/50">Deja ambas horas vacías para que esté vigente todo el día. La hora final debe ser igual o posterior a la inicial.</p>
         </div>
 
         <label className="flex items-center gap-3 text-sm text-white">

@@ -13,7 +13,7 @@ export default function AdminPromos() {
   const [error, setError] = useState('');
   const [editing, setEditing] = useState<Editing>(null);
 
-  const mapRows = (items: Array<{ id: string; title: string; subtitle: string; badge: string; image?: string; link?: string; active?: boolean; type: 'none' | 'percent' | 'take_pay' | 'amount'; value: number; buyQty: number; getQty: number; productIds?: string[]; categoryIds?: string[]; startDate?: string; endDate?: string; days?: number[]; sortOrder?: number; }> = []): PromoRow[] =>
+  const mapRows = (items: Array<{ id: string; title: string; subtitle: string; badge: string; image?: string; link?: string; active?: boolean; type: 'none' | 'percent' | 'take_pay' | 'amount'; value: number; buyQty: number; getQty: number; productIds?: string[]; categoryIds?: string[]; startDate?: string; endDate?: string; startTime?: string; endTime?: string; days?: number[]; sortOrder?: number; }> = []): PromoRow[] =>
     items.map(item => ({
       id: item.id,
       title: item.title,
@@ -30,13 +30,15 @@ export default function AdminPromos() {
       category_ids: item.categoryIds ?? [],
       start_date: item.startDate ?? null,
       end_date: item.endDate ?? null,
+      start_time: item.startTime ?? null,
+      end_time: item.endTime ?? null,
       days: item.days ?? [],
       sort_order: item.sortOrder ?? 0,
     }));
 
   const load = useCallback(async () => {
     try {
-      const data = await apiFetch<Array<{ id: string; title: string; subtitle: string; badge: string; image?: string; link?: string; active?: boolean; type: 'none' | 'percent' | 'take_pay' | 'amount'; value: number; buyQty: number; getQty: number; productIds?: string[]; categoryIds?: string[]; startDate?: string; endDate?: string; days?: number[]; sortOrder?: number; }>>('/api/admin/promos');
+      const data = await apiFetch<Array<{ id: string; title: string; subtitle: string; badge: string; image?: string; link?: string; active?: boolean; type: 'none' | 'percent' | 'take_pay' | 'amount'; value: number; buyQty: number; getQty: number; productIds?: string[]; categoryIds?: string[]; startDate?: string; endDate?: string; startTime?: string; endTime?: string; days?: number[]; sortOrder?: number; }>>('/api/admin/promos');
       setRows(mapRows(data ?? []));
       setError('');
     } catch (err) {

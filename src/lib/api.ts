@@ -1,6 +1,6 @@
 const API_BASE = (import.meta.env.VITE_API_URL ?? 'http://localhost:3000').replace(/\/$/, '');
 
-export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+export async function apiFetch<T>(path: string, options: RequestInit = {}, timeoutMs = 2500): Promise<T> {
   const method = (options.method ?? 'GET').toUpperCase();
   const headers = new Headers(options.headers || {});
 
@@ -14,7 +14,7 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
   }
 
   const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), 2500);
+  const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const response = await fetch(`${API_BASE}${path}`, {
@@ -33,7 +33,6 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
     const data = text ? JSON.parse(text) : null;
 
     if (response.status === 401) {
-      if (typeof window !== 'undefined') window.location.href = '/admin';
       throw new Error('Sesión expirada');
     }
 

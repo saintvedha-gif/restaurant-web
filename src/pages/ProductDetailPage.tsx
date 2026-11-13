@@ -71,8 +71,13 @@ export default function ProductDetailPage({ item, onBack }: Props) {
         ? (item.addons
             .map((id) => addonGroups.find((g) => g.id === id))
             .filter(Boolean) as AddonGroup[])
+            .map(group => ({
+              ...group,
+              addons: group.addons.filter(addon => !addon.categoryId || addon.categoryId === item.categoryId),
+            }))
+            .filter(group => group.addons.length > 0)
         : [],
-    [item.addons],
+    [item.addons, item.categoryId],
   );
 
   const defaultSelections = useMemo(
@@ -156,6 +161,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
       item.id,
       group,
       selectedSize?.id,
+      item.addonGroupLimits?.[group.id],
     );
     const groupAddonIds = group.addons.map((groupAddon) => groupAddon.id);
     const currentGroupCount = countSelectedInGroup(
@@ -163,6 +169,13 @@ export default function ProductDetailPage({ item, onBack }: Props) {
       groupAddonIds,
     );
     const currentAddonQuantity = getAddonQuantity(selectedAddons, addon.id);
+    const minAddonQuantity = addon.minAdds ?? 1;
+    const quantityChange = delta === 1
+      ? currentAddonQuantity === 0 ? minAddonQuantity : 1
+      : currentAddonQuantity <= minAddonQuantity ? currentAddonQuantity : 1;
+    const perAddonLimit = addon.maxAdds !== undefined
+      ? addon.maxAdds ?? undefined
+      : getPerAddonLimit(item.id, group.id, addon.id);
 
     // Unificar límite de 5 entre adicionales y quesos para amorguesa-armable (excluyendo salsas)
     let totalAdicionalesQuesos = 0;
@@ -180,7 +193,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
         group.id === "adicionales-amorguesa"
       ) {
         const addonLimit = AMORGUESA_ARMABLE_ADDON_LIMITS[addon.id];
-        if (addonLimit && currentAddonQuantity >= addonLimit) {
+        if (addonLimit && currentAddonQuantity + quantityChange > addonLimit) {
           setValidationError(`Máximo ${addonLimit} de ${addon.name}.`);
           return;
         }
@@ -189,7 +202,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
       // Validar límites específicos por addon para quesos en amorguesa-armable
       if (isAmorguesaWithLimits(item.id) && group.id === "quesos-amorguesa") {
         const quesoLimit = AMORGUESA_ARMABLE_QUESO_LIMITS[addon.id];
-        if (quesoLimit && currentAddonQuantity >= quesoLimit) {
+        if (quesoLimit && currentAddonQuantity + quantityChange > quesoLimit) {
           setValidationError(`Máximo ${quesoLimit} de ${addon.name}.`);
           return;
         }
@@ -198,7 +211,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
       // Límite combinado de 5 entre adicionales y quesos
       if (
         isAmorguesaWithLimits(item.id) &&
-        totalAdicionalesQuesos >= AMORGUESA_COMBINED_MAX
+        totalAdicionalesQuesos + quantityChange > AMORGUESA_COMBINED_MAX
       ) {
         setValidationError(
           `Máximo ${AMORGUESA_COMBINED_MAX} adicionales en total entre adicionales y quesos.`,
@@ -206,25 +219,30 @@ export default function ProductDetailPage({ item, onBack }: Props) {
         return;
       }
 
-      if (currentGroupCount >= maxSelections) {
+      if (currentGroupCount + quantityChange > maxSelections) {
         setValidationError(
           `Máximo ${maxSelections} adicional(es) en este grupo.`,
         );
         return;
       }
-      setSelectedAddons((prev) => [...prev, addon]);
+      if (perAddonLimit !== undefined && currentAddonQuantity + quantityChange > perAddonLimit) {
+        setValidationError(`Máximo ${perAddonLimit} de ${addon.name}.`);
+        return;
+      }
+      setSelectedAddons((prev) => [...prev, ...Array.from({ length: quantityChange }, () => addon)]);
       return;
     }
 
-    if (currentAddonQuantity === 0 || currentGroupCount <= minSelections)
+    if (currentAddonQuantity === 0 || currentGroupCount - quantityChange < minSelections)
       return;
 
     setSelectedAddons((prev) => {
-      const removeIndex = prev.findIndex(
-        (selectedAddon) => selectedAddon.id === addon.id,
-      );
-      if (removeIndex === -1) return prev;
-      return prev.filter((_, index) => index !== removeIndex);
+      let removeCount = quantityChange;
+      return prev.filter(selectedAddon => {
+        if (selectedAddon.id !== addon.id || removeCount === 0) return true;
+        removeCount -= 1;
+        return false;
+      });
     });
   }
 
@@ -234,6 +252,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
         item.id,
         group,
         selectedSize?.id,
+        item.addonGroupLimits?.[group.id],
       );
       const groupIds = group.addons.map((a) => a.id);
       const selectedCount = countSelectedInGroup(selectedAddons, groupIds);
@@ -247,6 +266,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
         item.id,
         group,
         selectedSize?.id,
+        item.addonGroupLimits?.[group.id],
       );
       if (maxSelections <= 0) return false;
       const groupIds = group.addons.map((a) => a.id);
@@ -491,7 +511,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                 <div key={group.id} className="mt-5">
                   {(() => {
                     const { minSelections, maxSelections } =
-                      getEffectiveGroupLimits(item.id, group, selectedSize?.id);
+                      getEffectiveGroupLimits(item.id, group, selectedSize?.id, item.addonGroupLimits?.[group.id]);
                     const hideGroupMeta = shouldHideGroupMeta(
                       item.id,
                       group.id,
@@ -539,6 +559,7 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                           item.id,
                           group,
                           selectedSize?.id,
+                          item.addonGroupLimits?.[group.id],
                         );
                       const currentGroupCount = countSelectedInGroup(
                         selectedAddons,
@@ -547,38 +568,39 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                       const isFinalPriceOption = addon.pricingMode === "final";
                       const isSauceSingleSelect =
                         group.id === "salsas-amorguesa";
-                      const perAddonLimit = getPerAddonLimit(
-                        item.id,
-                        group.id,
-                        addon.id,
-                      );
+                      const perAddonLimit = addon.maxAdds !== undefined
+                        ? addon.maxAdds ?? undefined
+                        : getPerAddonLimit(item.id, group.id, addon.id);
+                      const initialQuantity = quantity === 0 ? addon.minAdds ?? 1 : 1;
 
                       // Validar límites específicos por addon para amorguesa-armable
                       let canIncrement = isFinalPriceOption
                         ? true
-                        : currentGroupCount < maxSelections;
+                        : currentGroupCount + initialQuantity <= maxSelections;
+                      if (perAddonLimit !== undefined && quantity + initialQuantity > perAddonLimit) {
+                        canIncrement = false;
+                      }
                       if (
                         !isFinalPriceOption &&
                         isAmorguesaWithLimits(item.id)
                       ) {
                         if (group.id === "adicionales-amorguesa") {
-                          const addonLimit =
-                            AMORGUESA_ARMABLE_ADDON_LIMITS[addon.id];
-                          if (addonLimit && quantity >= addonLimit) {
+                          const addonLimit = perAddonLimit;
+                          if (addonLimit && quantity + initialQuantity > addonLimit) {
                             canIncrement = false;
                           }
                         } else if (group.id === "quesos-amorguesa") {
-                          const quesoLimit =
-                            AMORGUESA_ARMABLE_QUESO_LIMITS[addon.id];
-                          if (quesoLimit && quantity >= quesoLimit) {
+                          const quesoLimit = perAddonLimit;
+                          if (quesoLimit && quantity + initialQuantity > quesoLimit) {
                             canIncrement = false;
                           }
                         }
                       }
 
+                      const decrementQuantity = quantity <= (addon.minAdds ?? 1) ? quantity : 1;
                       const canDecrement = isFinalPriceOption
                         ? quantity === 0 && minSelections === 0
-                        : quantity > 0 && currentGroupCount > minSelections;
+                        : quantity > 0 && currentGroupCount - decrementQuantity >= minSelections;
                       const isSelected = quantity > 0;
 
                       if (isSauceSingleSelect) {
@@ -663,10 +685,16 @@ export default function ProductDetailPage({ item, onBack }: Props) {
                                   <p className="text-sm font-semibold leading-snug text-white break-words">
                                     {addon.emoji} {addon.name}
                                   </p>
+                                  {addon.description && (
+                                    <p className="mt-1 text-xs leading-4 text-white/55">{addon.description}</p>
+                                  )}
                                   {perAddonLimit && (
                                     <p className="mt-1 text-xs text-white/55">
                                       Máx. {perAddonLimit}
                                     </p>
+                                  )}
+                                  {addon.minAdds != null && addon.minAdds > 1 && (
+                                    <p className="mt-1 text-xs text-white/55">Mín. {addon.minAdds} por pedido</p>
                                   )}
                                   {addon.price > 0 && (
                                     <p className="mt-1 text-xs text-white/55">

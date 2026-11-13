@@ -8,16 +8,33 @@ interface Props {
 export default function InstallButton({ className = '' }: Props) {
   const [, setTick] = useState(0);
   const [showIos, setShowIos] = useState(false);
+  const [installing, setInstalling] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => subscribePwa(() => setTick(t => t + 1)), []);
 
   if (isStandalone()) return null;
   const ios = isIosDevice();
-  if (!canPromptInstall() && !ios) return null;
+  if (!canPromptInstall() && !ios && !installing && !message) return null;
 
-  function handleClick() {
-    if (canPromptInstall()) promptInstall();
-    else setShowIos(true);
+  async function handleClick() {
+    if (ios) {
+      setShowIos(true);
+      return;
+    }
+
+    setInstalling(true);
+    setMessage('');
+    try {
+      const result = await promptInstall();
+      if (result === 'accepted') setMessage('Instalación aceptada. Busca Mucha Mazorca entre tus aplicaciones.');
+      else if (result === 'dismissed') setMessage('Instalación cancelada.');
+      else setMessage('El navegador no abrió la instalación. Usa el menú del navegador y elige “Instalar aplicación”.');
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'No se pudo iniciar la instalación.');
+    } finally {
+      setInstalling(false);
+    }
   }
 
   return (
@@ -25,10 +42,16 @@ export default function InstallButton({ className = '' }: Props) {
       <button
         type="button"
         onClick={handleClick}
-        className={`inline-flex items-center justify-center gap-2 rounded-full border border-yellow-400/40 bg-yellow-400/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.12em] text-yellow-300 transition-all active:scale-95 ${className}`}
+        disabled={installing}
+        className={`inline-flex items-center justify-center gap-2 rounded-full border border-yellow-400/40 bg-yellow-400/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.12em] text-yellow-300 transition-all active:scale-95 disabled:cursor-wait disabled:opacity-60 ${className}`}
       >
-        ⬇️ Instalar app
+        {installing ? 'Abriendo instalación...' : '⬇️ Instalar app'}
       </button>
+      {message && (
+        <p className="mt-1 text-center text-[11px] text-yellow-200" role="status" aria-live="polite">
+          {message}
+        </p>
+      )}
 
       {showIos && (
         <div className="fixed inset-0 z-[10000] flex items-end justify-center bg-black/70 p-4 backdrop-blur-sm" onClick={() => setShowIos(false)}>

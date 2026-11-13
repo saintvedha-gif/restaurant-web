@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { apiFetch } from '../../lib/api';
 import { categories, formatPrice, getSizedImageUrl } from '../../data/menuData';
+import AdminCategories from './AdminCategories';
+import AdminAddons from './AdminAddons';
 import type { MenuRow } from '../../lib/menuRows';
 import ProductEditor from './ProductEditor';
 
@@ -17,8 +19,11 @@ export default function AdminProducts({ onLogout }: Props) {
   const [search, setSearch] = useState('');
   const [cat, setCat] = useState('todas');
   const [editing, setEditing] = useState<Editing>(null);
+  const [manageCategories, setManageCategories] = useState(false);
+  const [manageAddons, setManageAddons] = useState(false);
+  const [, setCategoryVersion] = useState(0);
 
-  const mapRows = (items: Array<{ id: string; name: string; description: string; price: number; emoji: string; image?: string; imageHero?: string; categoryId: string; addons?: string[]; tags?: string[]; maxSelections?: number; available?: boolean; sortOrder?: number; }> = []): MenuRow[] =>
+  const mapRows = (items: Array<{ id: string; name: string; description: string; price: number; emoji: string; image?: string; imageHero?: string; categoryId: string; addons?: string[]; addonGroupLimits?: Record<string, { minSelections?: number; maxSelections?: number }>; tags?: string[]; maxSelections?: number; available?: boolean; sortOrder?: number; }> = []): MenuRow[] =>
     items.map(item => ({
       id: item.id,
       name: item.name,
@@ -29,6 +34,7 @@ export default function AdminProducts({ onLogout }: Props) {
       image_hero: item.imageHero ?? null,
       category_id: item.categoryId,
       addons: item.addons ?? [],
+      addon_group_limits: item.addonGroupLimits,
       tags: item.tags ?? [],
       max_selections: item.maxSelections ?? null,
       available: Boolean(item.available),
@@ -37,7 +43,7 @@ export default function AdminProducts({ onLogout }: Props) {
 
   const load = useCallback(async () => {
     try {
-      const data = await apiFetch<Array<{ id: string; name: string; description: string; price: number; emoji: string; image?: string; imageHero?: string; categoryId: string; addons?: string[]; tags?: string[]; maxSelections?: number; available?: boolean; sortOrder?: number; }>>('/api/admin/menu');
+      const data = await apiFetch<Array<{ id: string; name: string; description: string; price: number; emoji: string; image?: string; imageHero?: string; categoryId: string; addons?: string[]; addonGroupLimits?: Record<string, { minSelections?: number; maxSelections?: number }>; tags?: string[]; maxSelections?: number; available?: boolean; sortOrder?: number; }>>('/api/admin/menu');
       setRows(mapRows(data ?? []));
       setError('');
     } catch (err) {
@@ -88,6 +94,20 @@ export default function AdminProducts({ onLogout }: Props) {
         className="mb-3 w-full rounded-xl bg-yellow-400 py-3 text-base font-black text-black active:scale-95"
       >
         + Nuevo producto
+      </button>
+      <button
+        type="button"
+        onClick={() => setManageCategories(true)}
+        className="mb-3 w-full rounded-xl border border-yellow-400/30 bg-yellow-400/10 py-3 text-sm font-bold text-yellow-200 active:scale-95"
+      >
+        Administrar categorías
+      </button>
+      <button
+        type="button"
+        onClick={() => setManageAddons(true)}
+        className="mb-3 w-full rounded-xl border border-yellow-400/30 bg-yellow-400/10 py-3 text-sm font-bold text-yellow-200 active:scale-95"
+      >
+        Administrar adicionales y tamaños
       </button>
 
       <div className="mb-3 grid grid-cols-2 gap-2">
@@ -148,6 +168,17 @@ export default function AdminProducts({ onLogout }: Props) {
             void load();
           }}
         />
+      )}
+      {manageCategories && (
+        <AdminCategories
+          onClose={() => setManageCategories(false)}
+          onChanged={() => setCategoryVersion(version => version + 1)}
+        />
+      )}
+      {manageAddons && (
+        <div className="fixed inset-0 z-[10000] overflow-y-auto bg-[#08080b]">
+          <AdminAddons onClose={() => setManageAddons(false)} />
+        </div>
       )}
     </div>
   );

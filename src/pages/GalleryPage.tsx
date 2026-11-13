@@ -1,15 +1,5 @@
-import { getImageUrl } from '../data/menuData';
-
-const galleryPhotos = [
-  { src: getImageUrl('Galeria 1.jpeg'), alt: 'Salchipapita clásica' },
-  { src: getImageUrl('Galeria 2.jpeg'), alt: 'Salchiper personal' },
-  { src: getImageUrl('Galeria 3.jpeg'), alt: 'Quetzalcóatl' },
-  { src: getImageUrl('Galeria 4.jpg'), alt: 'Maicito Milenial' },
-  { src: getImageUrl('Galeria 5.jpg'), alt: 'Malandro' },
-  { src: getImageUrl('Galeria 6.jpg'), alt: 'Amorguesa' },
-  { src: getImageUrl('Galeria7.jpg'), alt: 'Negrita' },
-  { src: getImageUrl('Galeria 8.jpg'), alt: 'Papitas entocinadas' },
-];
+import { getSizedImageUrl } from '../data/menuData';
+import { galleryImages } from '../lib/gallery';
 
 export default function GalleryPage() {
   return (
@@ -23,17 +13,17 @@ export default function GalleryPage() {
       </section>
 
       <section className="mt-8 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {galleryPhotos.map((photo, idx) => (
+        {galleryImages.map((photo, idx) => (
           <article
-            key={photo.src}
+            key={photo.id ?? photo.imageUrl}
             className={`self-start overflow-hidden rounded-[24px] border border-yellow-400/18 bg-[#101014] shadow-[0_15px_30px_rgba(0,0,0,0.3)] ${
               idx !== 0 && idx % 4 === 0 ? 'sm:col-span-2 lg:col-span-2' : ''
             }`}
           >
               <div className="relative bg-[#121217]">
               <img
-                src={photo.src}
-                alt={photo.alt}
+                src={getSizedImageUrl(photo.imageUrl, 900)}
+                alt={photo.altText}
                 className={idx <= 2
                   ? 'aspect-square w-full object-cover object-center transition-transform duration-500 hover:scale-105'
                   : 'h-64 w-full object-cover transition-transform duration-500 hover:scale-105'}

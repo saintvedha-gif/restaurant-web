@@ -4,6 +4,10 @@ import type { OrderData, OrderType } from '../types/order';
 interface Props {
   value: OrderData;
   onChange: (next: OrderData) => void;
+  deliveryEnabled: boolean;
+  pickupEnabled: boolean;
+  marketingConsent: boolean;
+  onMarketingConsentChange: (next: boolean) => void;
 }
 
 const inputClass =
@@ -14,7 +18,11 @@ const TYPES: { id: OrderType; label: string }[] = [
   { id: 'recoger', label: '🏃 Recoger' },
 ];
 
-export default function OrderForm({ value, onChange }: Props) {
+function isGeolocationError(error: unknown): error is GeolocationPositionError {
+  return typeof error === 'object' && error !== null && 'code' in error;
+}
+
+export default function OrderForm({ value, onChange, deliveryEnabled, pickupEnabled, marketingConsent, onMarketingConsentChange }: Props) {
   const [loading, setLoading] = useState(false);
   const [geoError, setGeoError] = useState('');
 
@@ -29,32 +37,41 @@ export default function OrderForm({ value, onChange }: Props) {
     }
     setLoading(true);
     setGeoError('');
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        setLoading(false);
+    const locate = (options: PositionOptions) => new Promise<GeolocationPosition>((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    });
+    void (async () => {
+      try {
+        let position: GeolocationPosition;
+        try {
+          position = await locate({ enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+        } catch (error) {
+          if (isGeolocationError(error) && error.code === 1) throw error;
+          position = await locate({ enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 });
+        }
         onChange({
           ...value,
           coords: {
-            lat: Number(pos.coords.latitude.toFixed(6)),
-            lng: Number(pos.coords.longitude.toFixed(6)),
+            lat: Number(position.coords.latitude.toFixed(6)),
+            lng: Number(position.coords.longitude.toFixed(6)),
           },
         });
-      },
-      err => {
-        setLoading(false);
-        if (err.code === 1) setGeoError('No diste permiso de ubicación. Escribe tu dirección.');
-        else if (err.code === 3) setGeoError('Tardó mucho. Intenta de nuevo.');
+      } catch (error) {
+        if (isGeolocationError(error) && error.code === 1) setGeoError('No diste permiso de ubicación. Escribe tu dirección.');
+        else if (isGeolocationError(error) && error.code === 3) setGeoError('No pudimos obtener la ubicación a tiempo. Intenta de nuevo o escribe tu dirección.');
         else setGeoError('No pudimos detectar tu ubicación. Escribe tu dirección.');
-      },
-      { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
-    );
+      } finally {
+        setLoading(false);
+      }
+    })();
   }
 
   return (
     <div className="space-y-3 rounded-[24px] border border-yellow-400/20 bg-[#16161b] p-4">
       <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-yellow-300">Datos del pedido</p>
 
-      <div className="grid grid-cols-2 gap-2">
+      {(deliveryEnabled && pickupEnabled) ? (
+        <div className="grid grid-cols-2 gap-2">
         {TYPES.map(t => (
           <button
             key={t.id}
@@ -69,7 +86,12 @@ export default function OrderForm({ value, onChange }: Props) {
             {t.label}
           </button>
         ))}
-      </div>
+        </div>
+      ) : (
+        <p className="rounded-xl border border-yellow-400/20 bg-yellow-400/5 px-3 py-2 text-sm font-bold text-yellow-200">
+          {deliveryEnabled ? '🛵 Pedido a domicilio' : '🏃 Pedido para recoger en el local'}
+        </p>
+      )}
 
       <input
         className={inputClass}
@@ -88,7 +110,7 @@ export default function OrderForm({ value, onChange }: Props) {
         onChange={e => set('phone', e.target.value)}
       />
 
-      {value.type === 'domicilio' && (
+      {value.type === 'domicilio' && deliveryEnabled && (
         <>
           <input
             className={inputClass}
@@ -128,6 +150,18 @@ export default function OrderForm({ value, onChange }: Props) {
           {geoError && <p className="text-xs text-red-400">{geoError}</p>}
         </>
       )}
+
+      <label className="flex items-start gap-3 rounded-xl border border-white/10 bg-[#0c0c10] p-3 text-xs leading-5 text-white/65">
+        <input
+          type="checkbox"
+          className="mt-1 h-4 w-4 shrink-0 accent-yellow-400"
+          checked={marketingConsent}
+          onChange={event => onMarketingConsentChange(event.target.checked)}
+        />
+        <span>
+          Acepto recibir mensajes promocionales por WhatsApp de Mucha Mazorca. Es opcional y puedo retirar mi consentimiento cuando quiera.
+        </span>
+      </label>
     </div>
   );
 }

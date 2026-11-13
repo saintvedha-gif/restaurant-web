@@ -56,25 +56,43 @@ function getSelectedSizeId(addons: CartAddon[]): string | undefined {
  * así el carrito nunca puede quedar con cantidades imposibles.
  */
 function canIncrementAddon(item: MenuItem, addons: CartAddon[], addonId: string): boolean {
-  const group = addonGroups.find(g => g.addons.some(a => a.id === addonId));
+  const group = (item.addons ?? [])
+    .map(groupId => addonGroups.find(candidate => candidate.id === groupId))
+    .find(candidate => candidate?.addons.some(addon => addon.id === addonId));
   if (!group) return true; // grupo desconocido: no bloqueamos por datos que no reconocemos
 
   const addonDef = group.addons.find(a => a.id === addonId);
   if (!addonDef || addonDef.pricingMode === 'final') return false;
+  if (addonDef.categoryId && addonDef.categoryId !== item.categoryId) return false;
 
   const selectedSizeId = getSelectedSizeId(addons);
-  const maxSelections = getEffectiveGroupMax(item.id, group.id, group.maxSelections, selectedSizeId);
-  const groupAddonIds = new Set(group.addons.map(a => a.id));
+  const maxSelections = getEffectiveGroupMax(
+    item.id,
+    group.id,
+    group.maxSelections,
+    selectedSizeId,
+    item.addonGroupLimits?.[group.id]?.maxSelections
+  );
+  const groupAddonIds = new Set(group.addons
+    .filter(addon => !addon.categoryId || addon.categoryId === item.categoryId)
+    .map(addon => addon.id));
   const currentGroupCount = addons
     .filter(entry => groupAddonIds.has(entry.addon.id))
     .reduce((sum, entry) => sum + entry.quantity, 0);
 
-  if (currentGroupCount >= maxSelections) return false;
+  const incrementBy = (addons.find(entry => entry.addon.id === addonId)?.quantity ?? 0) === 0
+    ? addonDef.minAdds ?? 1
+    : 1;
+  if (currentGroupCount + incrementBy > maxSelections) return false;
 
-  const perAddonLimit = getPerAddonLimit(item.id, group.id, addonId);
+  const specificLimit = addonDef.maxAdds !== undefined
+    ? addonDef.maxAdds ?? undefined
+    : getPerAddonLimit(item.id, group.id, addonId);
+  const limits = [specificLimit].filter((limit): limit is number => limit !== undefined);
+  const perAddonLimit = limits.length ? Math.min(...limits) : undefined;
   if (perAddonLimit) {
     const currentQty = addons.find(entry => entry.addon.id === addonId)?.quantity ?? 0;
-    if (currentQty >= perAddonLimit) return false;
+    if (currentQty + incrementBy > perAddonLimit) return false;
   }
 
   return true;
@@ -224,7 +242,9 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         const updatedAddons = i.selectedAddons
           .map(entry =>
             entry.addon.id === action.payload.addonId
-              ? { ...entry, quantity: entry.quantity - 1 }
+              ? entry.quantity <= (entry.addon.minAdds ?? 1)
+                ? entry
+                : { ...entry, quantity: entry.quantity - 1 }
               : entry
           )
           .filter(entry => entry.quantity > 0);

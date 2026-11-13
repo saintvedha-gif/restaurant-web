@@ -1,327 +1,124 @@
-# 🌽 Mucha Mazorca - Sitio Web del Restaurante
+# Mucha Mazorca — sitio web
 
-Sitio web moderno y elegante para el restaurante **Mucha Mazorca**, construido con tecnologías contemporáneas para ofrecer una experiencia de usuario excepcional.
+Frontend del sitio público y panel de administración. Está separado del repositorio hermano `mucha-mazorca-api`, que sirve datos y conecta con MySQL/MariaDB.
 
-## 📋 Tabla de Contenidos
+## Mapa rápido para trabajar
 
-- [Características](#características)
-- [Tecnología](#tecnología)
-- [Instalación](#instalación)
-- [Desarrollo](#desarrollo)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Características Principales](#características-principales)
-- [Scripts Disponibles](#scripts-disponibles)
-- [Configuración](#configuración)
-- [Despliegue](#despliegue)
+| Si necesitas cambiar... | Empieza aquí |
+|---|---|
+| Rutas del sitio y carga diferida de páginas | `src/App.tsx` |
+| Arranque, carga inicial desde API y tema | `src/main.tsx` |
+| Página de inicio, menú, contacto, galería o pedidos | `src/pages/` |
+| Vista/selección de un producto y sus adicionales | `src/pages/ProductDetailPage.tsx` |
+| Carrito, formulario y tarjetas | `src/context/CartContext.tsx`, `src/components/` |
+| Datos de respaldo, categorías, adicionales e imágenes | `src/data/menuData.ts`, `src/data/` |
+| Contrato de productos/adicionales | `src/types/menu.ts` |
+| URL base, cookies, CSRF y errores de API | `src/lib/api.ts` |
+| Carga de datos públicos de la API y respaldo local | `src/lib/load*.ts`, `src/lib/gallery.ts` |
+| Pestañas del administrador | `src/pages/AdminPage.tsx` |
+| Productos, categorías y adicionales | `src/components/admin/AdminProducts.tsx`, `AdminCategories.tsx`, `AdminAddons.tsx`, `ProductEditor.tsx` |
+| Promociones, pedidos, clientes, galería y ajustes | componentes correspondientes en `src/components/admin/` |
+| Estilos globales y tokens visuales | `src/index.css`, `tailwind.config.js` |
+| Publicación automática a Hostinger | `.github/workflows/deploy.yml` |
 
----
+## Páginas y panel
 
-## ✨ Características
+`src/App.tsx` define las rutas:
 
-- **Menú Interactivo**: Catálogo completo de productos con sistema de carrito integrado
-- **Galería de Imágenes**: Visualización moderna de los platos del restaurante
-- **Sistema de Carrito**: Carrito de compras funcional con Context API
-- **Página de Contacto**: Formulario para consultas y reservas
-- **Optimización de Imágenes**: Integración con Cloudinary para imágenes optimizadas
-- **Emojis Nativos**: Soporte para emojis con Twemoji
-- **Responsivo**: Diseño mobile-first que se adapta a todos los dispositivos
-- **Animaciones Sutiles**: Transiciones suaves y efectos visuales elegantes
-- **Optimizado para SEO**: Sitemap, robots.txt y metaetiquetas configuradas
+| Ruta | Pantalla |
+|---|---|
+| `/` | Inicio (`HomePage.tsx`) |
+| `/menu` | Menú y detalle de producto (`MenuPage.tsx`, `ProductDetailPage.tsx`) |
+| `/contacto` | Contacto |
+| `/galeria` | Galería |
+| `/mis-pedidos` | Consulta de pedidos |
+| `/admin` | Panel privado (`AdminPage.tsx`) |
 
----
+En el panel, `AdminPage.tsx` coordina las pestañas **Resumen**, **Pedidos**, **Productos**, **Promociones**, **Clientes**, **Galería**, **Personalizar sitio**, **Notificaciones** y **Cuenta**. Productos abre a su vez la administración de categorías y grupos/adicionales.
 
-## 🛠️ Tecnología
+## Flujo de datos
 
-### Stack Principal
-- **React** 18.3.1 - Biblioteca UI moderna
-- **TypeScript** 5.6.2 - Tipado estático para mayor seguridad
-- **Vite** 6.0.1 - Empaquetador ultra rápido
-- **Tailwind CSS** 3.4.14 - Framework de utilidades CSS
+1. `src/main.tsx` carga menú, categorías, adicionales, promociones, ajustes y galería antes de mostrar la aplicación.
+2. `src/lib/loadMenu.ts`, `loadCategories.ts`, `loadAddonGroups.ts`, `loadPromos.ts`, `loadSettings.ts` y `gallery.ts` consultan la API.
+3. Si la API no responde a tiempo, la aplicación conserva los datos de respaldo del frontend en `src/data/`. El menú/las categorías/adicionales/promociones iniciales se definen en esos módulos; si se cambian a mano, mantén sincronizadas las referencias de productos, categorías y grupos.
+4. Las funciones de red pasan por `src/lib/api.ts`; allí se establece `VITE_API_URL`, `credentials: include`, el encabezado CSRF para escrituras y el timeout.
+5. El panel escribe en la API. Si cambias un campo persistente, actualiza también la API y crea una migración cuando corresponda; modificar solo el formulario no garantiza que el backend/base lo acepte o guarde.
+6. El cálculo final de pedidos y precios ocurre de forma confiable en la API, no en el frontend.
 
-### Enrutamiento
-- **React Router** 7.4.0 - Navegación y rutas del sitio
+Para saber qué se necesita al cambiar la base, lee `mucha-mazorca-api/README.md`, sección “Base de datos: instalación y migraciones”.
 
-### Estilizado
-- **PostCSS** 8.4.47 - Procesador de CSS
-- **Autoprefixer** 10.4.20 - Prefijos de navegador automáticos
+## Tecnologías
 
-### Imágenes y Medios
-- **Cloudinary** 2.8.0 - Gestión y optimización de imágenes en la nube
-- **@twemoji/api** 17.0.2 - Soporte para emojis unicode
+- React 18, TypeScript, Vite 6, React Router 7, Tailwind CSS 3.
+- `@twemoji/api` para renderizado de emojis.
+- Cloudinary para imágenes remotas; imágenes locales de respaldo en `public/images/`.
+- API Node.js + Express + MySQL/MariaDB en el otro repositorio.
 
----
+## Desarrollo y comprobaciones
 
-## 📥 Instalación
+Requisitos: Node.js 22 recomendado y npm.
 
-### Requisitos Previos
-- Node.js 16+ 
-- npm o yarn
-
-### Pasos
-
-1. **Clonar el repositorio**
-```bash
-git clone <url-del-repositorio>
-cd restaurant-web
-```
-
-2. **Instalar dependencias**
 ```bash
 npm install
-```
-
-3. **Configurar variables de entorno (si es necesario)**
-```bash
-# Crear archivo .env si es necesario para Cloudinary u otras APIs
-```
-
-4. **Iniciar servidor de desarrollo**
-```bash
-npm start
-```
-
-El sitio estará disponible en `http://localhost:5173`
-
----
-
-## 🚀 Desarrollo
-
-### Iniciar modo desarrollo
-```bash
 npm run dev
 ```
 
-Vite compilará automáticamente los cambios y refrescará el navegador en tiempo real.
+Vite muestra la URL local, normalmente `http://localhost:5173`. Configura `.env.local` con `VITE_API_URL=http://localhost:3000` para API local. Si se modifica un archivo de entorno, reinicia Vite.
 
-### Compilar para producción
 ```bash
-npm run build
+npm run build       # TypeScript y compilación de producción
+npm run preview     # Sirve localmente la compilación
 ```
 
-Genera una carpeta `dist/` optimizada y lista para desplegar.
+En PowerShell, si la política de ejecución bloquea `npm.ps1`, usa `npm.cmd` (por ejemplo, `npm.cmd run build`).
 
-### Previsualizar build
-```bash
-npm run preview
-```
+Variables frontend:
 
-### Subir imágenes a Cloudinary
-```bash
-npm run images:cloudinary:upload
-```
+- `VITE_API_URL`: origen de la API.
+- `VITE_CLOUDINARY_CLOUD_NAME`, `VITE_CLOUDINARY_UPLOAD_PRESET`: carga de imágenes desde el panel.
+- `VITE_VAPID_PUBLIC_KEY`: clave pública para suscripciones push.
 
-Este script sincroniza todas las imágenes de `assets-source/images/` con Cloudinary.
+Todo valor `VITE_*` queda incluido en el JavaScript público del navegador. Nunca pongas claves privadas, contraseñas de base de datos ni secretos de Cloudinary aquí. Usa `.env.example` como plantilla y conserva los archivos `.env*` locales fuera de Git.
 
----
+## Publicación del frontend en Hostinger
 
-## 📁 Estructura del Proyecto
+El workflow `.github/workflows/deploy.yml` se ejecuta al hacer `push` a `main` o manualmente con `workflow_dispatch`. Construye `dist/` con Node 22 y sincroniza su contenido con Hostinger por FTP. Esto publica **solo el frontend**; no despliega la API, no modifica MySQL y no ejecuta migraciones.
 
-```
-restaurant-web/
-├── public/                    # Archivos estáticos públicos
-│   ├── 404.html             # Página de error 404
-│   ├── robots.txt           # Instrucciones para buscadores
-│   ├── site.webmanifest     # Manifest para PWA
-│   ├── sitemap.xml          # Mapa del sitio
-│   └── images/              # Imágenes estáticas
-├── src/                      # Código fuente
-│   ├── components/           # Componentes reutilizables
-│   │   ├── CartDrawer.tsx        # Carrito lateral
-│   │   ├── CategoryNav.tsx       # Navegación de categorías
-│   │   ├── MenuCard.tsx          # Tarjeta de producto
-│   │   ├── ProductModal.tsx      # Modal de detalles del producto
-│   │   └── SiteLayout.tsx        # Layout general del sitio
-│   ├── pages/                # Páginas principales
-│   │   ├── HomePage.tsx          # Página de inicio
-│   │   ├── MenuPage.tsx          # Página del menú
-│   │   ├── ContactPage.tsx       # Página de contacto
-│   │   ├── GalleryPage.tsx       # Página de galería
-│   │   └── ProductDetailPage.tsx # Detalles del producto
-│   ├── context/              # Context API
-│   │   └── CartContext.tsx       # Lógica del carrito
-│   ├── hooks/                # Hooks personalizados
-│   │   └── useTwemoji.ts        # Hook para emojis
-│   ├── data/                 # Datos y configuración
-│   │   ├── menuData.ts           # Datos del menú
-│   │   ├── addonRules.ts         # Reglas de complementos
-│   │   ├── cloudinaryImages.ts   # Mapeo de imágenes Cloudinary
-│   │   └── getImageUrl.ts        # Utilitario para URLs de imágenes
-│   ├── types/                # Tipos TypeScript
-│   │   └── menu.ts               # Tipos del menú
-│   ├── App.tsx               # Componente principal
-│   ├── main.tsx              # Punto de entrada
-│   └── index.css             # Estilos globales
-├── assets-source/            # Fuentes de activos (original)
-│   └── images/               # Imágenes originales
-├── scripts/                  # Scripts de utilidad
-│   ├── generate-favicons.mjs # Genera favicons
-│   └── upload-cloudinary.mjs # Sube imágenes a Cloudinary
-├── tailwind.config.js        # Configuración de Tailwind
-├── postcss.config.js         # Configuración de PostCSS
-├── vite.config.ts            # Configuración de Vite
-├── tsconfig.json             # Configuración de TypeScript
-├── index.html                # HTML principal
-└── package.json              # Dependencias del proyecto
-```
+En GitHub → **Settings → Secrets and variables → Actions**, configura los secretos que consume el workflow:
 
----
+- `HOSTINGER_FTP_SERVER`
+- `HOSTINGER_FTP_USERNAME`
+- `HOSTINGER_FTP_PASSWORD`
+- `VITE_API_URL` (URL productiva HTTPS de la API)
+- `VITE_CLOUDINARY_CLOUD_NAME`
+- `VITE_CLOUDINARY_UPLOAD_PRESET`
+- `VITE_VAPID_PUBLIC_KEY`
 
-## 🎯 Características Principales
+El workflow usa `server-dir: ./`; confirma que el usuario FTP esté limitado a la carpeta web correcta (normalmente `public_html`) antes de publicar. El secreto `HOSTINGER_SERVER_DIR` que aparezca en guías antiguas no se usa por el workflow actual.
 
-### 1. **Gestión de Menú**
-El menú se define en `src/data/menuData.ts` con estructura de categorías y productos. Cada producto puede tener complementos (add-ons) configurables con reglas específicas.
+Pasos de publicación:
 
-### 2. **Carrito de Compras**
-Sistema robusto basado en Context API (`src/context/CartContext.tsx`):
-- Agregar/eliminar productos
-- Ajustar cantidades
-- Aplicar modificadores (add-ons)
-- Persistencia de datos (opcional)
+1. Trabaja en una rama y prueba localmente.
+2. Ejecuta `npm run build`; corrige errores antes de fusionar.
+3. Revisa los secretos de GitHub y que `VITE_API_URL` apunte a producción.
+4. Fusiona/publica en `main`.
+5. Revisa **Actions** en GitHub: tanto build como FTP deben finalizar correctamente.
+6. Abre el sitio, fuerza recarga del navegador y prueba menú, imágenes, pedidos y acceso al panel.
+7. Si la API rechaza peticiones por CORS, configura el origen exacto del sitio en `ALLOWED_ORIGINS` de la API; no intentes arreglarlo agregando un proxy inseguro.
 
-### 3. **Optimización de Imágenes**
-Integración con Cloudinary para:
-- Redimensionamiento automático
-- Compresión optimizada
-- CDN global para mayor velocidad
-- Respaldo de imágenes locales
+Si el cambio incluye código de API, sigue también su proceso de publicación y prueba. Si incluye base de datos, respalda y aplica primero la migración aprobada según el README de la API; el workflow del frontend nunca migra la base.
 
-### 4. **Componentes Reutilizables**
-Arquitectura modular con componentes agnósticos que facilitan el mantenimiento:
-- `MenuCard`: Tarjeta de producto
-- `ProductModal`: Modal para detalles y opciones
-- `CategoryNav`: Navegación entre categorías
+## Imágenes y PWA
 
-### 5. **Emojis Nativos**
-Hook personalizado `useTwemoji` para renderizar emojis modernos y consistentes en todos los navegadores.
+- Imágenes locales: `public/images/`; fuentes originales: `assets-source/images/`.
+- Mapeo Cloudinary: `src/data/cloudinaryImages.ts`; funciones y fallback local: `src/data/menuData.ts`.
+- El script `npm run images:cloudinary:upload` sincroniza imágenes desde `assets-source/images/`; revisa el script y la configuración antes de usarlo.
+- PWA, instalación y notificaciones se implementan en `src/lib/pwa.ts`, `src/components/InstallButton.tsx` y `src/components/PushButton.tsx`.
+- Rutas fallback y archivos públicos como `public/.htaccess`, `404.html`, manifest, robots y sitemap deben conservarse al publicar.
 
----
+## Reglas al hacer cambios
 
-## 📦 Scripts Disponibles
-
-| Script | Descripción |
-|--------|-------------|
-| `npm start` | Inicia servidor de desarrollo (alias de `dev`) |
-| `npm run dev` | Inicia servidor de desarrollo con Vite |
-| `npm run build` | Compila TypeScript y construye para producción |
-| `npm run preview` | Previsualiza la build de producción localmente |
-| `npm run images:cloudinary:upload` | Sube imágenes a Cloudinary |
-
----
-
-## ⚙️ Configuración
-
-### Tailwind CSS
-Archivo: `tailwind.config.js`
-- Paleta de colores personalizada
-- Extensiones de utilidades
-- Modo oscuro (si está habilitado)
-
-### Vite
-Archivo: `vite.config.ts`
-- Plugin de React habilitado
-- Code splitting automático
-- Optimizaciones de build
-
-### TypeScript
-Archivo: `tsconfig.json`
-- Strict mode habilitado
-- JSX configurado para React
-- Resolución de módulos optimizada
-
----
-
-## 🌐 Despliegue
-
-### GitHub Pages
-El proyecto está optimizado para desplegar en GitHub Pages:
-
-1. **Actualizar `base` en `vite.config.ts`** si el repositorio no es de usuario:
-```typescript
-export default defineConfig({
-  base: '/restaurant-web/', // Para https://user.github.io/restaurant-web
-  // ...
-})
-```
-
-2. **Build y deploy**:
-```bash
-npm run build
-# Los archivos en dist/ se despliegan automáticamente
-```
-
-### Otros Hosting
-El proyecto es compatible con cualquier host estático:
-- Vercel
-- Netlify
-- AWS S3
-- Firebase Hosting
-
-Solo requiere servir el contenido de la carpeta `dist/` generada por el build.
-
-### Pedidos centralizados
-Para habilitar el registro de pedidos y la pestaña **Pedidos** del panel, la API propia debe exponer los endpoints de pedidos y la sesión del administrador debe seguir activa en el mismo dominio.
-
-El cliente puede autorizar guardar los datos del pedido para que el restaurante lo gestione. Las coordenadas solo se guardan si el cliente comparte su ubicación y autoriza el guardado. Si la base de datos no está disponible, WhatsApp sigue abriéndose y el sitio indica que el pedido no quedó en el panel. El panel permite eliminar los pedidos cancelados o entregados.
-
-### Hostinger con GitHub Actions
-Cada push a `main` genera el build y publica automáticamente `dist/` en Hostinger mediante FTP.
-
-En GitHub, configura estos secretos en `Settings > Secrets and variables > Actions`:
-
-- `HOSTINGER_FTP_SERVER`: servidor FTP de Hostinger
-- `HOSTINGER_FTP_USERNAME`: usuario FTP
-- `HOSTINGER_FTP_PASSWORD`: contraseña FTP
-- `HOSTINGER_SERVER_DIR`: normalmente `/public_html/`
-
-No guardes las credenciales en el repositorio. El archivo `public/.htaccess` se copia al build para servir correctamente los módulos JavaScript y las rutas de React.
-
----
-
-## 📱 SEO y Metaetiquetas
-
-El proyecto incluye:
-- **robots.txt** - Directivas para motores de búsqueda
-- **sitemap.xml** - Mapa completo del sitio
-- **site.webmanifest** - Configuración PWA
-- **404.html** - Página de error personalizada
-
-Asegúrate de actualizar metaetiquetas en `index.html` según sea necesario.
-
----
-
-## 🎨 Diseño
-
-El sitio sigue un diseño elegante y minimalista con:
-- Paleta cálida (madera, terracota, crema)
-- Animaciones sutiles y transiciones suaves
-- Tipografía limpia y legible
-- Enfoque mobile-first
-- Consistencia visual en todos los componentes
-
----
-
-## 🔗 URLs Principales
-
-- **Inicio** - `/`
-- **Menú** - `/menu`
-- **Contacto** - `/contacto`
-- **Galería** - `/galeria`
-
----
-
-## 📄 Licencia
-
-Este proyecto es propiedad de Restaurante Mucha Mazorca. Derechos reservados.
-
----
-
-## 💡 Notas de Desarrollo
-
-- El proyecto utiliza **lazy loading** para las páginas (optimización de bundle)
-- El carrito solo aparece en la página de menú
-- Las imágenes se sirven desde Cloudinary en producción, con fallback a local
-- Se recomienda minificar las imágenes fuente antes de subirlas a Cloudinary
-
----
-
-**Última actualización:** Mayo 2026
+1. Busca el componente y la ruta de API que ya implementan una función antes de crear lógica duplicada.
+2. Si cambia el contrato de un dato, actualiza tipos, UI, llamada API, validación/servidor y pruebas relacionadas.
+3. Prueba build del frontend y pruebas de la API cuando cambie el backend; no consideres una captura visual como validación de persistencia.
+4. No subas `.env`, credenciales, respaldos SQL ni datos de clientes.

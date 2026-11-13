@@ -62,10 +62,11 @@ interface CreateOrderInput {
   discountAmount: number;
   total: number;
   promoTitle?: string;
+  marketingConsent: boolean;
 }
 
 export async function createOrder(input: CreateOrderInput): Promise<void> {
-  const { order, items } = input;
+  const { order, items, marketingConsent } = input;
   await apiFetch('/api/orders', {
     method: 'POST',
     body: JSON.stringify({
@@ -82,6 +83,7 @@ export async function createOrder(input: CreateOrderInput): Promise<void> {
         addons: item.selectedAddons.map(({ addon, quantity }) => ({ id: addon.id, quantity })),
       })),
       privacy_consent_at: new Date().toISOString(),
+      marketing_consent: marketingConsent,
     }),
   });
 }

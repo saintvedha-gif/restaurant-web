@@ -18,6 +18,8 @@ export interface Promo {
   categoryIds: string[];
   startDate?: string;
   endDate?: string;
+  startTime?: string;
+  endTime?: string;
   days: number[]; // 0 = domingo ... 6 = sabado. Vacio = todos los dias
 }
 
